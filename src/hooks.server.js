@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes } from "sequelize";
 
-export const sequelize = new Sequelize("db", "user", "vuk43gtg6hR10Sev", {
+export const sequelize = new Sequelize("db3nf", "root", "7z4RUYYc8Om9Sjbp", { // insecure
     host: "localhost",
     dialect: "mysql",
     define: {

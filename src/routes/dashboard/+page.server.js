@@ -7,7 +7,7 @@ export async function load() {
         order: [
             ["date", "ASC"],
             ["startTime", "ASC"],
-        ] // change order as necessary 
+        ]
     });
 
     console.log(carnivals);
@@ -21,9 +21,9 @@ export const actions = {
         const data = await request.formData();
         const name = data.get("carnival-name");
         const type = data.get("carnival-type");
-        const date = data.get("carnival-date");
-        const start_time = data.get("carnival-start-time");
-        const end_time = data.get("carnival-end-time");
+        const date = data.get("carnival-date") === "" ? null : data.get("carnival-date");
+        const start_time = data.get("carnival-start-time")  === "" ? null : data.get("carnival-start-time");
+        const end_time = data.get("carnival-end-time")  === "" ? null : data.get("carnival-end-time");
         const location = data.get("carnival-location");
 
         await sequelize.query('CALL CreateCarnival (:name, :type, :date, :start_time, :end_time, :location);', {
