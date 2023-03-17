@@ -41,10 +41,10 @@
                     </label>
                     <label>
                         Type
-                        <select name="carnival-type" id="carnival-type">
-                            <option value="Athletics">Athletics Carnival</option>
-                            <option value="Swimming">Swimming Carnival</option>
-                            <option value="Cross Country">Cross Country</option>
+                        <select name="carnival-type-id" id="carnival-type-id">
+                            {#each data.carnivalTypes as type}
+                            <option value="{type.typeID}">{type.type}</option>
+                            {/each}
                         </select>
                     </label>
                     <label>
@@ -61,9 +61,10 @@
                     </label>
                     <label>
                         Location
-                        <select name="carnival-location" id="carnival-location">
-                            <option value="White Oval">White Oval</option>
-                            <option value="Doyles">Doyles</option>
+                        <select name="carnival-location-id" id="carnival-location-id">
+                            {#each data.carnivalLocations as location}
+                            <option value="{location.locationID}">{location.location}</option>
+                            {/each}
                         </select>
                     </label>
                     <button>Add</button>

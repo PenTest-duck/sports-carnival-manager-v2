@@ -4,7 +4,6 @@
     /** @type {import('./$types').PageData} */
     export let data;
 
-    
 
 </script>
 
@@ -49,4 +48,17 @@
     <div id="events-list">
         <h3>Events</h3>
     </div>
+
+    <dialogue open>
+        <article>
+            <div id="create-event">
+                <h3>Create Event</h3>
+
+                <form method="POST" action="?/addEvent">
+                    
+                    <button>Add</button>
+                </form>
+            </div>
+        </article>
+    </dialogue>
 </div>

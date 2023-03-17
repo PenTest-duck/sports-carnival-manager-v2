@@ -12,10 +12,14 @@ export async function load() {
         ]
     });*/
     const carnivals = await sequelize.query("CALL GetCarnivals");
-
     console.log(carnivals);
 
-    return { carnivals };
+    const cT = await sequelize.query("SELECT * FROM carnivalType");
+    const cL = await sequelize.query("SELECT * FROM carnivalLocation");
+    const carnivalTypes = cT[0];
+    const carnivalLocations = cL[0];
+
+    return { carnivals, carnivalTypes, carnivalLocations };
 };
 
 /** @type {import('./$types').Actions} */
@@ -23,20 +27,20 @@ export const actions = {
     addCarnival: async ({ request }) => {
         const data = await request.formData();
         const name = data.get("carnival-name");
-        const type = data.get("carnival-type");
+        const typeID = data.get("carnival-type-id");
         const date = data.get("carnival-date") === "" ? null : data.get("carnival-date");
         const start_time = data.get("carnival-start-time")  === "" ? null : data.get("carnival-start-time");
         const end_time = data.get("carnival-end-time")  === "" ? null : data.get("carnival-end-time");
-        const location = data.get("carnival-location");
+        const locationID = data.get("carnival-location-id");
 
-        await sequelize.query('CALL CreateCarnival (:name, :type, :date, :start_time, :end_time, :location);', {
+        await sequelize.query('CALL CreateCarnival (:name, :typeID, :date, :start_time, :end_time, :locationID);', {
             replacements: {
                 name: name,
-                type: type,
+                typeID: typeID,
                 date: date,
                 start_time: start_time,
                 end_time: end_time,
-                location: location
+                locationID: locationID
             }
         });
     },
