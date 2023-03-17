@@ -14,7 +14,7 @@
       </ul>
       <ul>
         <li><a href="/">Home</a></li>
-        <li><a href="/dashboard">Dashboard</a></li>
+        <li><a href="/carnivals">Carnivals</a></li>
         <li><a href="#" role="button">Signup</a></li>
       </ul>
     </nav>

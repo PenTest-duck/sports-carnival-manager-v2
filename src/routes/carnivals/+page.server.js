@@ -1,14 +1,17 @@
-import { sequelize, Carnival } from "../../hooks.server"; 
+import { sequelize, Carnival, CarnivalLocation, CarnivalType } from "../../hooks.server"; 
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load() {
-    const carnivals = await Carnival.findAll({
+
+    /*const carnivals = await Carnival.findAll({
+        include: [{ model: CarnivalType }, { model: CarnivalLocation }],
         raw: true,
         order: [
             ["date", "ASC"],
             ["startTime", "ASC"],
         ]
-    });
+    });*/
+    const carnivals = await sequelize.query("CALL GetCarnivals");
 
     console.log(carnivals);
 

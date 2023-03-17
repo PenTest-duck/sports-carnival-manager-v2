@@ -12,4 +12,12 @@
     <td>{startTime}</td>
     <td>{endTime}</td>
     <td>{location}</td>
+    <td>{organiser}</td>
+    <td><a href="/carnivals/{id}">Open</td>
+    <td>
+        <form method="POST" action="?/removeCarnival">
+            <input type="hidden" id="id" name="id" value={id}>
+            <button>Remove</button>
+        </form>
+    </td>
 </tr>

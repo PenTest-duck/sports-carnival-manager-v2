@@ -37,8 +37,8 @@ export const Carnival = sequelize.define("Carnival", {
     tableName: "carnivals"
 });
 
-const CarnivalType = sequelize.define("CarnivalType", {
-    id: {
+export const CarnivalType = sequelize.define("CarnivalType", {
+    typeID: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         allowNull: false,
@@ -52,8 +52,8 @@ const CarnivalType = sequelize.define("CarnivalType", {
     tableName: "carnivalType"
 });
 
-const CarnivalLocation = sequelize.define("CarnivalLocation", {
-    id: {
+export const CarnivalLocation = sequelize.define("CarnivalLocation", {
+    locationID: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         allowNull: false,
@@ -70,6 +70,13 @@ const CarnivalLocation = sequelize.define("CarnivalLocation", {
 Carnival.hasOne(CarnivalType, {
     foreignKey: "typeID"
 });
+CarnivalType.belongsTo(Carnival, {
+    foreignKey: "typeID"
+});
+
 Carnival.hasOne(CarnivalLocation, {
+    foreignKey: "locationID"
+});
+CarnivalLocation.belongsTo(Carnival, {
     foreignKey: "locationID"
 });
