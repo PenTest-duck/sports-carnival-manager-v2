@@ -1,1 +1,1 @@
-<h1 class="centered">Welcome to Sports Manager</h1>
+<h1 class="centered">Welcome to Sports Carnival Manager</h1>

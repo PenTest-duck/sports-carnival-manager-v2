@@ -5,7 +5,6 @@
     /** @type {import('./$types').PageData} */
     export let data;
 
-
 </script>
 
 <div>
@@ -59,7 +58,7 @@
                 <th>Location</th>
             </tr>
             {#each data.events as event}
-                <Event {...event} />
+                <Event carnivalID={data.slug} {...event} />
             {/each}
         </table>
     </div>

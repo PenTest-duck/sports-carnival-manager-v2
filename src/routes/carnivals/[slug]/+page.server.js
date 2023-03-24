@@ -2,11 +2,13 @@ import { sequelize } from "../../../hooks.server";
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params }) {
-    const carnivals = await sequelize.query("CALL GetOneCarnival (:id)", {
+    const slug = params.slug;
+
+    const carnivalQueryResponse = await sequelize.query("CALL GetOneCarnival (:id)", {
         replacements: { id: params.slug }
     });
 
-    let carnival = carnivals[0]
+    let carnival = carnivalQueryResponse[0]
     console.log(carnival);
 
     const events = await sequelize.query("CALL GetEvents (:id)", {
@@ -23,7 +25,7 @@ export async function load({ params }) {
     const eventDivisions = eD[0];
     const eventLocations = eL[0];
 
-    return { carnival, events, eventTypes, eventAgeGroups, eventDivisions, eventLocations };
+    return { slug, carnival, events, eventTypes, eventAgeGroups, eventDivisions, eventLocations };
 };
 
 /** @type {import('./$types').Actions} */
