@@ -14,6 +14,7 @@
       </ul>
       <ul>
         <li><a href="/">Home</a></li>
+        <li><a href="/students">Students</a></li>
         <li><a href="/carnivals">Carnivals</a></li>
         <li><a href="/auth/signup" role="button">Sign Up</a></li>
         <li><a href="/auth/login" role="button">Login</a></li>

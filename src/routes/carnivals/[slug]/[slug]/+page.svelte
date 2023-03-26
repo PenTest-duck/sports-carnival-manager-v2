@@ -1,5 +1,6 @@
 <script>
 // @ts-nocheck
+    import Result from "$lib/components/Result.svelte";
 
     /** @type {import('./$types').PageData} */
     export let data;
@@ -47,7 +48,31 @@
     <div id="add-result">
         <h3>Results</h3>
 
-        <table>
+        <form method="POST" action="?/addResult">
+            <table>
+                <tr>
+                    <th>Student</th>
+                    <th>DNF</th>
+                    <th>DQ</th>
+                    <th>Result</th>
+                </tr>
+                <tr>
+                    <td>
+                        <select name="event-student-id" id="event-student-id">
+                            {#each data.students as student}
+                            <option value="{student.id}">[{student.initials}] {student.firstName} {student.lastName}</option>
+                            {/each}
+                        </select>
+                    </td>
+                    <td><input type="checkbox" name="event-dnf"></td>
+                    <td><input type="checkbox" name="event-dq"></td>
+                    <td><input type="text" name="event-result"></td>
+                    <button>Add</button>
+                </tr>
+            </table>
+        </form>
+
+        <table id="results-list">
             <tr>
                 <th>Rank</th>
                 <th>First Name</th>
@@ -58,20 +83,9 @@
                 <th>Result</th>
             </tr>
 
-            <tr>
-                <td></td>
-                <td>
-                    <input type="text" name="event-first-name" placeholder="First">
-                </td>
-                <td>
-                    <input type="text" name="event-last-name" placeholder="First">
-                </td>
-            </tr>
+            {#each data.results as result}
+                <Result {...result} />
+            {/each}
         </table>
-
-        <form method="POST" action="?/addResult">
-            <button>Add</button>
-        </form>
     </div>
-
 </div>

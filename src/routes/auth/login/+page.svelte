@@ -13,17 +13,17 @@
         <p>{error}</p>
     {/if}-->
 
-    <div>
-        <form method="POST" action="?/logIn">
-            <label>
-                Email Address
-                <input type="email" id="email" name="email" placeholder="Email address">
-            </label>
-            <label>
-                Password
-                <input type="password" id="password" name="password" placeholder="Password">
-            </label>
-            <button>Log In</button>
-        </form>
-    </div>
+    <form method="POST" action="?/logIn">
+        <label>
+            Email Address
+            <input type="email" id="email" name="email" placeholder="Email address">
+        </label>
+        <label>
+            Password
+            <input type="password" id="password" name="password" placeholder="Password">
+        </label>
+        <button>Log In</button>
+    </form>
+
+    <a href="/auth/signup">Sign up instead</a>
 </div>

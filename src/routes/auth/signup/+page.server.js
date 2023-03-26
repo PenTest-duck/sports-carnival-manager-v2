@@ -1,40 +1,48 @@
+import { sequelize } from "../../../hooks.server"; 
 import { redirect } from "@sveltejs/kit";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { goto } from "$app/navigation";
 import { auth } from "../../../firebase";
 
 /** @type {import('./$types').Actions} */
 export const actions = {
     signUp: async ({ request }) => {
-        let error;
+        let error; // need to return this to +page.svelte
+        let success = false;
 
         const data = await request.formData();
-        const username = data.get("username");
+        const firstName = data.get("first-name");
+        const lastName = data.get("last-name");
         const email = data.get("email");
         const password = data.get("password");
 
         try {
+            // @ts-ignore
             let user = await createUserWithEmailAndPassword(auth, email, password);
 
-            await updateProfile(user.user, {
-                displayName: username
-            });
-
             const { currentUser } = auth;
-
             if (currentUser) {
                 let uid = currentUser.uid;
-                
-                // set user document
             }
 
-            //await goto("/auth/login");
-            //throw redirect(303, "/auth/login");
+            success = true;
         } catch (e) {
             if (e instanceof Error) {
                 console.log("Sign up error: ", e);
                 error = e.message;
             }
+        }
+
+        if (success) {
+            // below assumes roleID 1 = "staff"
+            await sequelize.query("INSERT INTO staff VALUES (NULL, :email, :firstName, :lastName, 1)", {
+                replacements: {
+                    email: email,
+                    firstName: firstName,
+                    lastName: lastName
+                }
+            });
+
+            throw redirect(303, '/auth/login');
         }
     }
 };
