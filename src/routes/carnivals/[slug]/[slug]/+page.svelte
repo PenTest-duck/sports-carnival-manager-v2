@@ -32,14 +32,6 @@
             <td>{data.event.startTime}</td>
         </tr>
         <tr>
-            <th>End Time</th>
-            <td>{data.event.endTime}</td>
-        </tr>
-        <tr>
-            <th>Location</th>
-            <td>{data.event.location}</td>
-        </tr>
-        <tr>
             <th>Record</th>
             <td>{data.event.record}</td>
         </tr>

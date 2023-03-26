@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { sequelize } from "../../../../hooks.server"; 
 
 /** @type {import('./$types').PageServerLoad} */
@@ -9,6 +10,9 @@ export async function load({ params }) {
     });
 
     let event = eventQueryResponse[0]
+    if (event.record == null) {
+        event.record = "N/A";
+    }
     console.log(event);
 
     const students = await sequelize.query("CALL GetStudentsForEventResults");

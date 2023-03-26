@@ -11,6 +11,7 @@
     <td>{house}</td>
     <td>{firstName}</td>
     <td>{lastName}</td>
+    <td><a href="/students/{id}">Open</td>
     <td>
         <form method="POST" action="?/removeStudent">
             <input type="hidden" id="id" name="id" value={id}>

@@ -1,7 +1,7 @@
 <script>
 // @ts-nocheck
 
-    export let id, name, type, date, startTime, endTime, location, organiser;
+    export let id, name, type, date, startTime, endTime, location, firstName, lastName;
 
 </script>
 
@@ -12,7 +12,7 @@
     <td>{startTime}</td>
     <td>{endTime}</td>
     <td>{location}</td>
-    <td>{organiser}</td>
+    <td>{firstName} {lastName}</td>
     <td><a href="/carnivals/{id}">Open</td>
     <td>
         <form method="POST" action="?/removeCarnival">

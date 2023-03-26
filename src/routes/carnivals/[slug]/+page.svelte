@@ -5,18 +5,49 @@
     /** @type {import('./$types').PageData} */
     export let data;
 
+    let editingCarnival = false;
+    let dataChanged = false;
+
+    function setEditingCarnival() {
+        editingCarnival = true;
+    }
+
+    function cancelEditingCarnival() {
+        editingCarnival = false;
+        dataChanged = false;
+    }
+
+    function editCarnival() {
+        document.getElementById("editCarnivalForm").submit();
+    }
+
+    function setDataChanged() {
+        dataChanged = true;
+    }
+
 </script>
 
 <div>
     <h1>Carnival</h1>
 
     <div id="carnival-details">
-        <h3>Carnival Details</h3>
+        <h3 style="display: inline-block">Carnival Details</h3>
+        {#if !editingCarnival}
+            <button style="display: inline-block; width: 100px" on:click={setEditingCarnival}>Edit</button>
+        {:else}
+            <button style="display: inline-block; width: 150px; height: 50px" on:click={cancelEditingCarnival}>Cancel</button>
+            <button style="display: inline-block; width: 150px; height: 50px" on:click={editCarnival} disabled={!dataChanged || null}>Save</button>
+        {/if}
 
+        <form method="POST" action="?/editCarnival" id="editCarnivalForm">
         <table>
             <tr>
                 <th>Name</th>
-                <td>{data.carnival.name}</td>
+                {#if editingCarnival}
+                    <td><input type="text" name="carnival-name" value={data.carnival.name} on:input={setDataChanged}></td>
+                {:else}
+                    <td>{data.carnival.name}</td>
+                {/if}
             </tr>
             <tr>
                 <th>Type</th>
@@ -24,25 +55,58 @@
             </tr>
             <tr>
                 <th>Date</th>
-                <td>{data.carnival.date}</td>
+                {#if editingCarnival}
+                    <td><input type="date" name="carnival-date" value={data.carnival.date} on:input={setDataChanged}></td>
+                {:else}
+                    <td>{data.carnival.date}</td>
+                {/if}
             </tr>
             <tr>
                 <th>Start Time</th>
-                <td>{data.carnival.startTime}</td>
+                {#if editingCarnival}
+                    <td><input type="time" name="carnival-start-time" value={data.carnival.startTime} on:input={setDataChanged}></td>
+                {:else}
+                    <td>{data.carnival.startTime.slice(0, -3)}</td>
+                {/if}
             </tr>
             <tr>
                 <th>End Time</th>
-                <td>{data.carnival.endTime}</td>
+                {#if editingCarnival}
+                    <td><input type="time" name="carnival-end-time" value={data.carnival.endTime} on:input={setDataChanged}></td>
+                {:else}
+                    <td>{data.carnival.endTime.slice(0, -3)}</td>
+                {/if}
             </tr>
             <tr>
                 <th>Location</th>
-                <td>{data.carnival.location}</td>
+                {#if editingCarnival}
+                    <td>
+                        <select name="carnival-location-id" id="carnival-location-id" on:input={setDataChanged}>
+                        {#each data.carnivalLocations as location}
+                        <option value="{location.locationID}">{location.location}</option>
+                        {/each}
+                        </select>
+                    </td>
+                {:else}
+                    <td>{data.carnival.location}</td>
+                {/if}
             </tr>
             <tr>
                 <th>Organiser</th>
-                <td>{data.carnival.organiser}</td>
+                {#if editingCarnival}
+                    <td>
+                        <select name="carnival-staff-id" id="carnival-staff-id" on:change={setDataChanged}>
+                            {#each data.staffs as staff}
+                            <option value="{staff.id}">{staff.firstName} {staff.lastName}</option>
+                            {/each}
+                        </select>
+                    </td>
+                {:else}
+                    <td>{data.carnival.firstName} {data.carnival.lastName}</td>
+                {/if}
             </tr>
         </table>
+        </form>
     </div>
 
     <div id="events-list">
@@ -54,8 +118,6 @@
                 <th>Age Group</th>
                 <th>Division</th>
                 <th>Start Time</th>
-                <th>End Time</th>
-                <th>Location</th>
             </tr>
             {#each data.events as event}
                 <Event carnivalID={data.slug} {...event} />
@@ -99,21 +161,8 @@
 
                     <label>
                         Start Time
-                        <input type="time" name="event-start-time">
-                    </label>
-
-                    <label>
-                        End Time
-                        <input type="time" name="event-end-time">
-                    </label>
-
-                    <label>
-                        Location
-                        <select name="event-location-id" id="event-location-id">
-                            {#each data.eventLocations as location}
-                            <option value="{location.id}">{location.location}</option>
-                            {/each}
-                        </select>
+                        <input type="time" name="event-start-time"> 
+                        <!--min={data.carnival.startTime} max={data.carnival.endTime}-->
                     </label>
 
                     <button>Add</button>

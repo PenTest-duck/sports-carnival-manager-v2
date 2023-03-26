@@ -67,6 +67,14 @@
                             {/each}
                         </select>
                     </label>
+                    <label>
+                        Organiser
+                        <select name="carnival-staff-id" id="carnival-staff-id">
+                            {#each data.staffs as staff}
+                            <option value="{staff.id}">{staff.firstName} {staff.lastName}</option>
+                            {/each}
+                        </select>
+                    </label>
                     <button>Add</button>
                 </form>
             </div>

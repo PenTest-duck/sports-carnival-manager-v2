@@ -1,4 +1,6 @@
 <script>
+// @ts-nocheck
+
     import Student from "$lib/components/Student.svelte";
 
     /** @type {import('./$types').PageData} */

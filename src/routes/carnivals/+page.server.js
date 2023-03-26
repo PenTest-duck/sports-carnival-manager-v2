@@ -3,14 +3,6 @@ import { sequelize, Carnival, CarnivalLocation, CarnivalType } from "../../hooks
 /** @type {import('./$types').PageServerLoad} */
 export async function load() {
 
-    /*const carnivals = await Carnival.findAll({
-        include: [{ model: CarnivalType }, { model: CarnivalLocation }],
-        raw: true,
-        order: [
-            ["date", "ASC"],
-            ["startTime", "ASC"],
-        ]
-    });*/
     const carnivals = await sequelize.query("CALL GetCarnivals");
     console.log(carnivals);
 
@@ -19,7 +11,10 @@ export async function load() {
     const carnivalTypes = cT[0];
     const carnivalLocations = cL[0];
 
-    return { carnivals, carnivalTypes, carnivalLocations };
+    const s = await sequelize.query("SELECT * FROM staff");
+    const staffs = s[0];
+
+    return { carnivals, carnivalTypes, carnivalLocations, staffs };
 };
 
 /** @type {import('./$types').Actions} */
@@ -32,15 +27,17 @@ export const actions = {
         const start_time = data.get("carnival-start-time")  === "" ? null : data.get("carnival-start-time");
         const end_time = data.get("carnival-end-time")  === "" ? null : data.get("carnival-end-time");
         const locationID = data.get("carnival-location-id");
+        const staffID = data.get("carnival-staff-id");
 
-        await sequelize.query('CALL CreateCarnival (:name, :typeID, :date, :start_time, :end_time, :locationID);', {
+        await sequelize.query('CALL CreateCarnival (:name, :typeID, :date, :start_time, :end_time, :locationID, :staffID);', {
             replacements: {
                 name: name,
                 typeID: typeID,
                 date: date,
                 start_time: start_time,
                 end_time: end_time,
-                locationID: locationID
+                locationID: locationID,
+                staffID: staffID
             }
         });
     },
