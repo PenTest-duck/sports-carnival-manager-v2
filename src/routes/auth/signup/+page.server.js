@@ -15,13 +15,15 @@ export const actions = {
         const email = data.get("email");
         const password = data.get("password");
 
+        let uid;
+
         try {
             // @ts-ignore
             let user = await createUserWithEmailAndPassword(auth, email, password);
-
+            
             const { currentUser } = auth;
             if (currentUser) {
-                let uid = currentUser.uid;
+                uid = currentUser.uid;
             }
 
             success = true;
@@ -34,8 +36,9 @@ export const actions = {
 
         if (success) {
             // below assumes roleID 1 = "staff"
-            await sequelize.query("INSERT INTO staff VALUES (NULL, :email, :firstName, :lastName, 1)", {
+            await sequelize.query("INSERT INTO staff VALUES (:uid, :email, :firstName, :lastName, 1)", {
                 replacements: {
+                    uid: uid,
                     email: email,
                     firstName: firstName,
                     lastName: lastName

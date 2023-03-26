@@ -15,6 +15,11 @@ export async function load({ params }) {
     }
     console.log(event);
 
+    const eAG = await sequelize.query("SELECT * FROM eventAgeGroup");
+    const eD = await sequelize.query("SELECT * FROM eventDivision");
+    const eventAgeGroups = eAG[0];
+    const eventDivisions = eD[0];
+
     const students = await sequelize.query("CALL GetStudentsForEventResults");
 
     const results = await sequelize.query("CALL GetResultsForEvent (:eventID)", {
@@ -23,7 +28,7 @@ export async function load({ params }) {
 
     console.log(results);
 
-    return { event, students, results };
+    return { event, eventAgeGroups, eventDivisions, students, results };
 };
 
 /** @type {import('./$types').Actions} */
@@ -35,8 +40,6 @@ export const actions = {
         const dnf = data.get("event-dnf") === "on" ? true : false;
         const dq = data.get("event-dq") === "on" ? true : false;
         const result = data.get("event-result");
-
-        console.log(dnf);
 
         await sequelize.query("INSERT INTO results VALUES (NULL, :eventID, :studentID, :dnf, :dq, :result)", {
             replacements: {
@@ -55,6 +58,23 @@ export const actions = {
 
         await sequelize.query('DELETE FROM results WHERE id = :id', {
             replacements: { id: id }
+        });
+    },
+
+    editEvent: async ({ request, params }) => {
+        const data = await request.formData();
+        const id = params.slug;
+        const ageGroupID = data.get("event-age-group-id");
+        const divisionID = data.get("event-division-id");
+        const startTime = data.get("event-start-time")  === "" ? null : data.get("event-start-time");
+
+        await sequelize.query('UPDATE events SET ageGroupID = :ageGroupID, divisionID = :divisionID, startTime = :startTime WHERE id = :id', {
+            replacements: {
+                id: id,
+                ageGroupID: ageGroupID,
+                divisionID: divisionID,
+                startTime: startTime
+            }
         });
     }
 };

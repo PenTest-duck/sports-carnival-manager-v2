@@ -46,8 +46,8 @@ export const actions = {
         const data = await request.formData();
         const id = data.get("id");
 
-        await Carnival.destroy({
-            where: {id: id}
-        });
+        await sequelize.query("CALL RemoveCarnival (:id)", {
+            replacements: { id: id }
+        })
     }
 };

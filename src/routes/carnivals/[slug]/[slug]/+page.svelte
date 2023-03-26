@@ -5,37 +5,91 @@
     /** @type {import('./$types').PageData} */
     export let data;
 
+    let editingEvent = false;
+    let dataChanged = false;
+
+    function setEditingEvent() {
+        editingEvent = true;
+    }
+
+    function cancelEditingEvent() {
+        editingEvent = false;
+        dataChanged = false;
+    }
+
+    function editEvent() {
+        document.getElementById("editEventForm").submit();
+    }
+
+    function setDataChanged() {
+        dataChanged = true;
+    }
+
 </script>
 
 <div>
     <h1>Event</h1>
 
-    <div id="event-details">
-        <h3>Event Details</h3>
-    </div>
+    <p><a href="/carnivals/{data.event.carnivalID}">Back to Carnival</a></p>
 
-    <table>
-        <tr>
-            <th>Type</th>
-            <td>{data.event.type}</td>
-        </tr>
-        <tr>
-            <th>Age Group</th>
-            <td>{data.event.ageGroup}</td>
-        </tr>
-        <tr>
-            <th>Division</th>
-            <td>{data.event.division}</td>
-        </tr>
-        <tr>
-            <th>Start Time</th>
-            <td>{data.event.startTime}</td>
-        </tr>
-        <tr>
-            <th>Record</th>
-            <td>{data.event.record}</td>
-        </tr>
-    </table>
+    <div id="event-details">
+        <h3 style="display: inline-block;">Event Details</h3>
+        {#if !editingEvent}
+            <button style="display: inline-block; width: 100px" on:click={setEditingEvent}>Edit</button>
+        {:else}
+            <button style="display: inline-block; width: 150px; height: 50px" on:click={cancelEditingEvent}>Cancel</button>
+            <button style="display: inline-block; width: 150px; height: 50px" on:click={editEvent} disabled={!dataChanged || null}>Save</button>
+        {/if}
+
+        <form method="POST" action="?/editEvent" id="editEventForm">
+        <table>
+            <tr>
+                <th>Type</th>
+                <td>{data.event.type}</td>
+            </tr>
+            <tr>
+                <th>Age Group</th>
+                {#if editingEvent}
+                    <td>
+                        <select name="event-age-group-id" id="event-age-group-id" on:input={setDataChanged}>
+                        {#each data.eventAgeGroups as ageGroup}
+                        <option value="{ageGroup.id}" selected={ageGroup.ageGroup === data.event.ageGroup || null}>{ageGroup.ageGroup}</option>
+                        {/each}
+                        </select>
+                    </td>
+                {:else}
+                    <td>{data.event.ageGroup}</td>
+                {/if}
+            </tr>
+            <tr>
+                <th>Division</th>
+                {#if editingEvent}
+                    <td>
+                        <select name="event-division-id" id="event-division-id" on:input={setDataChanged}>
+                        {#each data.eventDivisions as division}
+                        <option value="{division.id}" selected={division.division === data.event.division || null}>{division.division}</option>
+                        {/each}
+                        </select>
+                    </td>
+                {:else}
+                    <td>{data.event.division}</td>
+                {/if}
+            </tr>
+            <tr>
+                <th>Start Time</th>
+                {#if editingEvent}
+                    <td><input type="time" name="event-start-time" value={data.event.startTime} on:input={setDataChanged}></td>
+                {:else}
+                    <td>{data.event.startTime.slice(0, -3)}</td>
+                {/if}
+            </tr>
+            <tr>
+                <th>Record</th>
+                <td>{data.event.record}</td>
+            </tr>
+        </table>
+        </form>
+    </div>
 
     <div id="add-result">
         <h3>Results</h3>
@@ -76,7 +130,7 @@
             </tr>
 
             {#each data.results as result}
-                <Result {...result} />
+                <Result {...result} rank={data.results.indexOf(result) + 1} />
             {/each}
         </table>
     </div>

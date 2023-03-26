@@ -1,0 +1,7 @@
+<script>
+
+</script>
+
+<div>
+    <h1>Student</h1>
+</div>

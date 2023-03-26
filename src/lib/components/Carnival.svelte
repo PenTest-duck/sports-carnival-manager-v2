@@ -9,8 +9,8 @@
     <td>{name}</td>
     <td>{type}</td>
     <td>{date}</td>
-    <td>{startTime}</td>
-    <td>{endTime}</td>
+    <td>{startTime.slice(0, -3)}</td>
+    <td>{endTime.slice(0, -3)}</td>
     <td>{location}</td>
     <td>{firstName} {lastName}</td>
     <td><a href="/carnivals/{id}">Open</td>

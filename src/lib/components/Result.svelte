@@ -3,6 +3,7 @@
     import { onMount } from "svelte";
     
     export let id, firstName, lastName, house, dnf, dq, result;
+    export let rank;
 
     onMount(() => {
         if (dnf == 1) {
@@ -16,7 +17,7 @@
  
  
 <tr class="result">
-    <td>Rank</td>
+    <td>{rank}</td>
     <td>{firstName}</td>
     <td>{lastName}</td>
     <td>{house}</td>

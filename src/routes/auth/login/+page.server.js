@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../../firebase";
 import { redirect } from "@sveltejs/kit";
@@ -18,12 +19,6 @@ export const actions = {
             let user = await signInWithEmailAndPassword(auth, email, password);
     
             const { currentUser } = auth;
-    
-            if (currentUser) {
-                let uid = currentUser.uid;
-                
-                // set document
-            }
 
             success = true;
 

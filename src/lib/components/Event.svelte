@@ -10,7 +10,7 @@
     <td>{type}</td>
     <td>{ageGroup}</td>
     <td>{division}</td>
-    <td>{startTime}</td>
+    <td>{startTime.slice(0, -3)}</td>
     <td><a href="/carnivals/{carnivalID}/{id}">Open</td>
     <td>
         <form method="POST" action="?/removeEvent">
