@@ -1,7 +1,6 @@
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import { sequelize } from "../hooks.server"; 
-
-const auth = getAuth();
+import { auth } from "../firebase";
 
 /** @type {import('./$types').LayoutServerLoad} */
 export async function load() {
