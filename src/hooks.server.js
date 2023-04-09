@@ -1,6 +1,7 @@
 import { Sequelize, DataTypes } from "sequelize";
+import { MYSQL_ROOT_PW } from '$env/static/private'
 
-export const sequelize = new Sequelize("db3nf", "root", "7z4RUYYc8Om9Sjbp", { // insecure
+export const sequelize = new Sequelize("db3nf", "root", MYSQL_ROOT_PW, { // insecure
     host: "localhost",
     dialect: "mysql",
     define: {

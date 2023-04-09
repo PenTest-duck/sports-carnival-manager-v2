@@ -18,6 +18,7 @@
  
 <tr class="result">
     <td>{rank}</td>
+    <td>Points</td>
     <td>{firstName}</td>
     <td>{lastName}</td>
     <td>{house}</td>

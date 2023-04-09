@@ -121,12 +121,13 @@
         <table id="results-list">
             <tr>
                 <th>Rank</th>
+                <th>Points</th>
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>House</th>
                 <th>DNF</th>
                 <th>DQ</th>
-                <th>Result</th>
+                <th>Result ({data.event.unit})</th>
             </tr>
 
             {#each data.results as result}

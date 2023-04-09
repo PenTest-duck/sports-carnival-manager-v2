@@ -83,7 +83,7 @@
                     <td>
                         <select name="carnival-location-id" id="carnival-location-id" on:input={setDataChanged}>
                         {#each data.carnivalLocations as location}
-                        <option value="{location.locationID}" selected={location.location === data.event.location || null}>{location.location}</option>
+                        <option value="{location.locationID}" selected={location.location === data.carnival.location || null}>{location.location}</option>
                         {/each}
                         </select>
                     </td>
@@ -107,6 +107,10 @@
             </tr>
         </table>
         </form>
+    </div>
+
+    <div id="house-points">
+        <h3>House Points</h3>
     </div>
 
     <div id="events-list">

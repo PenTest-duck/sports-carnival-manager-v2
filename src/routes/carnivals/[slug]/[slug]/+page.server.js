@@ -25,6 +25,10 @@ export async function load({ params }) {
     const results = await sequelize.query("CALL GetResultsForEvent (:eventID)", {
         replacements: { eventID: params.slug }
     })
+    
+    if (event.type == "Long Jump" || event.type == "High Jump" || event.type == "Shot Put") {
+        results.reverse();
+    }
 
     console.log(results);
 
