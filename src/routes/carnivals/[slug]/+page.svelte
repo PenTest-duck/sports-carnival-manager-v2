@@ -122,6 +122,7 @@
                 <th>Age Group</th>
                 <th>Division</th>
                 <th>Start Time</th>
+                <th>Competitors</th>
             </tr>
             {#each data.events as event}
                 <Event carnivalID={data.slug} {...event} />

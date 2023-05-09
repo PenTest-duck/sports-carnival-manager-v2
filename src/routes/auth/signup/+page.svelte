@@ -10,12 +10,13 @@
 </svelte:head>
 
 <div>
-    <h1>Sign Up</h1>
-    <!--{#if error}
-        <p>{error}</p>
-    {/if}-->
     
     <form method="POST" action="?/signUp">
+        <h1>Sign Up</h1>
+        <!--{#if error}
+            <p>{error}</p>
+        {/if}-->
+
         <label>
             First Name
             <input type="text" id="first-name" name="first-name" placeholder="First name">
@@ -33,7 +34,20 @@
             <input type="password" id="password" name="password" placeholder="Password">
         </label>
         <button>Sign Up</button>
-    </form>
 
-    <a href="/auth/login">Log in instead</a>
+        <a href="/auth/login">Log in instead</a>
+    </form>
 </div>
+
+<style>
+    form {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
+
+        padding: 3%;
+        border-radius: 20px;
+        background-color: rgb(162, 194, 200);
+    }
+</style>

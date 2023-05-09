@@ -7,7 +7,7 @@
     let navbar = {logo: 'images/favicon.ico', navItems: [{destination: '/', name: "Home"}]}
 </script>
 
-<div>
+<div style="margin-left: 5%; margin-right: 5%">
   <nav>
     <ul>
       <li><strong><a href="/">Sports Carnival Manager</a></strong></li>
