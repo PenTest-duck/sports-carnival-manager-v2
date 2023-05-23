@@ -131,7 +131,7 @@
             </tr>
 
             {#each data.results as result}
-                <Result {...result} rank={data.results.indexOf(result) + 1} />
+                <Result {...result} rank={result.placing} />
             {/each}
         </table>
     </div>

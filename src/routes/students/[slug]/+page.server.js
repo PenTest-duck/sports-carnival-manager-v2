@@ -15,8 +15,10 @@ export async function load({ params }) {
         replacements: { id: params.slug }
     });
     const results = r[0]
+
+    const events = await sequelize.query("CALL GetEvents (0)");
     
-    return { student, houses };
+    return { student, houses, results, events };
 };
 
 /** @type {import('./$types').Actions} */

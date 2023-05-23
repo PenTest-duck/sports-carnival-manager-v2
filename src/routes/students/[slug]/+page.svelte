@@ -1,6 +1,7 @@
 <script>
 // @ts-nocheck
 
+  import Participation from '$lib/components/Participation.svelte';
 
     /** @type {import('./$types').PageData} */
     export let data;
@@ -84,6 +85,19 @@
 
     <div id="participation-history">
         <h3>Participation History</h3>
-        
+        <table>
+            <tr>
+                <th>Event</th>
+                <th>Age Group</th>
+                <th>Division</th>
+                <th>Rank</th>
+                <th>DNF</th>
+                <th>DQ</th>
+                <th>Result</th>
+            </tr>
+            {#each data.results as result}
+            <Participation {...result} events=events/>
+            {/each}
+        </table>
     </div>
 </div>

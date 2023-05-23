@@ -7,10 +7,13 @@
 
     onMount(() => {
         if (dnf == 1) {
-            document.getElementById("result-dnf").setAttribute("checked", "");
+            document.getElementById("result-dnf-" + id).setAttribute("checked", "");
         }
         if (dq == 1) {
-            document.getElementById("result-dq").setAttribute("checked", "");
+            document.getElementById("result-dq-" + id).setAttribute("checked", "");
+        }
+        if (rank == 99999) {
+            rank = "N/A";
         }
     });
 </script>
@@ -22,8 +25,8 @@
     <td>{firstName}</td>
     <td>{lastName}</td>
     <td>{house}</td>
-    <td><input type="checkbox" id="result-dnf"></td>
-    <td><input type="checkbox" id="result-dq"></td>
+    <td><input type="checkbox" id="result-dnf-{id}"></td>
+    <td><input type="checkbox" id="result-dq-{id}"></td>
     <td>{result}</td>
     <td>
         <form method="POST" action="?/removeResult">
