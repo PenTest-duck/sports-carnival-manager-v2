@@ -25,10 +25,6 @@ export async function load({ params }) {
     const results = await sequelize.query("CALL GetResultsForEvent (:eventID)", {
         replacements: { eventID: params.slug }
     });
-    
-    /*if (event.type == "Long Jump" || event.type == "High Jump" || event.type == "Shot Put") {
-        results.reverse();
-    }*/
 
     console.log(results);
 
@@ -45,8 +41,12 @@ export const actions = {
         const dq = data.get("event-dq") === "on" ? true : false;
         const result = data.get("event-result");
 
-        const ascending = await sequelize.query("SELECT ascending FROM eventType WHERE id = :eventID", {
+        const typeID = await sequelize.query("SELECT typeID FROM events WHERE id = :eventID", {
             replacements: { eventID: eventID }
+        })
+
+        const ascending = await sequelize.query("SELECT ascending FROM eventType WHERE id = :typeID", {
+            replacements: { typeID: typeID[0][0].typeID }
         });
 
         await sequelize.query("CALL AddResult (:eventID, :studentID, :dnf, :dq, :result, :ascending)", {

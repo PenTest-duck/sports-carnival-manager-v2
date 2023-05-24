@@ -2,7 +2,7 @@
     // @ts-nocheck
     import { onMount } from "svelte";
     
-    export let id, firstName, lastName, house, dnf, dq, result;
+    export let id, firstName, lastName, house, dnf, dq, result, points;
     export let rank;
 
     onMount(() => {
@@ -21,7 +21,7 @@
  
 <tr class="result">
     <td>{rank}</td>
-    <td>Points</td>
+    <td>{points}</td>
     <td>{firstName}</td>
     <td>{lastName}</td>
     <td>{house}</td>

@@ -1,7 +1,7 @@
 <script>
 // @ts-nocheck
 
-  import Participation from '$lib/components/Participation.svelte';
+    import Participation from '$lib/components/Participation.svelte';
 
     /** @type {import('./$types').PageData} */
     export let data;
@@ -96,7 +96,7 @@
                 <th>Result</th>
             </tr>
             {#each data.results as result}
-            <Participation {...result} events=events/>
+            <Participation {...result} events={data.events}/>
             {/each}
         </table>
     </div>

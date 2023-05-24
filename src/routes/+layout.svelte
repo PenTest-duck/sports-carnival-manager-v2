@@ -16,6 +16,7 @@
     <ul>
       <li><a href="/">Home</a></li>
       <li><a href="/students">Students</a></li>
+      <li><a href="/houses">Houses</a></li>
       <li><a href="/carnivals">Carnivals</a></li>
       {#if data.staffName != ""}
         <li>Hello {data.staffName}</li>

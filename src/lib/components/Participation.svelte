@@ -2,7 +2,7 @@
     // @ts-nocheck
     import { onMount } from "svelte";
     
-    export let id, eventID, dnf, dq, placing, result;
+    export let id, eventID, studentID, dnf, dq, placing, result;
     export let events;
 
     let type = "N/A";
@@ -20,16 +20,15 @@
             placing = "N/A";
         }
 
-        // TO FIX
-        console.log(eventID);
-        events.foreach((event) => {
+        // TO FIX 
+        for (const event of events) {
             console.log(event.id);
             if (event.id == eventID) {
                 type = event.type;
                 ageGroup = event.ageGroup;
                 division = event.division;
             }
-        });
+        }
     });
 </script>
  

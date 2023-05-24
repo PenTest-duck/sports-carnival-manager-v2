@@ -25,6 +25,17 @@
         dataChanged = true;
     }
 
+    let selected_eventType;
+    let only_championship = false;
+
+    function toggleChampionships() {
+        if ([4, 5, 10, 11, 12].includes(selected_eventType)) {
+            only_championship = true;
+        } else {
+            only_championship = false;
+        }
+    }
+
 </script>
 
 <div>
@@ -139,7 +150,7 @@
                     
                     <label>
                         Type
-                        <select name="event-type-id" id="event-type-id">
+                        <select name="event-type-id" id="event-type-id" bind:value={selected_eventType} on:change={toggleChampionships}>
                             {#each data.eventTypes as type}
                             <option value="{type.id}">{type.type}</option>
                             {/each}
@@ -158,9 +169,13 @@
                     <label>
                         Division
                         <select name="event-division-id" id="event-division-id">
-                            {#each data.eventDivisions as division}
-                            <option value="{division.id}">{division.division}</option>
-                            {/each}
+                            {#if only_championship}
+                                <option value="1">Championships</option>
+                            {:else}
+                                {#each data.eventDivisions as division}
+                                <option value="{division.id}">{division.division}</option>
+                                {/each}
+                            {/if}
                         </select>
                     </label>
 
