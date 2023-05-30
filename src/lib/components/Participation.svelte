@@ -2,7 +2,7 @@
     // @ts-nocheck
     import { onMount } from "svelte";
     
-    export let id, eventID, studentID, dnf, dq, placing, result;
+    export let id, eventID, studentID, dnf, dq, placing, result, points;
     export let events;
 
     let type = "N/A";
@@ -40,5 +40,6 @@
     <td><input type="checkbox" disabled id="result-dnf-{id}"></td>
     <td><input type="checkbox" disabled id="result-dq-{id}"></td>
     <td>{result}</td>
+    <td>{points}</td>
 </tr>
     

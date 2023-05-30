@@ -65,7 +65,7 @@ export const actions = {
         const data = await request.formData();
         const id = data.get("id");
 
-        await sequelize.query('DELETE FROM results WHERE id = :id', {
+        await sequelize.query('CALL RemoveResult (:id)', {
             replacements: { id: id }
         });
     },

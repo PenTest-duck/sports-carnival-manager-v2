@@ -94,6 +94,7 @@
                 <th>DNF</th>
                 <th>DQ</th>
                 <th>Result</th>
+                <th>Points</th>
             </tr>
             {#each data.results as result}
             <Participation {...result} events={data.events}/>

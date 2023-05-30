@@ -59,9 +59,9 @@ export const actions = {
         const data = await request.formData();
         const id = data.get("id");
 
-        await sequelize.query('DELETE FROM events WHERE id = :id', {
+        /*await sequelize.query('DELETE FROM events WHERE id = :id', {
             replacements: { id: id }
-        });
+        });*/
     },
 
     editCarnival: async ({ request, params }) => {
