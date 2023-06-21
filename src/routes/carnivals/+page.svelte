@@ -7,7 +7,7 @@
 
 </script>
 
-<div style="width: 40%">
+<div id="main-container">
     <div id="carnival-list">
         <h3>Carnival List</h3>
 
@@ -81,3 +81,7 @@
         </article>
     </dialogue>
 </div>
+
+<style>
+    @import "$lib/css/main-container.css";
+</style>

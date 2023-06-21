@@ -8,7 +8,7 @@
 
 </script>
 
-<div>
+<div id="main-container">
     <h1>Students</h1>
 
     <div id="students-list">
@@ -55,3 +55,7 @@
             </form>
     </div>
 </div>
+
+<style>
+    @import "$lib/css/main-container.css";
+</style>

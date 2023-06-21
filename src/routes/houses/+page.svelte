@@ -6,7 +6,7 @@
 
 </script>
 
-<div>
+<div id="main-container">
     <h1>Houses</h1>
 
     <table>
@@ -27,3 +27,7 @@
         {/each}
     </table>
 </div>
+
+<style>
+    @import "$lib/css/main-container.css";
+</style>

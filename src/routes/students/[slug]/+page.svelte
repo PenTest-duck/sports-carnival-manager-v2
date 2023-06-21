@@ -27,16 +27,16 @@
     }
 </script>
 
-<div>
+<div id="main-container">
     <h1>Student</h1>
 
     <div id="student-details">
         <h3 style="display: inline-block">Student Details</h3>
         {#if !editingStudent}
-            <button style="display: inline-block; width: 100px" on:click={setEditingStudent}>Edit</button>
+            <button style="float: right; display: inline-block; width: 100px" on:click={setEditingStudent}>Edit</button>
         {:else}
-            <button style="display: inline-block; width: 150px; height: 50px" on:click={cancelEditingStudent}>Cancel</button>
-            <button style="display: inline-block; width: 150px; height: 50px" on:click={editStudent} disabled={!dataChanged || null}>Save</button>
+            <button style="float: right; display: inline-block; width: 150px; height: 50px; margin-left: 10px" on:click={cancelEditingStudent}>Cancel</button>
+            <button style="float: right; display: inline-block; width: 150px; height: 50px" on:click={editStudent} disabled={!dataChanged || null}>Save</button>
         {/if}
 
         <form method="POST" action="?/editStudent" id="editStudentForm">
@@ -102,3 +102,7 @@
         </table>
     </div>
 </div>
+
+<style>
+    @import "$lib/css/main-container.css";
+</style>

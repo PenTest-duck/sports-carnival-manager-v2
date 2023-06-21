@@ -27,7 +27,7 @@
 
 </script>
 
-<div>
+<div id="main-container">
     <h1>Event</h1>
 
     <p><a href="/carnivals/{data.event.carnivalID}">Back to Carnival</a></p>
@@ -136,3 +136,7 @@
         </table>
     </div>
 </div>
+
+<style>
+    @import "$lib/css/main-container.css";
+</style>

@@ -38,7 +38,7 @@
 
 </script>
 
-<div>
+<div id="main-container">
     <h1>Carnival</h1>
 
     <div id="carnival-details">
@@ -191,3 +191,7 @@
         </article>
     </dialogue>
 </div>
+
+<style>
+    @import "$lib/css/main-container.css";
+</style>
