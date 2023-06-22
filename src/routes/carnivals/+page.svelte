@@ -12,6 +12,7 @@
         <h3>Carnival List</h3>
 
         <table>
+            <!--Table headers-->
             <tr>
                 <th>Name</th>
                 <th>Type</th>
@@ -21,6 +22,8 @@
                 <th>Location</th>
                 <th>Organiser</th>
             </tr>
+
+            <!--Row of each carnival's name, type, date, start time, end time, location, organiser + open & delete buttons-->
             {#each data.carnivals as carnival}
                 <Carnival {...carnival} />
             {/each}
@@ -35,12 +38,14 @@
                 <h3>Create Carnival</h3>
 
                 <form method="POST" action="?/addCarnival">
+                    <!--Add carnival input fields-->
                     <label>
                         Name
                         <input type="text" name="carnival-name" placeholder="Carnival Name">
                     </label>
                     <label>
                         Type
+                        <!--Carnival type dropdown select-->
                         <select name="carnival-type-id" id="carnival-type-id">
                             {#each data.carnivalTypes as type}
                             <option value="{type.typeID}">{type.type}</option>
@@ -61,6 +66,7 @@
                     </label>
                     <label>
                         Location
+                        <!--Carnival location dropdown select-->
                         <select name="carnival-location-id" id="carnival-location-id">
                             {#each data.carnivalLocations as location}
                             <option value="{location.locationID}">{location.location}</option>
@@ -69,6 +75,7 @@
                     </label>
                     <label>
                         Organiser
+                        <!--Carnival organiser dropdown select-->
                         <select name="carnival-staff-id" id="carnival-staff-id">
                             {#each data.staffs as staff}
                             <option value="{staff.id}">{staff.firstName} {staff.lastName}</option>
@@ -83,5 +90,5 @@
 </div>
 
 <style>
-    @import "$lib/css/main-container.css";
+    @import "$lib/css/containers.css";
 </style>

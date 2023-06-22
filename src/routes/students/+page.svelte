@@ -14,6 +14,7 @@
     <div id="students-list">
         <h3>Students List</h3>
         <table>
+            <!--Table headers-->
             <tr>
                 <th>Number</th>
                 <th>House</th>
@@ -21,6 +22,7 @@
                 <th>Last Name</th>
             </tr>
 
+            <!--Row of each student's number, first name, last name, house + open & remove buttons-->
             {#each data.students as student}
                 <Student {...student} />
             {/each}
@@ -31,12 +33,14 @@
         <h3>Add Student</h3>
 
             <form method="POST" action="?/addStudent">
+                <!--Add student input fields-->
                 <label>
                     Number
                     <input type="text" name="student-number" placeholder="Number">
                 </label>
                 <label>
                     House
+                    <!--House selection dropdown-->
                     <select name="student-house-id" id="student-house-id">
                         {#each data.houses as house}
                         <option value="{house.id}">{house.house}</option>
@@ -57,5 +61,5 @@
 </div>
 
 <style>
-    @import "$lib/css/main-container.css";
+    @import "$lib/css/containers.css";
 </style>

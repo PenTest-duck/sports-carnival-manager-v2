@@ -7,6 +7,10 @@
     let navbar = {logo: 'images/favicon.ico', navItems: [{destination: '/', name: "Home"}]}
 </script>
 
+<head>
+  <script src="https://kit.fontawesome.com/abc7f9b08f.js" crossorigin="anonymous"></script>
+</head>
+
 <div style="margin-left: 5%; margin-right: 5%">
   <nav>
     <ul>

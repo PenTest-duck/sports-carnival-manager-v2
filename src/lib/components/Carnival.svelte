@@ -17,7 +17,7 @@
     <td>
         <form method="POST" action="?/removeCarnival">
             <input type="hidden" id="id" name="id" value={id}>
-            <button>Remove</button>
+            <button><i class="fa-solid fa-trash" style="color: red"></i></button>
         </form>
     </td>
 </tr>

@@ -5,7 +5,8 @@ import { redirect } from "@sveltejs/kit";
 export const actions = {
     logout: async ({ request }) => {
         const auth = getAuth();
-        console.log("AGFEFAW");
+
+        // Destroy session and log out
         signOut(auth).then(() => {
             throw redirect(303, '/auth/login');
         }).catch((error) => {

@@ -20,6 +20,7 @@ export async function load() {
 /** @type {import('./$types').Actions} */
 export const actions = {
     addCarnival: async ({ request }) => {
+        // Extract variables from form submission
         const data = await request.formData();
         const name = data.get("carnival-name");
         const typeID = data.get("carnival-type-id");
@@ -29,6 +30,7 @@ export const actions = {
         const locationID = data.get("carnival-location-id");
         const staffID = data.get("carnival-staff-id");
 
+        // Invoke MySQL stored procedure to create carnival
         await sequelize.query('CALL CreateCarnival (:name, :typeID, :date, :start_time, :end_time, :locationID, :staffID);', {
             replacements: {
                 name: name,
@@ -43,9 +45,11 @@ export const actions = {
     },
 
     removeCarnival: async ({ request }) => {
+        // Extract variable from form submission
         const data = await request.formData();
         const id = data.get("id");
 
+        // Invoke MySQL stored procedure to remove carnival
         await sequelize.query("CALL RemoveCarnival (:id)", {
             replacements: { id: id }
         })

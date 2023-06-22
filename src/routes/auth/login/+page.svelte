@@ -1,20 +1,23 @@
 <script>
-    
+    /** @type {import('./$types').ActionData} */
+    export let form;
 </script>
 
 <svelte:head>
     <title>Log In</title>
 </svelte:head>
 
-<div>
+<div id="auth-container">
 
     <form method="POST" action="?/logIn">
         <h1>Log In</h1>
 
-        <!--{#if error}
-            <p>{error}</p>
-        {/if}-->
+        <!--Display error message from server process-->
+        {#if form?.error}
+            <p id="error">{form?.error}</p>
+        {/if}
 
+        <!--Log in input fields-->
         <label>
             Email Address
             <input type="email" id="email" name="email" placeholder="Email address">
@@ -31,14 +34,9 @@
 </div>
 
 <style>
-    form {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        width: 40%;
+    @import "$lib/css/containers.css";
 
-        padding: 3%;
-        border-radius: 20px;
-        background-color: rgb(162, 194, 200);
+    #error {
+        color: red;
     }
 </style>

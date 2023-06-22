@@ -10,12 +10,14 @@
     <h1>Records</h1>
 
     <table>
+        <!--Table headers-->
         <tr>
             <th>Event</th>
             <th>Age Group</th>
             <th>Result</th>
         </tr>
 
+        <!--Row of each record's event, age group and result-->
         {#each data.athletics_records as athletics_record}
         <tr>
             <td>{athletics_record.type}</td>
@@ -29,5 +31,5 @@
 
 
 <style>
-    @import "$lib/css/main-container.css";
+    @import "$lib/css/containers.css";
 </style>

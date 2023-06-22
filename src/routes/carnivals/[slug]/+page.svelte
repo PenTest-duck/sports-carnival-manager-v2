@@ -43,11 +43,13 @@
 
     <div id="carnival-details">
         <h3 style="display: inline-block">Carnival Details</h3>
+
+        <!--Edit or Cancel/Save buttons to show when needed-->
         {#if !editingCarnival}
-            <button style="display: inline-block; width: 100px" on:click={setEditingCarnival}>Edit</button>
+            <button style="float: right; display: inline-block; width: 120px" on:click={setEditingCarnival}>Edit</button>
         {:else}
-            <button style="display: inline-block; width: 150px; height: 50px" on:click={cancelEditingCarnival}>Cancel</button>
-            <button style="display: inline-block; width: 150px; height: 50px" on:click={editCarnival} disabled={!dataChanged || null}>Save</button>
+            <button style="float: right; display: inline-block; width: 120px; margin-left: 10px" on:click={cancelEditingCarnival}>Cancel</button>
+            <button style="float: right; display: inline-block; width: 120px" on:click={editCarnival} disabled={!dataChanged || null}>Save</button>
         {/if}
 
         <form method="POST" action="?/editCarnival" id="editCarnivalForm">
@@ -120,10 +122,6 @@
         </form>
     </div>
 
-    <div id="house-points">
-        <h3>House Points</h3>
-    </div>
-
     <div id="events-list">
         <h3>Events</h3>
 
@@ -193,5 +191,5 @@
 </div>
 
 <style>
-    @import "$lib/css/main-container.css";
+    @import "$lib/css/containers.css";
 </style>

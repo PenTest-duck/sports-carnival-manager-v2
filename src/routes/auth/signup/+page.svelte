@@ -1,22 +1,24 @@
 <script>
 // @ts-nocheck
-    //import { error } from "../signup/+page.server";
-
-    
+    /** @type {import('./$types').ActionData} */
+    export let form;
 </script>
 
 <svelte:head>
     <title>Sign Up</title>
 </svelte:head>
 
-<div>
+<div id="auth-container">
     
     <form method="POST" action="?/signUp">
         <h1>Sign Up</h1>
-        <!--{#if error}
-            <p>{error}</p>
-        {/if}-->
 
+        <!--Display error message from server process-->
+        {#if form?.error}
+            <p id="error">{form?.error}</p>
+        {/if}
+
+        <!--Sign up input fields-->
         <label>
             First Name
             <input type="text" id="first-name" name="first-name" placeholder="First name">
@@ -40,14 +42,9 @@
 </div>
 
 <style>
-    form {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        width: 50%;
+    @import "$lib/css/containers.css";
 
-        padding: 3%;
-        border-radius: 20px;
-        background-color: rgb(162, 194, 200);
+    #error {
+        color: red;
     }
 </style>

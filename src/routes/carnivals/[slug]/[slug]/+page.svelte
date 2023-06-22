@@ -35,10 +35,10 @@
     <div id="event-details">
         <h3 style="display: inline-block;">Event Details</h3>
         {#if !editingEvent}
-            <button style="display: inline-block; width: 100px" on:click={setEditingEvent}>Edit</button>
+            <button style="float: right; display: inline-block; width: 120px" on:click={setEditingEvent}>Edit</button>
         {:else}
-            <button style="display: inline-block; width: 150px; height: 50px" on:click={cancelEditingEvent}>Cancel</button>
-            <button style="display: inline-block; width: 150px; height: 50px" on:click={editEvent} disabled={!dataChanged || null}>Save</button>
+            <button style="float: right; display: inline-block; width: 120px; margin-left: 10px" on:click={cancelEditingEvent}>Cancel</button>
+            <button style="float: right; display: inline-block; width: 120px" on:click={editEvent} disabled={!dataChanged || null}>Save</button>
         {/if}
 
         <form method="POST" action="?/editEvent" id="editEventForm">
@@ -138,5 +138,5 @@
 </div>
 
 <style>
-    @import "$lib/css/main-container.css";
+    @import "$lib/css/containers.css";
 </style>

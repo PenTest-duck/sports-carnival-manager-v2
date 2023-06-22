@@ -7,29 +7,33 @@ import { redirect } from "@sveltejs/kit";
 export const actions = {
     logIn: async ({ request }) => {
         
-        let error; // need to return this to +page.svelte
-        let success = false;
-
+        // Extract variables from form submission
         const data = await request.formData();
         const email = data.get("email");
         const password = data.get("password");
         
         try {
+            // API request to Firebase Auth to authenticate user and return the found user record
             let user = await signInWithEmailAndPassword(auth, email, password);
-    
-            const { currentUser } = auth;
 
-            success = true;
+            // If logged in, redirect to dashboard
+            throw redirect(303, '/');
 
         } catch (e) {
             if (e instanceof Error) {
                 console.log("Log in error", e);
-                error = e.message;
-            }
-        }
 
-        if (success) {
-            throw redirect(303, '/');
+                if (e.code == "auth/user-not-found") {
+                    return { error: "User does not exist" }
+                }
+
+                if (e.code == "auth/wrong-password") {
+                    return { error: "Password incorrect" }
+                }
+
+                // Any other errors returned by Firebase Auth is displayed as-is
+                return { error: "There was an error with the database -- " + e.message };
+            }
         }
     }
 };
