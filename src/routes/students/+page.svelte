@@ -1,10 +1,16 @@
 <script>
 // @ts-nocheck
 
+    // Import components
     import Student from "$lib/components/Student.svelte";
 
+    // Fetch loaded data
     /** @type {import('./$types').PageData} */
     export let data;
+
+    // Fetch action data
+    /** @type {import('./$types').ActionData} */
+    export let form;
 
 </script>
 
@@ -31,6 +37,11 @@
 
     <div id="add-student">
         <h3>Add Student</h3>
+
+            <!--Display error message from server process-->
+            {#if form?.error}
+                <p id="error">{form?.error}</p>
+            {/if}
 
             <form method="POST" action="?/addStudent">
                 <!--Add student input fields-->

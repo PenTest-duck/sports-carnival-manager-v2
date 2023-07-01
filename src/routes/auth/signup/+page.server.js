@@ -1,22 +1,18 @@
 // @ts-nocheck
+// Imports
 import { sequelize } from "../../../hooks.server"; 
 import { redirect } from "@sveltejs/kit";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../../../firebase";
+import { validateName } from "$lib/validation";
 
-// Check name only has alphabet characters
-function validateName(name) {
-    if (Boolean(name.match(/^[A-Za-z]*$/))) {     // Regex for alphabet            
-        return true
-    } else {
-        return false
-    }
-}
-
-// Check email conforms to valid format
-// Check email does not already exist in the database
+// Function: validateEmail()
+// Purpose: check email conforms to valid format AND does not already exist in the database
+// Parameters: email
+// Returns: "Success" OR error message
 async function validateEmail(email) {
-    const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;   // Regex for valid email format
+    // Check email matches regex of valid email addresses
+    const validEmailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     if (!Boolean(email.match(validRegex))) {
         return "Invalid email"
     }
@@ -25,7 +21,6 @@ async function validateEmail(email) {
     const existingEmail = await sequelize.query("SELECT * FROM staff WHERE email = :email", {
         replacements: { email: email }
     });
-    console.log(existingEmail[0][0]);
 
     // If any rows are returned, that means an account already exists
     if (existingEmail[0][0] != null) {
@@ -35,6 +30,10 @@ async function validateEmail(email) {
     return "Success"
 }
 
+// Function: validatePassword()
+// Purpose: check password matches complexity requirements
+// Parameters: password
+// Returns: "Success" OR error message
 function validatePassword(password) {
     // Password complexity requirement: check password length is at least 8
     if (password.length < 8) {
@@ -71,6 +70,10 @@ function validatePassword(password) {
 
 /** @type {import('./$types').Actions} */
 export const actions = {
+    // Function: signUp()
+    // Purpose: validate parameters, then create new user in Firebase Auth and in the database
+    // Parameters: form data (first name, last name, email, password)
+    // Returns: redirection to / OR error message
     signUp: async ({ request }) => {
 
         // Extract variables from form submission

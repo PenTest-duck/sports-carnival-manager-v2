@@ -1,6 +1,7 @@
 <script>
 // @ts-nocheck
 
+    // Fetch loaded data
     /** @type {import('./$types').PageData} */
     export let data;
 

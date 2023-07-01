@@ -1,10 +1,15 @@
 // @ts-nocheck
+// Imports
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../../firebase";
 import { redirect } from "@sveltejs/kit";
 
 /** @type {import('./$types').Actions} */
 export const actions = {
+    // Function: login()
+    // Purpose: checks credentials, and authenticates user OR returns error message
+    // Parameters: form data (email, password)
+    // Returns: redirection to / OR error message
     logIn: async ({ request }) => {
         
         // Extract variables from form submission
@@ -29,6 +34,10 @@ export const actions = {
 
                 if (e.code == "auth/wrong-password") {
                     return { error: "Password incorrect" }
+                }
+
+                if (e.code == "auth/invalid-email") {
+                    return { error: "Invalid email format" }
                 }
 
                 // Any other errors returned by Firebase Auth is displayed as-is

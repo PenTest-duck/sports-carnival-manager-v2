@@ -1,14 +1,20 @@
+// Imports
 import { sequelize } from "../../hooks.server"; 
+import { validateName } from "$lib/validation";
 
 /** @type {import('./$types').PageServerLoad} */
+// Function: load()
+// Purpose: upon page load, fetches array of students and houses
+// Parameters: N/A
+// Returns: array of students, array of houses
 export async function load() {
 
     // Fetch list of all students
     const students = await sequelize.query("CALL GetStudents");
 
     // Fetch list of all houses
-    const h = await sequelize.query("SELECT * FROM house");
-    const houses = h[0];
+    const housesQueryResponse = await sequelize.query("SELECT * FROM house");
+    const houses = housesQueryResponse[0];
 
     console.log(students);
 
@@ -17,6 +23,10 @@ export async function load() {
 
 /** @type {import('./$types').Actions} */
 export const actions = {
+    // Function: addStudent
+    // Purpose: validate input parameters, then add student to database
+    // Parameters: form data (first name, last name, house ID, student number)
+    // Returns: N/A OR error message
     addStudent: async ({ request }) => {
 
         // Extract variables from form submission
@@ -25,6 +35,11 @@ export const actions = {
         const lastName = data.get("student-last-name");
         const houseID = data.get("student-house-id");
         const number = data.get("student-number");
+
+        // Validate first and last name
+        if (!validateName(firstName) || !validateName(lastName)) {
+            return { error: "Invalid name" }
+        }
 
         // Append to Students MySQL table
         await sequelize.query("INSERT INTO students VALUES (NULL, :firstName, :lastName, :houseID, :number)", {
@@ -37,6 +52,10 @@ export const actions = {
         });
     },
 
+    // Function: removeStudent()
+    // Purpose:
+    // Parameters: student ID
+    // Returns: 
     removeStudent: async ({ request }) => {
         // Extract variable from form submission
         const data = await request.formData();

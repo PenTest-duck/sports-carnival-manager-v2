@@ -1,7 +1,7 @@
 FROM mhart/alpine-node:12
 
 # install dependencies
-WORKDIR /app
+WORKDIR /
 COPY package.json package-lock.json ./
 RUN npm ci
 

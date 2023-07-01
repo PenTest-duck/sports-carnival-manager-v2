@@ -1,6 +1,7 @@
 <script>
     // @ts-nocheck
     
+    // Fetch loaded data
     /** @type {import('./$types').PageData} */
     export let data;
     
@@ -18,11 +19,11 @@
         </tr>
 
         <!--Row of each record's event, age group and result-->
-        {#each data.athletics_records as athletics_record}
+        {#each data.athleticsRecords as athleticsRecord}
         <tr>
-            <td>{athletics_record.type}</td>
-            <td>{athletics_record.ageGroup}</td>
-            <td>{athletics_record.result}</td>
+            <td>{athleticsRecord.type}</td>
+            <td>{athleticsRecord.ageGroup}</td>
+            <td>{athleticsRecord.result}</td>
         </tr>
         {/each}
         

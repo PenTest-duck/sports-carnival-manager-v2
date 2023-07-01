@@ -1,4 +1,5 @@
 <script>
+    // Fetch action data
     /** @type {import('./$types').ActionData} */
     export let form;
 </script>
@@ -35,8 +36,4 @@
 
 <style>
     @import "$lib/css/containers.css";
-
-    #error {
-        color: red;
-    }
 </style>

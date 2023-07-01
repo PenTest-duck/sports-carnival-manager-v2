@@ -1,18 +1,17 @@
 import { sequelize } from "../../hooks.server"; 
 
 /** @type {import('./$types').PageServerLoad} */
+
+// Function: load()
+// Purpose: upon page load, fetches array of records
+// Parameters: N/A
+// Returns: array of records
 export async function load() {
     
     // Fetch all records for Athletics Carnival
-    const aR = await sequelize.query("CALL GetRecords (1)");
-    const athletics_records = aR;
+    const athleticsRecords = await sequelize.query("CALL GetRecords (1)");
 
-    console.log(athletics_records);
+    console.log(athleticsRecords);
 
-    return { athletics_records };
-};
-
-/** @type {import('./$types').Actions} */
-export const actions = {
-
+    return { athleticsRecords };
 };
