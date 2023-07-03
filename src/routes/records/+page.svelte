@@ -30,7 +30,6 @@
     </table>
 </div>
 
-
 <style>
     @import "$lib/css/containers.css";
 </style>

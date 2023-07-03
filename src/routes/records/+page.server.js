@@ -1,3 +1,4 @@
+// Imports
 import { sequelize } from "../../hooks.server"; 
 
 /** @type {import('./$types').PageServerLoad} */

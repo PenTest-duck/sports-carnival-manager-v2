@@ -49,6 +49,7 @@
                     Number
                     <input type="text" name="student-number" placeholder="Number">
                 </label>
+
                 <label>
                     House
                     <!--House selection dropdown-->
@@ -58,14 +59,17 @@
                         {/each}
                     </select>
                 </label>
+
                 <label>
                     First Name
                     <input type="text" name="student-first-name" placeholder="First name">
                 </label>
+
                 <label>
                     Last Name
                     <input type="text" name="student-last-name" placeholder="Last name">
                 </label>
+                
                 <button>Add</button>
             </form>
     </div>

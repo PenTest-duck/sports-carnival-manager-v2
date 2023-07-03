@@ -1,6 +1,6 @@
 // Imports
 import { sequelize } from "../../hooks.server"; 
-import { validateName } from "$lib/validation";
+import { validateName, validateNumber } from "$lib/validation";
 
 /** @type {import('./$types').PageServerLoad} */
 // Function: load()
@@ -41,6 +41,11 @@ export const actions = {
             return { error: "Invalid name" }
         }
 
+        // Validate number
+        if (!validateNumber(number)) {
+            return { error: "Invalid number" }
+        }
+
         // Append to Students MySQL table
         await sequelize.query("INSERT INTO students VALUES (NULL, :firstName, :lastName, :houseID, :number)", {
             replacements: {
@@ -53,7 +58,7 @@ export const actions = {
     },
 
     // Function: removeStudent()
-    // Purpose:
+    // Purpose: 
     // Parameters: student ID
     // Returns: 
     removeStudent: async ({ request }) => {

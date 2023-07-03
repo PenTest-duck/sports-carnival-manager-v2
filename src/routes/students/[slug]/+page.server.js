@@ -1,23 +1,28 @@
+// Imports
 import { sequelize } from "../../../hooks.server"; 
+import { validateName, validateNumber } from "$lib/validation";
 
 /** @type {import('./$types').PageServerLoad} */
+// Function: load()
+// Purpose: upon page load, fetches array of students, houses, results, and events
+// Parameters: N/A
+// Returns: array of students, array of houses, array of results, array of events
 export async function load({ params }) {
     // Fetch student record given the specified StudentID
-    const s = await sequelize.query("CALL GetOneStudent (:id)", {
+    const studentsQueryResponse = await sequelize.query("CALL GetOneStudent (:id)", {
         replacements: { id: params.slug }
     });
-    const student = s[0];
-    console.log(student);
+    const student = studentsQueryResponse[0];
 
     // Fetch list of all houses
-    const h = await sequelize.query("SELECT * FROM house");
-    const houses = h[0];
+    const housesQueryResponse = await sequelize.query("SELECT * FROM house");
+    const houses = housesQueryResponse[0];
 
     // Fetch list of all results belonging to the specified student
-    const r = await sequelize.query("SELECT * FROM results WHERE studentID = :id", {
+    const resultsQueryResponse = await sequelize.query("SELECT * FROM results WHERE studentID = :id", {
         replacements: { id: params.slug }
     });
-    const results = r[0]
+    const results = resultsQueryResponse[0];
 
     // Fetch list of all events
     // Parameter of 0 indicates 'all events' rather than a specified EventID
@@ -28,6 +33,10 @@ export async function load({ params }) {
 
 /** @type {import('./$types').Actions} */
 export const actions = {
+    // Function: editStudent
+    // Purpose: validate input parameters, then update database with new values
+    // Parameters: form data (first name, last name, house ID, student number) + slug (URL)
+    // Returns: N/A OR error message
     editStudent: async ({ request, params }) => {
         // Extract variables from form submission
         const data = await request.formData();
@@ -36,6 +45,16 @@ export const actions = {
         const lastName = data.get("student-last-name");
         const houseID = data.get("student-house-id");
         const number = data.get("student-number");
+
+        // Validate first and last name
+        if (!validateName(firstName) || !validateName(lastName)) {
+            return { error: "Invalid name" }
+        }
+
+        // Validate number
+        if (!validateNumber(number)) {
+            return { error: "Invalid number" }
+        }
 
         // Update Students MySQL table with new values
         await sequelize.query('UPDATE students SET firstName = :firstName, lastName = :lastName, houseID = :houseID, number = :number WHERE id = :id', {
