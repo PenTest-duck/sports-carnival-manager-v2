@@ -1,6 +1,7 @@
+// @ts-nocheck
 // Imports
 import { sequelize } from "../../hooks.server"; 
-import { validateName } from "$lib/validation";
+import { validateName, validateDate, validateTime } from "$lib/validation";
 
 /** @type {import('./$types').PageServerLoad} */
 
@@ -37,38 +38,74 @@ export const actions = {
         const name = data.get("carnival-name");
         const typeID = data.get("carnival-type-id");
         const date = data.get("carnival-date") === "" ? null : data.get("carnival-date"); // if empty, set to null
-        const start_time = data.get("carnival-start-time")  === "" ? null : data.get("carnival-start-time"); // if empty, set to null
-        const end_time = data.get("carnival-end-time")  === "" ? null : data.get("carnival-end-time"); // if empty, set to null
+        const startTime = data.get("carnival-start-time")  === "" ? null : data.get("carnival-start-time"); // if empty, set to null
+        const endTime = data.get("carnival-end-time")  === "" ? null : data.get("carnival-end-time"); // if empty, set to null
         const locationID = data.get("carnival-location-id");
         const staffID = data.get("carnival-staff-id");
 
+        // Check no fields are empty
+        if (name == "" || typeID == "" || date == null || startTime == null || endTime == null || locationID == "" || staffID == "") {
+            return { error: "All fields must be filled" }
+        }
+
         // Validate name
-        if (!validateName(name)) {
-            return { error: "Invalid name" }
+        const nameValidityMessage = validateName(name);
+        if (nameValidityMessage != "Valid") {
+            return { error: nameValidityMessage }
+        }
+
+        // Validate date
+        const dateValidityMessage = validateDate(date);
+        if (dateValidityMessage != "Valid") {
+            return { error: dateValidityMessage }
+        }
+
+        // Validate start time
+        const startTimeValidityMessage = validateTime(startTime);
+        if (startTimeValidityMessage != "Valid") {
+            return { error: startTimeValidityMessage }
+        }
+
+        // Validate end time
+        const endTimeValidityMessage = validateTime(endTime);
+        if (endTimeValidityMessage != "Valid") {
+            return { error: endTimeValidityMessage }
+        }
+
+        // Check end time is not before start time
+        // Direct string comparison possible as both are in 24-hour format
+        if (endTime < startTime) {
+            return { error: "End time cannot be before start time" }
         }
 
         // Invoke MySQL stored procedure to create carnival
-        await sequelize.query('CALL CreateCarnival (:name, :typeID, :date, :start_time, :end_time, :locationID, :staffID);', {
+        await sequelize.query('CALL CreateCarnival (:name, :typeID, :date, :startTime, :endTime, :locationID, :staffID);', {
             replacements: {
                 name: name,
                 typeID: typeID,
                 date: date,
-                start_time: start_time,
-                end_time: end_time,
+                startTime: startTime,
+                endTime: endTime,
                 locationID: locationID,
                 staffID: staffID
             }
         });
     },
 
+    // Function: removeCarnival()
+    // Purpose: remove carnival from the database
+    // Parameters: carnival ID
+    // Returns: N/A
     removeCarnival: async ({ request }) => {
         // Extract variable from form submission
         const data = await request.formData();
         const id = data.get("id");
 
+        console.log("remove");
+
         // Invoke MySQL stored procedure to remove carnival
-        await sequelize.query("CALL RemoveCarnival (:id)", {
+        /*await sequelize.query("CALL RemoveCarnival (:id)", {
             replacements: { id: id }
-        })
+        })*/
     }
 };

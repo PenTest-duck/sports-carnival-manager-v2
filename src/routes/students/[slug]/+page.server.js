@@ -46,14 +46,27 @@ export const actions = {
         const houseID = data.get("student-house-id");
         const number = data.get("student-number");
 
-        // Validate first and last name
-        if (!validateName(firstName) || !validateName(lastName)) {
-            return { error: "Invalid name" }
+        // Check no fields are empty
+        if (firstName == "" || lastName == "" || houseID == "" || number == "") {
+            return { error: "All fields must be filled" }
+        }
+
+        // Validate first name
+        const firstNameValidityMessage = validateName(firstName);
+        if (firstNameValidityMessage != "Valid") {
+            return { error: firstNameValidityMessage }
+        }
+
+        // Validate last name
+        const lastNameValidityMessage = validateName(lastName);
+        if (lastNameValidityMessage != "Valid") {
+            return { error: lastNameValidityMessage }
         }
 
         // Validate number
-        if (!validateNumber(number)) {
-            return { error: "Invalid number" }
+        const numberValidityMessage = validateNumber(number);
+        if (numberValidityMessage != "Valid") {
+            return { error: numberValidityMessage }
         }
 
         // Update Students MySQL table with new values

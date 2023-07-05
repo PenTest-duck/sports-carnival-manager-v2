@@ -1,7 +1,15 @@
 <script>
 // @ts-nocheck
+    import { onMount } from "svelte";
 
     export let id, name, type, date, startTime, endTime, location, firstName, lastName;
+
+    onMount(() => {
+        const form = document.getElementById("form");
+        document.querySelector("submit").addEventListener("click", function() {
+            form.submit();
+        });
+    });
 
 </script>
 
@@ -15,9 +23,9 @@
     <td>{firstName} {lastName}</td>
     <td><a href="/carnivals/{id}">Open</td>
     <td>
-        <form method="POST" action="?/removeCarnival">
+        <form id="form" method="POST" action="?/removeCarnival">
             <input type="hidden" id="id" name="id" value={id}>
-            <button><i class="fa-solid fa-trash" style="color: red"></i></button>
+            <i id="submit" class="fa-solid fa-trash" style="color: red"></i>
         </form>
     </td>
 </tr>
