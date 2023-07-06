@@ -3,18 +3,7 @@
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../../../firebase";
 import { redirect } from "@sveltejs/kit";
-
-// Function: validateEmail()
-// Purpose: check email address conforms to valid format
-// Parameters: email
-// Returns: True (valid) or False (invalid)
-function validateEmail(email) {
-    // Check email matches regex of valid email addresses
-    const validEmailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    const emailIsValid = Boolean(email.match(validEmailRegex));
-    
-    return emailIsValid;
-}
+import { MAX_STR_LENGTH, VALID_EMAIL_REGEX } from "$lib/validation";
 
 /** @type {import('./$types').Actions} */
 export const actions = {
@@ -27,13 +16,23 @@ export const actions = {
         // Extract variables from form submission
         const data = await request.formData();
         const email = data.get("email");
+
+        // Check email is not empty
+        if (email == "") {
+            return { error: "An email address must be provided" }
+        }
+
+        // Check email is not too long
+        if (email.length > MAX_STR_LENGTH) {
+            return { error: `Email cannot exceed ${MAX_STR_LENGTH} characters` }
+        }
+    
+        // Check email matches regex of valid email addresses
+        if (!Boolean(email.match(VALID_EMAIL_REGEX))) {
+            return { error: "Email is not in a valid format" }
+        }
         
         try {
-            // Check email address is valid
-            if (!validateEmail(email)) {
-                return { error: "Invalid email" }
-            }
-
             // Send API Request to Firebase Auth to send a reset email 
             await sendPasswordResetEmail(auth, email);
 
@@ -45,7 +44,7 @@ export const actions = {
                 console.log("Password reset error", e);
 
                 if (e.code == "auth/user-not-found") {
-                    return { error: "User for this email does not exist" }
+                    return { error: "User does not exist for this email" }
                 }
 
                 // Any other errors returned by Firebase Auth is displayed as-is

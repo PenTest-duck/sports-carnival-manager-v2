@@ -18,18 +18,17 @@
 	<nav>
 		<!--Web app name-->
 		<ul>
-			<li><strong><a href="/">Sports Carnival Manager</a></strong></li>
+			<li><strong><a href="/carnivals">Sports Carnival Manager</a></strong></li>
     	</ul>
 
 		<!--Display navbar if logged in-->
     	{#if data.loggedIn}
     	<ul>
 			<!--Links to pages-->
-      		<li><a href="/">Home</a></li>
+			<li><a href="/carnivals">Carnivals</a></li>
       		<li><a href="/students">Students</a></li>
       		<li><a href="/houses">Houses</a></li>
       		<li><a href="/records">Records</a></li>
-      		<li><a href="/carnivals">Carnivals</a></li>
 
 			<!--Display logged-in user's name-->
 			{#if data.staffName != ""}

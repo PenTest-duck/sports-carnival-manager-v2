@@ -60,14 +60,19 @@ export const actions = {
         }
 
         // Append to Students MySQL table
-        await sequelize.query("INSERT INTO students VALUES (NULL, :firstName, :lastName, :houseID, :number)", {
-            replacements: {
-                firstName: firstName,
-                lastName: lastName,
-                houseID: houseID,
-                number: number
-            }
-        });
+        try {
+            await sequelize.query("INSERT INTO students VALUES (NULL, :firstName, :lastName, :houseID, :number)", {
+                replacements: {
+                    firstName: firstName,
+                    lastName: lastName,
+                    houseID: houseID,
+                    number: number
+                }
+            });
+        } catch (e) {
+            console.log("Error: ", e);
+            return { error: "There was an unexpected error with the server" };
+        }
     },
 
     // Function: removeStudent()

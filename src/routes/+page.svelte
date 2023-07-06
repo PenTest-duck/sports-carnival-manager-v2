@@ -1,2 +1,4 @@
-<!--Main page-->
-<h1 class="centered">Welcome to Sports Carnival Manager</h1>
+<!--Redirect to carnivals dashboard-->
+<head>
+    <meta http-equiv="refresh" content="0; URL=/carnivals">
+</head>

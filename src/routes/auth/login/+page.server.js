@@ -3,6 +3,7 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../../firebase";
 import { redirect } from "@sveltejs/kit";
+import { MAX_STR_LENGTH, VALID_EMAIL_REGEX } from "$lib/validation";
 
 /** @type {import('./$types').Actions} */
 export const actions = {
@@ -16,13 +17,28 @@ export const actions = {
         const data = await request.formData();
         const email = data.get("email");
         const password = data.get("password");
+
+        // Check no fields are empty
+        if (email == "" || password == "") {
+            return { error: "All fields must be filled" }
+        }
+
+        // Check email is not too long
+        if (email.length > MAX_STR_LENGTH) {
+            return { error: `Email cannot exceed ${MAX_STR_LENGTH} characters` }
+        }
+    
+        // Check email matches regex of valid email addresses
+        if (!Boolean(email.match(VALID_EMAIL_REGEX))) {
+            return { error: "Email is not in a valid format" }
+        }
         
         try {
             // API request to Firebase Auth to authenticate user and return the found user record
             let user = await signInWithEmailAndPassword(auth, email, password);
 
-            // If logged in, redirect to dashboard
-            throw redirect(303, '/');
+            // If logged in, redirect to carnivals dashboard
+            throw redirect(303, '/carnivals');
 
         } catch (e) {
             if (e instanceof Error) {
@@ -34,10 +50,6 @@ export const actions = {
 
                 if (e.code == "auth/wrong-password") {
                     return { error: "Password incorrect" }
-                }
-
-                if (e.code == "auth/invalid-email") {
-                    return { error: "Invalid email format" }
                 }
 
                 // Any other errors returned by Firebase Auth is displayed as-is

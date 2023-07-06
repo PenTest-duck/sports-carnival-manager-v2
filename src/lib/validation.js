@@ -3,9 +3,9 @@
 import { sequelize } from "../hooks.server"; 
 
 // Define static values
-const MAX_STR_LENGTH = 200;
+export const MAX_STR_LENGTH = 200;
 const MIN_NUMBER = 1;
-const MAX_NUMBER = 1000000000; // One billion
+const MAX_NUMBER = 999999999; // Less than one billion 
 const MIN_PASSWORD_LENGTH = 8;
 const MAX_PASSWORD_LENGTH = 40;
 
@@ -14,7 +14,8 @@ const VALID_NAME_REGEX = /^[A-Za-z]+$/;
 const VALID_NUMBER_REGEX = /^\d+$/;   // Can only contain digits - culls out decimals
 const VALID_DATE_REGEX = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/; // YYYY-MM-DD (limited to year 2999)
 const VALID_TIME_REGEX = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/; // HH:MM (24 hour)
-const VALID_EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+const VALID_RESULT_REGEX = /^[+]?([0-9]+([.][0-9]*)?|[.][0-9]+)$/; // positive float value
+export const VALID_EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
 const LOWERCASE_REGEX = /[a-z]/;
 const UPPERCASE_REGEX = /[A-Z]/;
@@ -90,6 +91,15 @@ export function validateTime(time) {
     return "Valid";
 }
 
+export function validateResult(result) {
+    // Check result is a valid float
+    if (!Boolean(time.match(VALID_RESULT_REGEX))) {
+        return "Result is in an invalid format";
+    }
+
+    return "Valid";
+}
+
 // Function: validateEmail()
 // Purpose: check email conforms to valid format AND does not already exist in the database
 // Parameters: email
@@ -106,9 +116,14 @@ async function validateEmail(email) {
     }
 
     // Fetch all rows in staff that match the email
-    const existingEmail = await sequelize.query("SELECT * FROM staff WHERE email = :email", {
-        replacements: { email: email }
-    });
+    try {
+        const existingEmail = await sequelize.query("SELECT * FROM staff WHERE email = :email", {
+            replacements: { email: email }
+        });
+    } catch (e) {
+        console.log("Error: ", e);
+        return "There was an unexpected error with the server";
+    }
 
     // If any rows are returned, that means an account already exists
     if (existingEmail[0][0] != null) {

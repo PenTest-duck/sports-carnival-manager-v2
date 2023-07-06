@@ -79,15 +79,20 @@ export const actions = {
         }
 
         // Invoke MySQL stored procedure to create event
-        await sequelize.query('CALL CreateEvent (:carnivalID, :typeID, :ageGroupID, :divisionID, :startTime);', {
-            replacements: {
-                carnivalID: carnivalID,
-                typeID: typeID,
-                ageGroupID: ageGroupID,
-                divisionID: divisionID,
-                startTime: startTime,
-            }
-        });
+        try {
+            await sequelize.query('CALL CreateEvent (:carnivalID, :typeID, :ageGroupID, :divisionID, :startTime);', {
+                replacements: {
+                    carnivalID: carnivalID,
+                    typeID: typeID,
+                    ageGroupID: ageGroupID,
+                    divisionID: divisionID,
+                    startTime: startTime,
+                }
+            });
+        } catch (e) {
+            console.log("Error: ", e);
+            return { eventError: "There was an unexpected error with the server" }
+        }
     },
 
     // Function: removeEvent
@@ -154,16 +159,21 @@ export const actions = {
         }
 
         // Update Carnivals MySQL table with new values
-        await sequelize.query('UPDATE carnivals SET name = :name, date = :date, startTime = :startTime, endTime = :endTime, locationID = :locationID, staffID = :staffID WHERE id = :id', {
-            replacements: {
-                id: id,
-                name: name,
-                date: date,
-                startTime: startTime,
-                endTime: endTime,
-                locationID: locationID,
-                staffID: staffID
-            }
-        });
+        try {
+            await sequelize.query('UPDATE carnivals SET name = :name, date = :date, startTime = :startTime, endTime = :endTime, locationID = :locationID, staffID = :staffID WHERE id = :id', {
+                replacements: {
+                    id: id,
+                    name: name,
+                    date: date,
+                    startTime: startTime,
+                    endTime: endTime,
+                    locationID: locationID,
+                    staffID: staffID
+                }
+            });
+        } catch (e) {
+            console.log("Error: ", e);
+            return { carnivalError: "There was an unexpected error with the server" }
+        }
     }
 };

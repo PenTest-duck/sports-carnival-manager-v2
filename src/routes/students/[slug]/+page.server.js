@@ -70,14 +70,19 @@ export const actions = {
         }
 
         // Update Students MySQL table with new values
-        await sequelize.query('UPDATE students SET firstName = :firstName, lastName = :lastName, houseID = :houseID, number = :number WHERE id = :id', {
-            replacements: {
-                id: id,
-                firstName: firstName,
-                lastName: lastName,
-                houseID: houseID,
-                number: number
-            }
-        });
+        try {
+            await sequelize.query('UPDATE students SET firstName = :firstName, lastName = :lastName, houseID = :houseID, number = :number WHERE id = :id', {
+                replacements: {
+                    id: id,
+                    firstName: firstName,
+                    lastName: lastName,
+                    houseID: houseID,
+                    number: number
+                }
+            });
+        } catch (e) {
+            console.log("Error: ", e);
+            return { error: "There was an unexpected error with the server" };
+        }
     }
 };

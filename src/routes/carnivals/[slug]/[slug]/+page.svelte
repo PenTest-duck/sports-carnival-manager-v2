@@ -1,26 +1,37 @@
 <script>
 // @ts-nocheck
+    // Import component
     import Result from "$lib/components/Result.svelte";
 
+    // Import loaded data
     /** @type {import('./$types').PageData} */
     export let data;
 
+    // Import action data
+    /** @type {import('./$types').ActionData} */
+    export let form;
+
+    // Initialise variables
     let editingEvent = false;
     let dataChanged = false;
 
+    // Changes form to editable values
     function setEditingEvent() {
         editingEvent = true;
     }
 
+    // Returns form to displaying values
     function cancelEditingEvent() {
         editingEvent = false;
         dataChanged = false;
     }
 
+    // Submits the POST request with edited values
     function editEvent() {
         document.getElementById("editEventForm").submit();
     }
 
+    // Enable save button if data edited
     function setDataChanged() {
         dataChanged = true;
     }
@@ -30,15 +41,23 @@
 <div id="main-container">
     <h1>Event</h1>
 
+    <!--Back button to carnival-->
     <p><a href="/carnivals/{data.event.carnivalID}">Back to Carnival</a></p>
 
     <div id="event-details">
         <h3 style="display: inline-block;">Event Details</h3>
+
+        <!--Edit or Cancel/Save buttons to show when needed-->
         {#if !editingEvent}
             <button style="float: right; display: inline-block; width: 120px" on:click={setEditingEvent}>Edit</button>
         {:else}
             <button style="float: right; display: inline-block; width: 120px; margin-left: 10px" on:click={cancelEditingEvent}>Cancel</button>
             <button style="float: right; display: inline-block; width: 120px" on:click={editEvent} disabled={!dataChanged || null}>Save</button>
+        {/if}
+
+        <!--Display error message from saving event details-->
+        {#if form?.eventError}
+            <p id="error">{form?.eventError}</p>
         {/if}
 
         <form method="POST" action="?/editEvent" id="editEventForm">
@@ -49,8 +68,10 @@
             </tr>
             <tr>
                 <th>Age Group</th>
+                <!--Display editable or non-editable field-->
                 {#if editingEvent}
                     <td>
+                        <!--Event age group dropdown select-->
                         <select name="event-age-group-id" id="event-age-group-id" on:input={setDataChanged}>
                         {#each data.eventAgeGroups as ageGroup}
                         <option value="{ageGroup.id}" selected={ageGroup.ageGroup === data.event.ageGroup || null}>{ageGroup.ageGroup}</option>
@@ -63,8 +84,10 @@
             </tr>
             <tr>
                 <th>Division</th>
+                <!--Display editable or non-editable field-->
                 {#if editingEvent}
                     <td>
+                        <!--Event division dropdown select-->
                         <select name="event-division-id" id="event-division-id" on:input={setDataChanged}>
                         {#each data.eventDivisions as division}
                         <option value="{division.id}" selected={division.division === data.event.division || null}>{division.division}</option>
@@ -77,6 +100,7 @@
             </tr>
             <tr>
                 <th>Start Time</th>
+                <!--Display editable or non-editable field-->
                 {#if editingEvent}
                     <td><input type="time" name="event-start-time" value={data.event.startTime} on:input={setDataChanged}></td>
                 {:else}
@@ -95,15 +119,24 @@
         <h3>Results</h3>
 
         <form method="POST" action="?/addResult">
+            <!--Display error message from saving result-->
+            {#if form?.resultError}
+                <p id="error">{form?.resultError}</p>
+            {/if}
+
             <table>
+                <!--Table headers-->
                 <tr>
                     <th>Student</th>
                     <th>DNF</th>
                     <th>DQ</th>
                     <th>Result</th>
                 </tr>
+
+                <!--Add result input fields-->
                 <tr>
                     <td>
+                        <!--Result student dropdown select-->
                         <select name="event-student-id" id="event-student-id">
                             {#each data.students as student}
                             <option value="{student.id}">[{student.initials}] {student.firstName} {student.lastName}</option>
@@ -119,6 +152,7 @@
         </form>
 
         <table id="results-list">
+            <!--Table headers-->
             <tr>
                 <th>Rank</th>
                 <th>Points</th>
@@ -130,6 +164,7 @@
                 <th>Result ({data.event.unit})</th>
             </tr>
 
+            <!--Row of each result's rank, points, first name, last name, house, DNF, DQ, result-->
             {#each data.results as result}
                 <Result {...result} rank={result.placing} />
             {/each}

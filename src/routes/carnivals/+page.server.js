@@ -79,17 +79,22 @@ export const actions = {
         }
 
         // Invoke MySQL stored procedure to create carnival
-        await sequelize.query('CALL CreateCarnival (:name, :typeID, :date, :startTime, :endTime, :locationID, :staffID);', {
-            replacements: {
-                name: name,
-                typeID: typeID,
-                date: date,
-                startTime: startTime,
-                endTime: endTime,
-                locationID: locationID,
-                staffID: staffID
-            }
-        });
+        try {
+            await sequelize.query('CALL CreateCarnival (:name, :typeID, :date, :startTime, :endTime, :locationID, :staffID);', {
+                replacements: {
+                    name: name,
+                    typeID: typeID,
+                    date: date,
+                    startTime: startTime,
+                    endTime: endTime,
+                    locationID: locationID,
+                    staffID: staffID
+                }
+            });
+        } catch (e) {
+            console.log("Error: ", e);
+            return { error: "There was an unexpected error with the server" }
+        }
     },
 
     // Function: removeCarnival()
