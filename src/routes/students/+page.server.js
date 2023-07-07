@@ -76,17 +76,22 @@ export const actions = {
     },
 
     // Function: removeStudent()
-    // Purpose: 
+    // Purpose: Remove student and all their results + update placings and points
     // Parameters: student ID
-    // Returns: 
+    // Returns: N/A OR error message
     removeStudent: async ({ request }) => {
         // Extract variable from form submission
         const data = await request.formData();
         const id = data.get("id");
 
-        // Remove from Students MySQL table by ID
-        await sequelize.query('DELETE FROM students WHERE id = :id', {
-            replacements: { id: id }
-        });
+        // Invoke MySQL stored procedure to remove student and all their results, and update placings and points
+        try {
+            await sequelize.query('CALL RemoveStudent (:id)', {
+                replacements: { id: id }
+            });
+        } catch (e) {
+            console.log("Error: ", e);
+            return { error: "There was an unexpected error with the server" };
+        }
     }
 };

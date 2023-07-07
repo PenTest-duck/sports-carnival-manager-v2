@@ -98,7 +98,7 @@
                     <th>Start Time</th>
                     <!--Display editable or non-editable field-->
                     {#if editingCarnival}
-                        <td><input type="time" name="carnival-start-time" value={data.carnival.startTime} on:input={setDataChanged}></td>
+                        <td><input type="time" name="carnival-start-time" value={data.carnival.startTime.slice(0, -3)} on:input={setDataChanged}></td>
                     {:else}
                         <td>{data.carnival.startTime.slice(0, -3)}</td>
                     {/if}
@@ -107,7 +107,7 @@
                     <th>End Time</th>
                     <!--Display editable or non-editable field-->
                     {#if editingCarnival}
-                        <td><input type="time" name="carnival-end-time" value={data.carnival.endTime} on:input={setDataChanged}></td>
+                        <td><input type="time" name="carnival-end-time" value={data.carnival.endTime.slice(0, -3)} on:input={setDataChanged}></td>
                     {:else}
                         <td>{data.carnival.endTime.slice(0, -3)}</td>
                     {/if}

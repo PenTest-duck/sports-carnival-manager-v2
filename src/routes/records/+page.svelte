@@ -15,6 +15,7 @@
         <tr>
             <th>Event</th>
             <th>Age Group</th>
+            <th>Name</th>
             <th>Result</th>
         </tr>
 
@@ -23,6 +24,7 @@
         <tr>
             <td>{athleticsRecord.type}</td>
             <td>{athleticsRecord.ageGroup}</td>
+            <td><a href="/students/{athleticsRecord.studentID}">{athleticsRecord.firstName} {athleticsRecord.lastName}</a></td>
             <td>{athleticsRecord.result}</td>
         </tr>
         {/each}

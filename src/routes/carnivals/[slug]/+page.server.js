@@ -1,7 +1,7 @@
 // @ts-nocheck
 // Imports
 import { sequelize } from "../../../hooks.server"; 
-import { validateTime } from "$lib/validation";
+import { validateName, validateDate, validateTime } from "$lib/validation";
 
 /** @type {import('./$types').PageServerLoad} */
 // Function: load()
@@ -96,16 +96,23 @@ export const actions = {
     },
 
     // Function: removeEvent
-    // Purpose: remove event from the database
+    // Purpose: remove event and its results + update records and points
     // Parameters: event ID
-    // Returns: N/A
+    // Returns: N/A OR error message
     removeEvent: async ({ request }) => {
+        // Extract variables from form submission
         const data = await request.formData();
         const id = data.get("id");
 
-        /*await sequelize.query('DELETE FROM events WHERE id = :id', {
-            replacements: { id: id }
-        });*/
+        // Invoke MySQL stored procedure to remove event and all its results, and update records and points
+        try {
+            await sequelize.query('CALL RemoveEvent (:id)', {
+                replacements: { id: id }
+            });
+        } catch (e) {
+            console.log("Error: ", e);
+            return { eventError: "There was an unexpected error with the server" }
+        }
     },
 
     // Function: editCarnival
@@ -124,7 +131,7 @@ export const actions = {
         const staffID = data.get("carnival-staff-id");
 
         // Check no fields are empty
-        if (name == "" || typeID == "" || date == null || startTime == null || endTime == null || locationID == "" || staffID == "") {
+        if (name == "" || date == null || startTime == null || endTime == null || locationID == "" || staffID == "") {
             return { carnivalError: "All fields must be filled" }
         }
 
@@ -139,6 +146,9 @@ export const actions = {
         if (dateValidityMessage != "Valid") {
             return { carnivalError: dateValidityMessage }
         }
+
+        console.log(startTime);
+        console.log(endTime);
 
         // Validate start time
         const startTimeValidityMessage = validateTime(startTime);

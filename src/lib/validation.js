@@ -10,7 +10,7 @@ const MIN_PASSWORD_LENGTH = 8;
 const MAX_PASSWORD_LENGTH = 40;
 
 // Define regex 
-const VALID_NAME_REGEX = /^[A-Za-z]+$/;
+const VALID_NAME_REGEX = /^[A-Za-z ]+$/;
 const VALID_NUMBER_REGEX = /^\d+$/;   // Can only contain digits - culls out decimals
 const VALID_DATE_REGEX = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/; // YYYY-MM-DD (limited to year 2999)
 const VALID_TIME_REGEX = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/; // HH:MM (24 hour)
@@ -91,9 +91,13 @@ export function validateTime(time) {
     return "Valid";
 }
 
+// Function: validateResult()
+// Purpose: check result is in valid format
+// Parameters: result
+// Returns "Valid" OR error message
 export function validateResult(result) {
-    // Check result is a valid float
-    if (!Boolean(time.match(VALID_RESULT_REGEX))) {
+    // Check result is a valid non-negative float
+    if (!Boolean(result.match(VALID_RESULT_REGEX))) {
         return "Result is in an invalid format";
     }
 
@@ -104,7 +108,7 @@ export function validateResult(result) {
 // Purpose: check email conforms to valid format AND does not already exist in the database
 // Parameters: email
 // Returns: "Valid" OR error message
-async function validateEmail(email) {
+export async function validateEmail(email) {
     // Check email does not exceed 200 characters
     if (email.length > MAX_STR_LENGTH) {
         return `Email cannot exceed ${MAX_STR_LENGTH} characters`;
@@ -137,7 +141,7 @@ async function validateEmail(email) {
 // Purpose: check password matches complexity requirements
 // Parameters: password
 // Returns: "Valid" OR error message
-function validatePassword(password) {
+export function validatePassword(password) {
     // Password complexity requirement: check password length is at least 8
     if (password.length < MIN_PASSWORD_LENGTH) {
         return `Password must be at least ${MIN_PASSWORD_LENGTH} characters`;

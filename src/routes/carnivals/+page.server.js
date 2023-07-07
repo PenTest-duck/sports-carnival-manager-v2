@@ -97,20 +97,23 @@ export const actions = {
         }
     },
 
-    // Function: removeCarnival()
-    // Purpose: remove carnival from the database
+    // Function: removeCarnival
+    // Purpose: remove carnival and its events from the database + update records and points
     // Parameters: carnival ID
-    // Returns: N/A
+    // Returns: N/A OR error message
     removeCarnival: async ({ request }) => {
-        // Extract variable from form submission
+        // Extract variables from form submission
         const data = await request.formData();
         const id = data.get("id");
 
-        console.log("remove");
-
-        // Invoke MySQL stored procedure to remove carnival
-        /*await sequelize.query("CALL RemoveCarnival (:id)", {
-            replacements: { id: id }
-        })*/
+        // Invoke MySQL stored procedure to remove carnival and all its events, and update records and points
+        try {
+            await sequelize.query("CALL RemoveCarnival (:id)", {
+                replacements: { id: id }
+            });
+        } catch (e) {
+            console.log("Error: ", e);
+            return { error: "There was an unexpected error with the server" }
+        }
     }
 };
