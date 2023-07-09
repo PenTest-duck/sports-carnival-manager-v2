@@ -2,7 +2,7 @@
 // @ts-nocheck
     
     export let carnivalID;
-    export let id, type, ageGroup, division, startTime;
+    export let id, type, ageGroup, division, startTime, unit;
     
 </script>
 

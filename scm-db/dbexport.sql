@@ -1,13 +1,13 @@
--- MySQL dump 10.13  Distrib 8.0.32, for macos11.5 (arm64)
+-- MySQL dump 10.13  Distrib 8.0.22, for macos10.15 (x86_64)
 --
--- Host: localhost    Database: db3nf
+-- Host: 127.0.0.1    Database: db3nf
 -- ------------------------------------------------------
 -- Server version	8.0.32
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8mb4 */;
+/*!50503 SET NAMES utf8 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -59,10 +59,10 @@ CREATE TABLE `carnivals` (
   KEY `typeID` (`typeID`),
   KEY `locationID` (`locationID`),
   KEY `staffID` (`staffID`),
-  CONSTRAINT `carnivals_ibfk_1` FOREIGN KEY (`typeID`) REFERENCES `carnivalType` (`typeID`),
-  CONSTRAINT `carnivals_ibfk_2` FOREIGN KEY (`locationID`) REFERENCES `carnivalLocation` (`locationID`),
+  CONSTRAINT `carnivals_ibfk_1` FOREIGN KEY (`typeID`) REFERENCES `carnivaltype` (`typeID`),
+  CONSTRAINT `carnivals_ibfk_2` FOREIGN KEY (`locationID`) REFERENCES `carnivallocation` (`locationID`),
   CONSTRAINT `carnivals_ibfk_3` FOREIGN KEY (`staffID`) REFERENCES `staff` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -71,7 +71,7 @@ CREATE TABLE `carnivals` (
 
 LOCK TABLES `carnivals` WRITE;
 /*!40000 ALTER TABLE `carnivals` DISABLE KEYS */;
-INSERT INTO `carnivals` VALUES (14,'abc',1,'2023-03-13','20:32:00','12:29:00',2,'ySRlwnQ7RYQhmCiyPZBc3xsZL2K3'),(15,'TKS Athletics Carnival',1,'2023-03-26','10:00:00','15:00:00',1,'ySRlwnQ7RYQhmCiyPZBc3xsZL2K3'),(16,'chriscomp',1,'2023-10-19','00:30:00','12:30:00',1,'SGQvN4MeBuPr9MiMd2E3krCJs4s2');
+INSERT INTO `carnivals` VALUES (14,'abc',1,'2023-03-13','08:32:00','12:29:00',2,'ySRlwnQ7RYQhmCiyPZBc3xsZL2K3'),(15,'TKS Athletics Carnival',1,'2023-03-26','10:00:00','15:00:00',1,'ySRlwnQ7RYQhmCiyPZBc3xsZL2K3'),(16,'chriscomp',1,'2023-10-19','00:30:00','12:30:00',1,'SGQvN4MeBuPr9MiMd2E3krCJs4s2');
 /*!40000 ALTER TABLE `carnivals` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -182,16 +182,15 @@ CREATE TABLE `eventrecord` (
   `id` int NOT NULL AUTO_INCREMENT,
   `typeID` int DEFAULT NULL,
   `ageGroupID` int DEFAULT NULL,
-  `divisionID` int DEFAULT NULL,
-  `record` float DEFAULT NULL,
+  `resultID` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `ageGroupID` (`ageGroupID`),
-  KEY `divisionID` (`divisionID`),
   KEY `typeID` (`typeID`),
+  KEY `eventrecord_ibfk_4` (`resultID`),
   CONSTRAINT `eventrecord_ibfk_1` FOREIGN KEY (`ageGroupID`) REFERENCES `eventAgeGroup` (`id`),
-  CONSTRAINT `eventrecord_ibfk_2` FOREIGN KEY (`divisionID`) REFERENCES `eventDivision` (`id`),
-  CONSTRAINT `eventrecord_ibfk_3` FOREIGN KEY (`typeID`) REFERENCES `eventType` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `eventrecord_ibfk_3` FOREIGN KEY (`typeID`) REFERENCES `eventtype` (`id`),
+  CONSTRAINT `eventrecord_ibfk_4` FOREIGN KEY (`resultID`) REFERENCES `results` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -200,7 +199,7 @@ CREATE TABLE `eventrecord` (
 
 LOCK TABLES `eventrecord` WRITE;
 /*!40000 ALTER TABLE `eventrecord` DISABLE KEYS */;
-INSERT INTO `eventrecord` VALUES (1,1,1,1,12.34);
+INSERT INTO `eventrecord` VALUES (21,2,1,42),(25,2,2,44),(32,4,1,32),(33,4,4,37);
 /*!40000 ALTER TABLE `eventrecord` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -220,20 +219,21 @@ CREATE TABLE `events` (
   `startTime` time DEFAULT NULL,
   `recordID` int DEFAULT NULL,
   `weightingID` int DEFAULT NULL,
+  `removed` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `typeID` (`typeID`),
   KEY `ageGroupID` (`ageGroupID`),
   KEY `divisionID` (`divisionID`),
   KEY `recordID` (`recordID`),
-  KEY `carnivalID` (`carnivalID`),
   KEY `weightingID` (`weightingID`),
-  CONSTRAINT `events_ibfk_1` FOREIGN KEY (`typeID`) REFERENCES `eventType` (`id`),
+  KEY `events_ibfk_7` (`carnivalID`),
+  CONSTRAINT `events_ibfk_1` FOREIGN KEY (`typeID`) REFERENCES `eventtype` (`id`),
   CONSTRAINT `events_ibfk_2` FOREIGN KEY (`ageGroupID`) REFERENCES `eventAgeGroup` (`id`),
-  CONSTRAINT `events_ibfk_3` FOREIGN KEY (`divisionID`) REFERENCES `eventDivision` (`id`),
-  CONSTRAINT `events_ibfk_5` FOREIGN KEY (`recordID`) REFERENCES `eventRecord` (`id`),
-  CONSTRAINT `events_ibfk_7` FOREIGN KEY (`carnivalID`) REFERENCES `carnivals` (`id`),
-  CONSTRAINT `events_ibfk_8` FOREIGN KEY (`weightingID`) REFERENCES `eventweighting` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `events_ibfk_3` FOREIGN KEY (`divisionID`) REFERENCES `eventdivision` (`id`),
+  CONSTRAINT `events_ibfk_5` FOREIGN KEY (`recordID`) REFERENCES `eventrecord` (`id`),
+  CONSTRAINT `events_ibfk_7` FOREIGN KEY (`carnivalID`) REFERENCES `carnivals` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `events_ibfk_8` FOREIGN KEY (`weightingID`) REFERENCES `eventweighting2` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -242,7 +242,7 @@ CREATE TABLE `events` (
 
 LOCK TABLES `events` WRITE;
 /*!40000 ALTER TABLE `events` DISABLE KEYS */;
-INSERT INTO `events` VALUES (6,15,2,2,6,'09:20:00',NULL,NULL),(7,15,2,1,7,'09:15:00',NULL,NULL),(8,15,4,4,1,'12:30:00',NULL,NULL),(9,15,4,1,1,'00:00:00',NULL,NULL);
+INSERT INTO `events` VALUES (6,15,2,2,6,'09:20:00',NULL,NULL,0),(7,15,2,1,7,'09:15:00',NULL,NULL,0),(8,15,4,4,1,'12:30:00',NULL,NULL,0),(9,15,4,1,1,'00:00:00',NULL,NULL,0),(10,14,4,4,1,'18:05:00',NULL,NULL,0),(11,15,8,1,1,'13:50:00',NULL,NULL,0);
 /*!40000 ALTER TABLE `events` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -362,7 +362,7 @@ CREATE TABLE `house` (
 
 LOCK TABLES `house` WRITE;
 /*!40000 ALTER TABLE `house` DISABLE KEYS */;
-INSERT INTO `house` VALUES (1,'Baker Hake','BAH',46,5),(2,'Bishop Barker Harris','BBH',0,7),(3,'Britten','BRI',61,4),(4,'Broughton Forrest','BRF',0,7),(5,'Burkitt','BUR',0,7),(6,'Dalmas','DAL',70,3),(7,'Kurrle','KUR',251,1),(8,'Macarthur Waddy','MAW',0,7),(9,'Macquarie','MAQ',94,2),(10,'Wickham','WIC',46,5),(11,'Gowan Brae','GB',0,7);
+INSERT INTO `house` VALUES (1,'Baker Hake','BAH',192,2),(2,'Bishop Barker Harris','BBH',0,6),(3,'Britten','BRI',57,4),(4,'Broughton Forrest','BRF',0,6),(5,'Burkitt','BUR',0,6),(6,'Dalmas','DAL',66,3),(7,'Kurrle','KUR',219,1),(8,'Macarthur Waddy','MAW',0,6),(9,'Macquarie','MAQ',0,6),(10,'Wickham','WIC',48,5),(11,'Gowan Brae','GB',0,6);
 /*!40000 ALTER TABLE `house` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -383,11 +383,11 @@ CREATE TABLE `results` (
   `placing` int DEFAULT NULL,
   `points` int DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `studentID` (`studentID`),
-  KEY `eventID` (`eventID`),
-  CONSTRAINT `results_ibfk_1` FOREIGN KEY (`studentID`) REFERENCES `students` (`id`),
-  CONSTRAINT `results_ibfk_2` FOREIGN KEY (`eventID`) REFERENCES `events` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `results_ibfk_1` (`studentID`),
+  KEY `results_ibfk_2` (`eventID`),
+  CONSTRAINT `results_ibfk_1` FOREIGN KEY (`studentID`) REFERENCES `students` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `results_ibfk_2` FOREIGN KEY (`eventID`) REFERENCES `events` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -396,7 +396,7 @@ CREATE TABLE `results` (
 
 LOCK TABLES `results` WRITE;
 /*!40000 ALTER TABLE `results` DISABLE KEYS */;
-INSERT INTO `results` VALUES (11,6,3,0,0,12.34,3,10),(13,7,3,0,0,34.88,1,12),(14,6,4,1,0,14.4,99999,0),(15,8,3,0,0,6.54,2,48),(16,8,5,0,0,5.78,5,44),(17,8,4,0,0,6.88,1,50),(18,9,5,0,1,1234,99999,0),(19,9,1,0,0,1,3,46),(20,9,5,0,0,3,1,50),(21,8,7,0,0,6,3,46),(22,8,7,0,1,999,99999,0),(23,8,7,1,0,998,99999,0),(24,8,6,0,0,5.88,4,45),(25,6,6,0,0,4.66,1,12),(26,6,6,1,0,1,99999,0),(27,6,6,0,0,25.01,4,9),(28,8,6,0,0,4,6,43),(29,8,6,0,0,3,7,42),(30,8,6,0,0,2,8,41),(31,7,6,0,0,35.01,2,11),(32,9,6,0,0,2,2,48),(33,6,4,0,0,5.12,2,11);
+INSERT INTO `results` VALUES (11,6,3,0,0,12.34,3,10),(13,7,3,0,0,34.88,2,11),(14,6,4,1,0,14.4,99999,0),(15,8,3,0,0,6.54,4,45),(17,8,4,0,0,6.88,3,46),(19,9,1,0,0,1,2,48),(21,8,7,0,0,6,5,44),(22,8,7,0,1,999,99999,0),(23,8,7,1,0,998,99999,0),(24,8,6,0,0,5.88,6,43),(27,6,6,0,0,25.01,4,9),(28,8,6,0,0,4,7,42),(30,8,6,0,0,2,8,41),(31,7,6,0,0,35.01,3,10),(32,9,6,0,0,2,1,50),(33,6,4,0,0,5.12,2,11),(34,10,7,0,0,7.11,1,50),(35,10,1,0,1,-1,99999,0),(36,8,7,0,0,7.65,2,48),(37,8,7,0,0,7.77,1,50),(42,7,6,0,0,0.4,1,12),(44,6,6,0,0,1,1,12);
 /*!40000 ALTER TABLE `results` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -415,7 +415,7 @@ CREATE TABLE `staff` (
   `roleID` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `roleID` (`roleID`),
-  CONSTRAINT `staff_ibfk_1` FOREIGN KEY (`roleID`) REFERENCES `staffrole` (`id`)
+  CONSTRAINT `staff_ibfk_1` FOREIGN KEY (`roleID`) REFERENCES `staffRole` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -469,7 +469,7 @@ CREATE TABLE `students` (
   PRIMARY KEY (`id`),
   KEY `houseID` (`houseID`),
   CONSTRAINT `students_ibfk_1` FOREIGN KEY (`houseID`) REFERENCES `House` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -478,37 +478,13 @@ CREATE TABLE `students` (
 
 LOCK TABLES `students` WRITE;
 /*!40000 ALTER TABLE `students` DISABLE KEYS */;
-INSERT INTO `students` VALUES (1,'Chris','Yoo',10,1034483),(3,'Dwayne','Johnson',6,1234567),(4,'Will','Smith',3,2345678),(5,'Chris','Rock',9,3456789),(6,'Rock','Daw',7,69699634),(7,'Elon','Ma',1,3254123);
+INSERT INTO `students` VALUES (1,'Chris','Yoo',10,1034483),(3,'Dwayne','Johnson',6,1234567),(4,'Will','Smith',3,2345678),(6,'Rock','Daw',7,69699634),(7,'Elon','Ma',1,3254123);
 /*!40000 ALTER TABLE `students` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `studentsandevents`
+-- Dumping events for database 'db3nf'
 --
-
-DROP TABLE IF EXISTS `studentsandevents`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `studentsandevents` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `studentID` int DEFAULT NULL,
-  `eventID` int DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `studentID` (`studentID`),
-  KEY `eventID` (`eventID`),
-  CONSTRAINT `studentsandevents_ibfk_1` FOREIGN KEY (`studentID`) REFERENCES `students` (`id`),
-  CONSTRAINT `studentsandevents_ibfk_2` FOREIGN KEY (`eventID`) REFERENCES `events` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `studentsandevents`
---
-
-LOCK TABLES `studentsandevents` WRITE;
-/*!40000 ALTER TABLE `studentsandevents` DISABLE KEYS */;
-/*!40000 ALTER TABLE `studentsandevents` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Dumping routines for database 'db3nf'
@@ -532,6 +508,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `AddResult`(
     IN ascending bool
 )
 ar: BEGIN
+	DECLARE newResultID int DEFAULT 0;
 
 	# Deal with DNF / DQ 
 	IF (inDnf = 1 OR inDq = 1) THEN
@@ -560,7 +537,6 @@ ar: BEGIN
 	ELSE
 		INSERT INTO tmpres2(id, res, placing) SELECT id, res, RANK() OVER (ORDER BY res DESC) FROM tmpres1;
 	END IF;
-    
     
 	# Update placings and points in table
 	BEGIN
@@ -594,12 +570,39 @@ ar: BEGIN
             
             IF cursor_id IS NULL THEN
 				INSERT INTO results VALUES (NULL, inEventID, inStudentID, inDnf, inDq, inResult, cursor_placing, cursor_points);
+                SELECT last_insert_id() INTO newResultID;
 			ELSE 
 				UPDATE results SET results.placing = cursor_placing, results.points = cursor_points WHERE results.id = cursor_id;
             END IF;
 		END LOOP;
 		CLOSE cursor_e;
     END;
+    
+    #Update record
+    BEGIN
+		DECLARE inTypeID int DEFAULT 0;
+        DECLARE inAgeGroupID int DEFAULT 0;
+        #DECLARE inDivisionID int DEFAULT 0;
+        DECLARE previousResultID int DEFAULT 0;
+        DECLARE previousResult float DEFAULT 0;
+        
+        #SELECT typeID, ageGroupID, divisionID INTO inTypeID, inAgeGroupID, inDivisionID FROM events WHERE id = inEventID;
+        SELECT typeID, ageGroupID INTO inTypeID, inAgeGroupID FROM events WHERE id = inEventID;
+        SELECT eventrecord.resultID INTO previousResultID FROM eventrecord WHERE typeID = inTypeID AND ageGroupID = inAgeGroupID; #AND divisionID = inDivisionID;
+        
+        IF (previousResultID != 0) THEN
+			SELECT result INTO previousResult FROM results WHERE id = previousResultID;
+			IF ((ascending = 1 AND inResult < previousResult) OR (ascending = 0 AND inResult > previousResult)) THEN
+				DELETE FROM eventrecord WHERE typeID = inTypeID AND ageGroupID = inAgeGroupID; #AND divisionID = inDivisionID;
+				INSERT INTO eventrecord VALUES (NULL, inTypeID, inAgeGroupID, newResultID); #inDivisionID, newResultID);
+			END IF;
+		ELSE
+			INSERT INTO eventrecord VALUES (NULL, inTypeID, inAgeGroupID, newResultID); #inDivisionID, newResultID);
+        END IF;
+    END;
+    
+    #CALL CalculateHousePlacings;
+    
     DROP TEMPORARY TABLE IF EXISTS tmpres1;
 	DROP TEMPORARY TABLE IF EXISTS tmpres2;
 END ;;
@@ -695,6 +698,92 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `CalculateRecord` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CalculateRecord`(
+	in inTypeID int,
+    in inAgeGroupID int
+)
+cr: BEGIN
+	DECLARE eventExists bool DEFAULT 0;
+    DECLARE resultExists bool DEFAULT 0;
+
+	DROP TEMPORARY TABLE IF EXISTS tmprecord;
+    CREATE TEMPORARY TABLE tmprecord (
+		id int
+    );
+
+	INSERT INTO tmprecord(id) SELECT id FROM events WHERE typeID = inTypeID AND ageGroupID = inAgeGroupID;
+    
+	SELECT EXISTS (SELECT 1 FROM tmprecord) INTO eventExists;
+    
+    IF (eventExists = 0) THEN
+		LEAVE cr;
+    END IF;
+    
+    BEGIN
+		DECLARE recordID int DEFAULT 0;
+        DECLARE record float DEFAULT 0;
+        DECLARE currentResultID int DEFAULT 0;
+        DECLARE currentResult float DEFAULT 0;
+        DECLARE inAscending bool DEFAULT 1;
+    
+		DECLARE cursor_id int DEFAULT 0;
+		DECLARE done int DEFAULT FALSE;
+		DECLARE cursor_e CURSOR FOR SELECT id FROM tmprecord;
+		DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+        
+        SELECT ascending INTO inAscending FROM eventtype WHERE eventtype.id = inTypeID;
+
+		OPEN cursor_e;
+		read_loop: LOOP
+			FETCH cursor_e INTO cursor_id;
+			IF done THEN
+				LEAVE read_loop;
+			END IF;
+            
+            IF (recordID = 0) THEN
+				SELECT id, result INTO recordID, record FROM results WHERE eventID = cursor_id AND placing = 1;
+			ELSE 
+				SELECT DISTINCT id, result INTO currentResultID, currentResult FROM results WHERE eventID = cursor_id AND placing = 1;
+                
+                IF (inAscending = 1) THEN
+					IF (currentResult < record) THEN
+						SET record = currentResult;
+						SET recordID = currentResultID;
+					END IF;
+				ELSE
+					IF (currentResult > record) THEN
+						SET record = currentResult;
+						SET recordID = currentResultID;
+					END IF;
+				END IF;
+            END IF;
+		END LOOP;
+		CLOSE cursor_e;
+         
+		DELETE FROM eventrecord WHERE typeID = inTypeID AND ageGroupID = inAgeGroupID;
+        IF (recordID != 0) THEN
+			INSERT INTO eventrecord VALUES (NULL, inTypeID, inAgeGroupID, recordID);
+        END IF;
+    END;
+
+	DROP TEMPORARY TABLE IF EXISTS tmprecord;
+    
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `CreateCarnival` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -738,17 +827,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateEvent`(
     IN ageGroupID int,
     IN divisionID int,
     IN startTime TIME
-    -- IN record FLOAT
-    -- Weighting
 )
 BEGIN
-    -- DECLARE recordID int;
-    -- DECLARE weightingID int;
-    
-    -- INSERT INTO eventRecord VALUES (NULL, record);
-    -- SELECT recordID INTO recordID FROM eventRecord WHERE eventRecord.record = record;
-
-    INSERT INTO events VALUES (NULL, carnivalID, typeID, ageGroupID, divisionID, startTime, NULL, NULL);
+    INSERT INTO events VALUES (NULL, carnivalID, typeID, ageGroupID, divisionID, startTime, NULL, NULL, 0);
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -767,10 +848,10 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetCarnivals`()
 BEGIN
-	SELECT carnivals.id, carnivals.name, carnivalType.type, carnivals.date, carnivals.startTime, carnivals.endTime, carnivalLocation.location, staff.firstName, staff.lastName
+	SELECT carnivals.id, carnivals.name, carnivaltype.type, carnivals.date, carnivals.startTime, carnivals.endTime, carnivallocation.location, staff.firstName, staff.lastName
 		FROM carnivals
-		INNER JOIN carnivalType ON carnivals.typeID = carnivalType.typeID
-        INNER JOIN carnivalLocation ON carnivals.locationID = carnivalLocation.locationID
+		INNER JOIN carnivaltype ON carnivals.typeID = carnivaltype.typeID
+        INNER JOIN carnivallocation ON carnivals.locationID = carnivallocation.locationID
         INNER JOIN staff ON carnivals.staffID = staff.id
         ORDER BY carnivals.date, carnivals.startTime, carnivals.endTime ASC;
 END ;;
@@ -794,20 +875,20 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetEvents`(
 )
 BEGIN
 	IF (carnivalID = 0) THEN
-		SELECT events.id, eventType.type, eventAgeGroup.ageGroup, eventDivision.division, events.startTime, eventType.unit
+		SELECT events.id, eventtype.type, eventAgeGroup.ageGroup, eventdivision.division, events.startTime, eventtype.unit
 			FROM events
 			INNER JOIN carnivals ON events.carnivalID = carnivals.id
-			INNER JOIN eventType ON events.typeID = eventType.id
+			INNER JOIN eventtype ON events.typeID = eventtype.id
 			INNER JOIN eventAgeGroup ON events.ageGroupID = eventAgeGroup.id
-			INNER JOIN eventDivision ON events.divisionID = eventDivision.id
+			INNER JOIN eventdivision ON events.divisionID = eventdivision.id
 			ORDER BY events.startTime ASC;
     ELSE 
-		SELECT events.id, eventType.type, eventAgeGroup.ageGroup, eventDivision.division, events.startTime, eventType.unit
+		SELECT events.id, eventtype.type, eventAgeGroup.ageGroup, eventdivision.division, events.startTime, eventtype.unit
 			FROM events
 			INNER JOIN carnivals ON events.carnivalID = carnivals.id
-			INNER JOIN eventType ON events.typeID = eventType.id
+			INNER JOIN eventtype ON events.typeID = eventtype.id
 			INNER JOIN eventAgeGroup ON events.ageGroupID = eventAgeGroup.id
-			INNER JOIN eventDivision ON events.divisionID = eventDivision.id
+			INNER JOIN eventdivision ON events.divisionID = eventdivision.id
 			WHERE events.carnivalID = carnivalID
 			ORDER BY events.startTime ASC;
 	END IF;
@@ -831,10 +912,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetOneCarnival`(
 	IN id varchar(255)
 )
 BEGIN
-	SELECT carnivals.id, carnivals.name, carnivals.typeID, carnivalType.type, carnivals.date, carnivals.startTime, carnivals.endTime, carnivalLocation.location, staff.firstName, staff.lastName
+	SELECT carnivals.id, carnivals.name, carnivals.typeID, carnivaltype.type, carnivals.date, carnivals.startTime, carnivals.endTime, carnivallocation.location, staff.firstName, staff.lastName
 		FROM carnivals
-		INNER JOIN carnivalType ON carnivals.typeID = carnivalType.typeID
-        INNER JOIN carnivalLocation ON carnivals.locationID = carnivalLocation.locationID
+		INNER JOIN carnivaltype ON carnivals.typeID = carnivaltype.typeID
+        INNER JOIN carnivallocation ON carnivals.locationID = carnivallocation.locationID
         INNER JOIN staff ON carnivals.staffID = staff.id
         WHERE carnivals.id = id;
 END ;;
@@ -857,12 +938,12 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetOneEvent`(
 	IN id int
 )
 BEGIN
-	SELECT events.id, events.carnivalID, eventType.type, eventAgeGroup.ageGroup, eventDivision.division, events.startTime, eventType.unit
+	SELECT events.id, events.carnivalID, eventtype.type, eventAgeGroup.ageGroup, eventdivision.division, events.startTime, eventtype.unit
 		FROM events
 		INNER JOIN carnivals ON events.carnivalID = carnivals.id
-        INNER JOIN eventType ON events.typeID = eventType.id
+        INNER JOIN eventtype ON events.typeID = eventtype.id
         INNER JOIN eventAgeGroup ON events.ageGroupID = eventAgeGroup.id
-        INNER JOIN eventDivision ON events.divisionID = eventDivision.id
+        INNER JOIN eventdivision ON events.divisionID = eventdivision.id
         WHERE events.id = id;
 END ;;
 DELIMITER ;
@@ -895,6 +976,44 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `GetRecords` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetRecords`(
+	IN inCarnivalTypeID int
+)
+BEGIN
+	
+    DROP TEMPORARY TABLE IF EXISTS tmpeventtype;
+    CREATE TEMPORARY TABLE tmpeventtype (
+		id int
+    );
+    
+    INSERT INTO tmpeventtype(id) SELECT id FROM eventtype WHERE eventtype.carnivalTypeID = inCarnivalTypeID;
+    
+    SELECT eventrecord.id, eventtype.type, eventAgeGroup.ageGroup, students.firstName, students.lastName, results.result, results.studentID
+		FROM eventrecord 
+		INNER JOIN eventtype ON eventrecord.typeID = eventtype.id
+        INNER JOIN eventAgeGroup ON eventrecord.ageGroupID = eventAgeGroup.id
+        INNER JOIN results ON eventrecord.resultID = results.id
+        INNER JOIN students ON results.studentID = students.id
+		WHERE EXISTS (SELECT 1 FROM tmpeventtype WHERE eventrecord.typeID=tmpeventtype.id)
+        ORDER BY eventrecord.typeID, eventrecord.ageGroupID;
+    
+    DROP TEMPORARY TABLE IF EXISTS tmpeventtype;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `GetResultsForEvent` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -914,29 +1033,6 @@ BEGIN
 		INNER JOIN (students INNER JOIN house ON students.houseID = house.id) ON results.studentID = students.id
         WHERE results.eventID = eventID
         ORDER BY results.placing ASC;
-END ;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `GetResultsForStudent` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GetResultsForStudent`(
-	IN studentID int
-)
-BEGIN
-	DECLARE eid int;
-    -- SELECT eventID INTO eid FROM studentsandevents WHERE studentsandevents.studentID = studentID;
-    
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -987,25 +1083,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `GetStudentsWithHouseInitials` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GetStudentsWithHouseInitials`()
-BEGIN
-
-END ;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `RemoveCarnival` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -1017,30 +1094,228 @@ DELIMITER ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `RemoveCarnival`(
-	IN id int
+	IN carnivalID int
 )
 BEGIN
-	DECLARE length int DEFAULT 0;
-    DECLARE counter int DEFAULT 0;
-    DECLARE eventID int;
+	DROP TEMPORARY TABLE IF EXISTS tmpcarnivalevents;
+    CREATE TEMPORARY TABLE tmpcarnivalevents (
+		id int
+	);
     
-	DROP TEMPORARY TABLE IF EXISTS tmp;
-	CREATE TEMPORARY TABLE tmp
-		SELECT id FROM events WHERE events.carnivalID = id;
+    INSERT INTO tmpcarnivalevents (id) SELECT id FROM events WHERE events.carnivalID = carnivalID;
     
-    SELECT COUNT(*) FROM tmp INTO length;
+    BEGIN
+		DECLARE cursor_id int DEFAULT 0;
+        DECLARE done int DEFAULT FALSE;
+		DECLARE cursor_e CURSOR FOR SELECT id FROM tmpcarnivalevents;
+		DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+        
+        OPEN cursor_e;
+        delete_loop: LOOP
+			FETCH cursor_e INTO cursor_id;
+            IF done THEN
+				LEAVE delete_loop;
+            END IF;
+            
+            CALL RemoveEvent (cursor_id);
+        END LOOP;
+        CLOSE cursor_e;
+    END;
     
-    SET counter=0;
-    WHILE counter<length DO
-		SELECT id FROM tmp LIMIT counter,1 INTO eventID;
-		DELETE FROM results WHERE results.eventID = eventID;
-        SET counter=counter+1;
-	END WHILE;
+    DELETE FROM carnivals WHERE carnivals.id = carnivalID;
     
-	DELETE FROM events WHERE events.carnivalID = id;
-	DELETE FROM carnivals WHERE carnivals.id = id;
+    DROP TEMPORARY TABLE IF EXISTS tmpcarnivalevents;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `RemoveEvent` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `RemoveEvent`(
+	IN eventID int
+)
+BEGIN
+	DROP TEMPORARY TABLE IF EXISTS tmpeventresults;
+    CREATE TEMPORARY TABLE tmpeventresults (
+		id int
+	);
     
-    DROP TEMPORARY TABLE IF EXISTS tmp;
+    INSERT INTO tmpeventresults (id) SELECT id FROM results WHERE results.eventID = eventID;
+    
+    BEGIN
+		DECLARE cursor_id int DEFAULT 0;
+        DECLARE done int DEFAULT FALSE;
+		DECLARE cursor_e CURSOR FOR SELECT id FROM tmpeventresults;
+		DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+        
+        OPEN cursor_e;
+        delete_loop: LOOP
+			FETCH cursor_e INTO cursor_id;
+            IF done THEN
+				LEAVE delete_loop;
+            END IF;
+            
+            CALL RemoveResult (cursor_id);
+        END LOOP;
+        CLOSE cursor_e;
+    END;
+    
+    DELETE FROM events WHERE events.id = eventID;
+    
+    DROP TEMPORARY TABLE IF EXISTS tmpeventresults;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `RemoveResult` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `RemoveResult`(
+	IN resultID int
+)
+BEGIN
+	# Get preliminary information
+	DECLARE inEventID int DEFAULT 0;
+    DECLARE inAscending bool DEFAULT 1;
+    DECLARE inTypeID int DEFAULT 0;
+    DECLARE inAgeGroupID int DEFAULT 0;
+    
+    SELECT eventID INTO inEventID FROM results WHERE results.id = resultID;
+    SELECT typeID, ageGroupID INTO inTypeID, inAgeGroupID FROM events WHERE events.id = inEventID;
+    SELECT ascending INTO inAscending FROM eventtype WHERE eventtype.id = inTypeID;
+	
+    # Delete result from table
+    DELETE FROM results WHERE results.id = resultID;
+    
+    # Set up temporary tables
+    DROP TEMPORARY TABLE IF EXISTS tmpres1;
+	DROP TEMPORARY TABLE IF EXISTS tmpres2;
+	CREATE TEMPORARY TABLE tmpres1 (
+		id int,
+		res float
+	);
+	CREATE TEMPORARY TABLE tmpres2 (
+		id int,
+		res float,
+		placing int
+	);
+    
+    # Load temporary tables
+	INSERT INTO tmpres1(id, res) SELECT id, result FROM results WHERE eventID = inEventID AND dnf = 0 AND dq = 0;
+	IF (inAscending = 1) THEN
+		INSERT INTO tmpres2(id, res, placing) SELECT id, res, RANK() OVER (ORDER BY res ASC) FROM tmpres1;
+	ELSE
+		INSERT INTO tmpres2(id, res, placing) SELECT id, res, RANK() OVER (ORDER BY res DESC) FROM tmpres1;
+	END IF;
+    
+	# Update placings and points in table
+	BEGIN
+		DECLARE cursor_typeID int DEFAULT 0;
+        DECLARE cursor_categoryID int DEFAULT 0;
+        DECLARE cursor_divisionID int DEFAULT 0;
+        DECLARE cursor_points int DEFAULT 0;
+        
+		DECLARE cursor_id int DEFAULT 0;
+		DECLARE cursor_placing int DEFAULT 0;
+		DECLARE done int DEFAULT FALSE;
+		DECLARE cursor_e CURSOR FOR SELECT id, placing FROM tmpres2;
+		DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+        
+        SELECT divisionID INTO cursor_divisionID FROM events WHERE events.id = inEventID;
+        SELECT typeID INTO cursor_typeID FROM events WHERE events.id = inEventID;
+        SELECT categoryID INTO cursor_categoryID FROM eventtype WHERE eventtype.id = cursor_typeID;
+		
+		OPEN cursor_e;
+		read_loop: LOOP
+			FETCH cursor_e INTO cursor_id, cursor_placing;
+			IF done THEN
+				LEAVE read_loop;
+			END IF;
+            
+            IF (cursor_divisionID = 1 OR cursor_divisionID = 2 OR cursor_divisionID = 3 OR cursor_divisionID = 4) THEN
+				SELECT points INTO cursor_points FROM eventweighting2 WHERE categoryID = cursor_categoryID AND divisionID = cursor_divisionID AND placing = cursor_placing;
+            ELSE 
+				SELECT points INTO cursor_points FROM eventweighting2 WHERE categoryID = cursor_categoryID AND divisionID = 4 AND placing = cursor_placing;
+            END IF;
+            
+            UPDATE results SET results.placing = cursor_placing, results.points = cursor_points WHERE results.id = cursor_id;
+		END LOOP;
+		CLOSE cursor_e;
+    END;
+    
+    # Update record
+    CALL CalculateRecord (inTypeID, inAgeGroupID);
+    
+    DROP TEMPORARY TABLE IF EXISTS tmpres1;
+	DROP TEMPORARY TABLE IF EXISTS tmpres2;
+    
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `RemoveStudent` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `RemoveStudent`(
+	IN studentID int
+)
+BEGIN
+	DROP TEMPORARY TABLE IF EXISTS tmpstudentresults;
+    CREATE TEMPORARY TABLE tmpstudentresults (
+		id int
+    );
+
+	INSERT INTO tmpstudentresults (id) SELECT id FROM results WHERE results.studentID = studentID;
+    
+    BEGIN
+		DECLARE cursor_id int DEFAULT 0;
+        DECLARE done int DEFAULT FALSE;
+		DECLARE cursor_e CURSOR FOR SELECT id FROM tmpstudentresults;
+		DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+        
+        OPEN cursor_e;
+        delete_loop: LOOP
+			FETCH cursor_e INTO cursor_id;
+            IF done THEN
+				LEAVE delete_loop;
+            END IF;
+            
+            CALL RemoveResult (cursor_id);
+        END LOOP;
+        CLOSE cursor_e;
+    END;
+
+	DELETE FROM students WHERE students.id = studentID;
+    
+    DROP TEMPORARY TABLE IF EXISTS tmpstudentresults;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1057,4 +1332,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-05-24 14:35:25
+-- Dump completed on 2023-07-09 15:27:32

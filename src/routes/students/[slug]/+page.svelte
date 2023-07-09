@@ -42,17 +42,17 @@
     <h1>Student</h1>
 
     <div id="student-details">
-        <h3 style="display: inline-block">Student Details</h3>
+        <h3 class="details-display">Student Details</h3>
 
         <!--Edit or Cancel/Save buttons to show when needed-->
         {#if !editingStudent}
             <!--Initially only display Edit button-->
-            <button style="float: right; display: inline-block; width: 120px" on:click={setEditingStudent}>Edit</button>
+            <button class="edit-button" on:click={setEditingStudent}>Edit</button>
         {:else}
             <!--If editing, display cancel button-->
-            <button style="float: right; display: inline-block; width: 120px; margin-left: 10px" on:click={cancelEditingStudent}>Cancel</button>
+            <button class="edit-button" on:click={cancelEditingStudent}>Cancel</button>
             <!--If data edited, enable save button-->
-            <button style="float: right; display: inline-block; width: 120px" on:click={editStudent} disabled={!dataChanged || null}>Save</button>
+            <button class="edit-button" on:click={editStudent} disabled={!dataChanged || null}>Save</button>
         {/if}
 
         <!--Display error message from server process-->
@@ -136,5 +136,5 @@
 </div>
 
 <style>
-    @import "$lib/css/containers.css";
+    @import "$lib/css/main.css";
 </style>

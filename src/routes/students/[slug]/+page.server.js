@@ -1,6 +1,6 @@
 // Imports
 import { sequelize } from "../../../hooks.server"; 
-import { validateName, validateNumber } from "$lib/validation";
+import { validateStudent } from "$lib/validation";
 
 /** @type {import('./$types').PageServerLoad} */
 // Function: load()
@@ -51,22 +51,10 @@ export const actions = {
             return { error: "All fields must be filled" }
         }
 
-        // Validate first name
-        const firstNameValidityMessage = validateName(firstName);
-        if (firstNameValidityMessage != "Valid") {
-            return { error: firstNameValidityMessage }
-        }
-
-        // Validate last name
-        const lastNameValidityMessage = validateName(lastName);
-        if (lastNameValidityMessage != "Valid") {
-            return { error: lastNameValidityMessage }
-        }
-
-        // Validate number
-        const numberValidityMessage = validateNumber(number);
-        if (numberValidityMessage != "Valid") {
-            return { error: numberValidityMessage }
+        // Validate input parameters
+        const studentValidityMessage = validateStudent(firstName, lastName, number);
+        if (studentValidityMessage != "Valid") {
+            return { error: studentValidityMessage }
         }
 
         // Update Students MySQL table with new values

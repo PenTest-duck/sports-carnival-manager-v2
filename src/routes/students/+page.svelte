@@ -76,5 +76,5 @@
 </div>
 
 <style>
-    @import "$lib/css/containers.css";
+    @import "$lib/css/main.css";
 </style>

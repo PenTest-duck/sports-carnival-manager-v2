@@ -2,7 +2,9 @@ version: '3.8'
 
 services:
   scm-web:
-    image: sportscarnivalmanagerv2:latest
+    build:
+      context: .
+    restart: always
     ports: 
       - '3000:3000'
     container_name: scm-web
@@ -10,18 +12,19 @@ services:
       - scm-db
 
   scm-db: 
-    image: mysql:latest
+    build:
+      context: scm-db
+      args:
+        MYSQL_DB: $MYSQL_DB
+        MYSQL_PW: $MYSQL_PW
     restart: always
-    environment:
-      MYSQL_DATABASE: $MYSQL_DB
-      MYSQL_ROOT_PASSWORD: $MYSQL_PW
     ports:
       - '3306:3306'
     expose:
       - '3306'
     volumes:
-      - scm-vol:/var/lib/mysql
+      - scmdb-vol:/var/lib/mysql
     container_name: scm-db
     
 volumes:
-  scm-vol:
+  scmdb-vol:

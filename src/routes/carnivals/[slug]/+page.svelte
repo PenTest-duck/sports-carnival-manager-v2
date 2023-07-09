@@ -55,14 +55,14 @@
     <h1>Carnival</h1>
 
     <div id="carnival-details">
-        <h3 style="display: inline-block">Carnival Details</h3>
+        <h3 class="details-display">Carnival Details</h3>
 
         <!--Edit or Cancel/Save buttons to show when needed-->
         {#if !editingCarnival}
-            <button style="float: right; display: inline-block; width: 120px" on:click={setEditingCarnival}>Edit</button>
+            <button class="edit-button" on:click={setEditingCarnival}>Edit</button>
         {:else}
-            <button style="float: right; display: inline-block; width: 120px; margin-left: 10px" on:click={cancelEditingCarnival}>Cancel</button>
-            <button style="float: right; display: inline-block; width: 120px" on:click={editCarnival} disabled={!dataChanged || null}>Save</button>
+            <button class="edit-button" on:click={cancelEditingCarnival}>Cancel</button>
+            <button class="edit-button" on:click={editCarnival} disabled={!dataChanged || null}>Save</button>
         {/if}
 
         <!--Display error message from saving carnival details-->
@@ -233,5 +233,5 @@
 </div>
 
 <style>
-    @import "$lib/css/containers.css";
+    @import "$lib/css/main.css";
 </style>

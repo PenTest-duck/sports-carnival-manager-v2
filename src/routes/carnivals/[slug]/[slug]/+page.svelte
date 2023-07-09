@@ -45,14 +45,14 @@
     <p><a href="/carnivals/{data.event.carnivalID}">Back to Carnival</a></p>
 
     <div id="event-details">
-        <h3 style="display: inline-block;">Event Details</h3>
+        <h3 class="details-display">Event Details</h3>
 
         <!--Edit or Cancel/Save buttons to show when needed-->
         {#if !editingEvent}
-            <button style="float: right; display: inline-block; width: 120px" on:click={setEditingEvent}>Edit</button>
+            <button class="edit-button" on:click={setEditingEvent}>Edit</button>
         {:else}
-            <button style="float: right; display: inline-block; width: 120px; margin-left: 10px" on:click={cancelEditingEvent}>Cancel</button>
-            <button style="float: right; display: inline-block; width: 120px" on:click={editEvent} disabled={!dataChanged || null}>Save</button>
+            <button class="edit-button" on:click={cancelEditingEvent}>Cancel</button>
+            <button class="edit-button" on:click={editEvent} disabled={!dataChanged || null}>Save</button>
         {/if}
 
         <!--Display error message from saving event details-->
@@ -61,57 +61,65 @@
         {/if}
 
         <form method="POST" action="?/editEvent" id="editEventForm">
-        <table>
-            <tr>
-                <th>Type</th>
-                <td>{data.event.type}</td>
-            </tr>
-            <tr>
-                <th>Age Group</th>
-                <!--Display editable or non-editable field-->
-                {#if editingEvent}
-                    <td>
-                        <!--Event age group dropdown select-->
-                        <select name="event-age-group-id" id="event-age-group-id" on:input={setDataChanged}>
-                        {#each data.eventAgeGroups as ageGroup}
-                        <option value="{ageGroup.id}" selected={ageGroup.ageGroup === data.event.ageGroup || null}>{ageGroup.ageGroup}</option>
-                        {/each}
-                        </select>
-                    </td>
-                {:else}
-                    <td>{data.event.ageGroup}</td>
-                {/if}
-            </tr>
-            <tr>
-                <th>Division</th>
-                <!--Display editable or non-editable field-->
-                {#if editingEvent}
-                    <td>
-                        <!--Event division dropdown select-->
-                        <select name="event-division-id" id="event-division-id" on:input={setDataChanged}>
-                        {#each data.eventDivisions as division}
-                        <option value="{division.id}" selected={division.division === data.event.division || null}>{division.division}</option>
-                        {/each}
-                        </select>
-                    </td>
-                {:else}
-                    <td>{data.event.division}</td>
-                {/if}
-            </tr>
-            <tr>
-                <th>Start Time</th>
-                <!--Display editable or non-editable field-->
-                {#if editingEvent}
-                    <td><input type="time" name="event-start-time" value={data.event.startTime} on:input={setDataChanged}></td>
-                {:else}
-                    <td>{data.event.startTime.slice(0, -3)}</td>
-                {/if}
-            </tr>
-            <tr>
-                <th>Record</th>
-                <td>{data.event.record}</td>
-            </tr>
-        </table>
+            <table>
+                <tr>
+                    <th>Type</th>
+                    <td>{data.event.type}</td>
+                </tr>
+
+                <tr>
+                    <th>Age Group</th>
+                    <!--Display editable or non-editable field-->
+                    {#if editingEvent}
+                        <td>
+                            <!--Event age group dropdown select-->
+                            <select name="event-age-group-id" id="event-age-group-id" on:input={setDataChanged}>
+                            {#each data.eventAgeGroups as ageGroup}
+                            <option value="{ageGroup.id}" selected={ageGroup.ageGroup === data.event.ageGroup || null}>{ageGroup.ageGroup}</option>
+                            {/each}
+                            </select>
+                        </td>
+                    {:else}
+                        <td>{data.event.ageGroup}</td>
+                    {/if}
+                </tr>
+
+                <tr>
+                    <th>Division</th>
+                    <!--Display editable or non-editable field-->
+                    {#if editingEvent}
+                        <td>
+                            <!--Event division dropdown select-->
+                            <select name="event-division-id" id="event-division-id" on:input={setDataChanged}>
+                            {#each data.eventDivisions as division}
+                            <option value="{division.id}" selected={division.division === data.event.division || null}>{division.division}</option>
+                            {/each}
+                            </select>
+                        </td>
+                    {:else}
+                        <td>{data.event.division}</td>
+                    {/if}
+                </tr>
+
+                <tr>
+                    <th>Start Time</th>
+                    <!--Display editable or non-editable field-->
+                    {#if editingEvent}
+                        <td><input type="time" name="event-start-time" value={data.event.startTime} min={data.carnival.startTime} max={data.carnival.endTime} on:input={setDataChanged}></td>
+                    {:else}
+                        <td>{data.event.startTime.slice(0, -3)}</td>
+                    {/if}
+                </tr>
+
+                <tr>
+                    <th>Record</th>
+                    <td>{data.event.record}</td>
+                </tr>
+
+                <!--Hidden input fields for validating start time is within range of carnival start and end times-->
+                <input type="hidden" name="event-min-time" value={data.carnival.startTime} />
+                <input type="hidden" name="event-max-time" value={data.carnival.endTime} />
+            </table>
         </form>
     </div>
 
@@ -166,12 +174,12 @@
 
             <!--Row of each result's rank, points, first name, last name, house, DNF, DQ, result-->
             {#each data.results as result}
-                <Result {...result} rank={result.placing} />
+                <Result {...result} placing={result.placing} />
             {/each}
         </table>
     </div>
 </div>
 
 <style>
-    @import "$lib/css/containers.css";
+    @import "$lib/css/main.css";
 </style>

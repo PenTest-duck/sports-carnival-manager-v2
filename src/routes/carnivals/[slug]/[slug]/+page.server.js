@@ -1,7 +1,7 @@
 // @ts-nocheck
 // Imports
 import { sequelize } from "../../../../hooks.server";
-import { validateTime, validateResult } from "$lib/validation";
+import { validateEvent, validateResult } from "$lib/validation";
 
 /** @type {import('./$types').PageServerLoad} */
 // Function: load()
@@ -25,7 +25,7 @@ export async function load({ params }) {
 
     // Fetch list of all event age groups and divisions
     const eventAgeGroupsQueryResponse = await sequelize.query("SELECT * FROM eventAgeGroup");
-    const eventDivisionsQueryResponse = await sequelize.query("SELECT * FROM eventDivision");
+    const eventDivisionsQueryResponse = await sequelize.query("SELECT * FROM eventdivision");
     const eventAgeGroups = eventAgeGroupsQueryResponse[0];
     const eventDivisions = eventDivisionsQueryResponse[0];
 
@@ -37,7 +37,13 @@ export async function load({ params }) {
         replacements: { eventID: params.slug }
     });
 
-    return { event, eventAgeGroups, eventDivisions, students, results };
+    // Fetch carnival details
+    const carnivalQueryResponse = await sequelize.query("CALL GetOneCarnival (:carnivalID)", {
+        replacements: { carnivalID: event.carnivalID }
+    });
+    const carnival = carnivalQueryResponse[0]
+
+    return { event, eventAgeGroups, eventDivisions, students, results, carnival };
 };
 
 /** @type {import('./$types').Actions} */
@@ -73,7 +79,7 @@ export const actions = {
             })
     
             // Fetch whether the results are sorted by ascending or descending order
-            const ascending = await sequelize.query("SELECT ascending FROM eventType WHERE id = :typeID", {
+            const ascending = await sequelize.query("SELECT ascending FROM eventtype WHERE id = :typeID", {
                 replacements: { typeID: typeID[0][0].typeID }
             });
 
@@ -125,40 +131,19 @@ export const actions = {
         const ageGroupID = data.get("event-age-group-id");
         const divisionID = data.get("event-division-id");
         const startTime = data.get("event-start-time")  === "" ? null : data.get("event-start-time"); // if empty, set to null
+        const minTime = data.get("event-min-time") === "" ? null : data.get("event-min-time"); // if empty, set to null
+        const maxTime = data.get("event-max-time") === "" ? null : data.get("event-max-time"); // if empty, set to null
 
         // Check no fields are empty
         if (id == "" || ageGroupID == "" || divisionID == null || startTime == null) {
             return { eventError: "All fields must be filled" }
         }
 
-        // Validate start time
-        const startTimeValidityMessage = validateTime(startTime);
-        if (startTimeValidityMessage != "Valid") {
-            return { eventError: startTimeValidityMessage }
+        // Validate input parameters
+        const eventValidityMessage = validateEvent(startTime, minTime, maxTime);
+        if (eventValidityMessage != "Valid") {
+            return { eventError: eventValidityMessage }
         }
-
-
-
-
-
-
-
-        // Carnival start and end time
-
-
-
-
-
-
-
-
-
-        /*
-        // Validate start time is within range of carnival start and end times
-        // Direct string comparison possible as all are in 24-hour format
-        if (startTime < minTime || startTime > maxTime) {
-            return { eventError: "Event start time must be between carnival start and end times" }
-        }*/
 
         // Update Events MySQL table with new values
         try {

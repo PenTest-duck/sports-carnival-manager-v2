@@ -3,3 +3,4 @@ npm-debug.log
 .git*
 .eslint*
 .prettier*
+scm-db

@@ -22,16 +22,29 @@ const UPPERCASE_REGEX = /[A-Z]/;
 const NUMBER_REGEX = /\d/;
 const SYMBOL_REGEX = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
 
-// Function: validateName()
+// Function: validatePersonName()
 // Purpose: check name is alphabet only and is not too long
 // Parameters: name
 // Returns: "Valid" OR error message
-export function validateName(name) {
+export function validatePersonName(name) {
     // Check name only contains alphabet
     if (!Boolean(name.match(VALID_NAME_REGEX))) {
         return "Name can only contain alphabet";
     }
 
+    // Check name does not exceed 200 characters
+    if (name.length > MAX_STR_LENGTH) {
+        return `Name cannot exceed ${MAX_STR_LENGTH} characters`;
+    }
+
+    return "Valid";
+}
+
+// Function: validateName()
+// Purpose: check non-person name (e.g. carnival name) is not too long
+// Parameters: name
+// Returns "Valid" OR error message
+export function validateName(name) {
     // Check name does not exceed 200 characters
     if (name.length > MAX_STR_LENGTH) {
         return `Name cannot exceed ${MAX_STR_LENGTH} characters`;
@@ -170,6 +183,90 @@ export function validatePassword(password) {
     // Password complexity requirement: check at least 1 symbol exists in password
     if (!Boolean(password.match(SYMBOL_REGEX))) {  
         return "Password must have at least 1 symbol";
+    }
+
+    return "Valid";
+}
+
+// Function: validateCarnival()
+// Purpose: perform validation on all parameters for carnival
+// Parameters: name, date, start time, end time
+// Returns: "Valid" OR error message
+export function validateCarnival(name, date, startTime, endTime) {
+    // Validate name
+    const nameValidityMessage = validateName(name);
+    if (nameValidityMessage != "Valid") {
+        return nameValidityMessage;
+    }
+
+    // Validate date
+    const dateValidityMessage = validateDate(date);
+    if (dateValidityMessage != "Valid") {
+        return dateValidityMessage;
+    }
+
+    // Validate start time
+    const startTimeValidityMessage = validateTime(startTime);
+    if (startTimeValidityMessage != "Valid") {
+        return startTimeValidityMessage;
+    }
+
+    // Validate end time
+    const endTimeValidityMessage = validateTime(endTime);
+    if (endTimeValidityMessage != "Valid") {
+        return endTimeValidityMessage;
+    }
+
+    // Check end time is not before start time
+    // Direct string comparison possible as both are in 24-hour format
+    if (endTime < startTime) {
+        return "End time cannot be before start time";
+    }
+
+    return "Valid";
+}
+
+// Function: validateEvent()
+// Purpose: perform validation on all parameters for event
+// Parameters: event start time, carnival start time, carnival end time
+// Returns: "Valid" OR error message
+export function validateEvent(startTime, minTime, maxTime) {
+    // Validate start time
+    const startTimeValidityMessage = validateTime(startTime);
+    if (startTimeValidityMessage != "Valid") {
+        return startTimeValidityMessage;
+    }
+
+    // Validate start time is within range of carnival start and end times
+    // Direct string comparison possible as all are in 24-hour format
+    if (startTime < minTime || startTime > maxTime) {
+        return "Event start time must be between carnival start and end times";
+    }
+
+    return "Valid";
+}
+
+// Function: validateStudent()
+// Purpose: perform validation on all parameters for student
+// Parameters: first name, last name, student number
+// Returns: "Valid" OR error message
+export function validateStudent(firstName, lastName, number) {
+    // Validate first name
+    const firstNameValidityMessage = validatePersonName(firstName);
+    if (firstNameValidityMessage != "Valid") {
+        return firstNameValidityMessage;
+    }
+
+    // Validate last name
+    const lastNameValidityMessage = validatePersonName(lastName);
+    if (lastNameValidityMessage != "Valid") {
+        return lastNameValidityMessage;
+    }
+
+    // Validate number
+    const numberValidityMessage = validateNumber(number);
+    if (numberValidityMessage != "Valid") {
+        return numberValidityMessage;
     }
 
     return "Valid";

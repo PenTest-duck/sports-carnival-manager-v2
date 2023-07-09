@@ -1,7 +1,7 @@
 // @ts-nocheck
 // Imports
 import { sequelize } from "../../../hooks.server"; 
-import { validateName, validateDate, validateTime } from "$lib/validation";
+import { validateCarnival, validateEvent } from "$lib/validation";
 
 /** @type {import('./$types').PageServerLoad} */
 // Function: load()
@@ -16,10 +16,10 @@ export async function load({ params }) {
     const carnivalQueryResponse = await sequelize.query("CALL GetOneCarnival (:id)", {
         replacements: { id: params.slug }
     });
-    let carnival = carnivalQueryResponse[0]
+    const carnival = carnivalQueryResponse[0]
 
     // Fetch list of all carnival locations
-    const carnivalLocationsQueryResponse = await sequelize.query("SELECT * FROM carnivalLocation");
+    const carnivalLocationsQueryResponse = await sequelize.query("SELECT * FROM carnivallocation");
     const carnivalLocations = carnivalLocationsQueryResponse[0];
 
     // Fetch list of all staff
@@ -32,11 +32,11 @@ export async function load({ params }) {
     });
 
     // Fetch list of all event types, event age groups, event divisions
-    const eventTypesQueryResponse = await sequelize.query("SELECT * FROM eventType WHERE carnivalTypeID = :carnivalTypeID", {
+    const eventTypesQueryResponse = await sequelize.query("SELECT * FROM eventtype WHERE carnivalTypeID = :carnivalTypeID", {
         replacements: { carnivalTypeID: carnival.typeID }
     });
     const eventAgeGroupsQueryResponse = await sequelize.query("SELECT * FROM eventAgeGroup");
-    const eventDivisionsQueryResponse = await sequelize.query("SELECT * FROM eventDivision");
+    const eventDivisionsQueryResponse = await sequelize.query("SELECT * FROM eventdivision");
     const eventTypes = eventTypesQueryResponse[0];
     const eventAgeGroups = eventAgeGroupsQueryResponse[0];
     const eventDivisions = eventDivisionsQueryResponse[0];
@@ -62,20 +62,14 @@ export const actions = {
         const maxTime = data.get("event-max-time") === "" ? null : data.get("event-max-time"); // if empty, set to null
 
         // Check no fields are empty
-        if (carnivalID == "" || typeID == "" || ageGroupID == "" || divisionID == "" || startTime == null || minTime == null || maxTime == null) {
+        if (carnivalID == "" || typeID == "" || ageGroupID == "" || divisionID == "" || startTime == null) {
             return { eventError: "All fields must be filled" }
         }
 
-        // Validate start time
-        const startTimeValidityMessage = validateTime(startTime);
-        if (startTimeValidityMessage != "Valid") {
-            return { eventError: startTimeValidityMessage }
-        }
-
-        // Validate start time is within range of carnival start and end times
-        // Direct string comparison possible as all are in 24-hour format
-        if (startTime < minTime || startTime > maxTime) {
-            return { eventError: "Event start time must be between carnival start and end times" }
+        // Validate input parameters
+        const eventValidityMessage = validateEvent(startTime, minTime, maxTime);
+        if (eventValidityMessage != "Valid") {
+            return { eventError: eventValidityMessage }
         }
 
         // Invoke MySQL stored procedure to create event
@@ -135,37 +129,10 @@ export const actions = {
             return { carnivalError: "All fields must be filled" }
         }
 
-        // Validate name
-        const nameValidityMessage = validateName(name);
-        if (nameValidityMessage != "Valid") {
-            return { carnivalError: nameValidityMessage }
-        }
-
-        // Validate date
-        const dateValidityMessage = validateDate(date);
-        if (dateValidityMessage != "Valid") {
-            return { carnivalError: dateValidityMessage }
-        }
-
-        console.log(startTime);
-        console.log(endTime);
-
-        // Validate start time
-        const startTimeValidityMessage = validateTime(startTime);
-        if (startTimeValidityMessage != "Valid") {
-            return { carnivalError: startTimeValidityMessage }
-        }
-
-        // Validate end time
-        const endTimeValidityMessage = validateTime(endTime);
-        if (endTimeValidityMessage != "Valid") {
-            return { carnivalError: endTimeValidityMessage }
-        }
-
-        // Check end time is not before start time
-        // Direct string comparison possible as both are in 24-hour format
-        if (endTime < startTime) {
-            return { carnivalError: "End time cannot be before start time" }
+        // Validate input parameters
+        const carnivalValidityMessage = validateCarnival(name, date, startTime, endTime);
+        if (carnivalValidityMessage != "Valid") {
+            return { carnivalError: carnivalValidityMessage }
         }
 
         // Update Carnivals MySQL table with new values

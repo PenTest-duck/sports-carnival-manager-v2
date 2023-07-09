@@ -4,7 +4,7 @@
     import { onMount } from "svelte";
     
     export let id, firstName, lastName, house, dnf, dq, result, points;
-    export let rank;
+    export let placing;
 
     // Run on component creation
     onMount(() => {
@@ -25,7 +25,7 @@
  
 <!--Each row of results-->
 <tr class="result">
-    <td>{rank}</td>
+    <td>{placing}</td>
     <td>{points}</td>
     <td>{firstName}</td>
     <td>{lastName}</td>

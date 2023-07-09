@@ -4,7 +4,7 @@ import { sequelize } from "../../../hooks.server";
 import { redirect } from "@sveltejs/kit";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../../firebase";
-import { validateName, validateEmail, validatePassword } from "$lib/validation";
+import { validatePersonName, validateEmail, validatePassword } from "$lib/validation";
 
 /** @type {import('./$types').Actions} */
 export const actions = {
@@ -29,13 +29,13 @@ export const actions = {
         }
 
         // Validate first name
-        const firstNameValidityMessage = validateName(firstName);
+        const firstNameValidityMessage = validatePersonName(firstName);
         if (firstNameValidityMessage != "Valid") {
             return { error: firstNameValidityMessage }
         }
 
         // Validate last name
-        const lastNameValidityMessage = validateName(lastName);
+        const lastNameValidityMessage = validatePersonName(lastName);
         if (lastNameValidityMessage != "Valid") {
             return { error: lastNameValidityMessage }
         }

@@ -1,7 +1,7 @@
 // @ts-nocheck
 // Imports
 import { sequelize } from "../../hooks.server"; 
-import { validateName, validateDate, validateTime } from "$lib/validation";
+import { validateCarnival } from "$lib/validation";
 
 /** @type {import('./$types').PageServerLoad} */
 
@@ -14,8 +14,8 @@ export async function load() {
     const carnivals = await sequelize.query("CALL GetCarnivals");
 
     // Fetch list of carnival types and carnival locations
-    const carnivalTypesQueryResponse = await sequelize.query("SELECT * FROM carnivalType");
-    const carnivalLocationsQueryResponse = await sequelize.query("SELECT * FROM carnivalLocation");
+    const carnivalTypesQueryResponse = await sequelize.query("SELECT * FROM carnivaltype");
+    const carnivalLocationsQueryResponse = await sequelize.query("SELECT * FROM carnivallocation");
     const carnivalTypes = carnivalTypesQueryResponse[0];
     const carnivalLocations = carnivalLocationsQueryResponse[0];
 
@@ -48,34 +48,10 @@ export const actions = {
             return { error: "All fields must be filled" }
         }
 
-        // Validate name
-        const nameValidityMessage = validateName(name);
-        if (nameValidityMessage != "Valid") {
-            return { error: nameValidityMessage }
-        }
-
-        // Validate date
-        const dateValidityMessage = validateDate(date);
-        if (dateValidityMessage != "Valid") {
-            return { error: dateValidityMessage }
-        }
-
-        // Validate start time
-        const startTimeValidityMessage = validateTime(startTime);
-        if (startTimeValidityMessage != "Valid") {
-            return { error: startTimeValidityMessage }
-        }
-
-        // Validate end time
-        const endTimeValidityMessage = validateTime(endTime);
-        if (endTimeValidityMessage != "Valid") {
-            return { error: endTimeValidityMessage }
-        }
-
-        // Check end time is not before start time
-        // Direct string comparison possible as both are in 24-hour format
-        if (endTime < startTime) {
-            return { error: "End time cannot be before start time" }
+        // Validate input parameters
+        const carnivalValidityMessage = validateCarnival(name, date, startTime, endTime);
+        if (carnivalValidityMessage != "Valid") {
+            return { error: carnivalValidityMessage }
         }
 
         // Invoke MySQL stored procedure to create carnival
