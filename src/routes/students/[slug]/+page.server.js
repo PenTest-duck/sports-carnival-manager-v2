@@ -27,8 +27,11 @@ export async function load({ params }) {
     // Fetch list of all events
     // Parameter of 0 indicates 'all events' rather than a specified EventID
     const events = await sequelize.query("CALL GetEvents (0)");
+
+    // Fetch list of all carnivals
+    const carnivals = await sequelize.query("CALL GetCarnivals");
     
-    return { student, houses, results, events };
+    return { student, houses, results, events, carnivals };
 };
 
 /** @type {import('./$types').Actions} */

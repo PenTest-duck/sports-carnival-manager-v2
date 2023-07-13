@@ -4,6 +4,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../../firebase";
 import { redirect } from "@sveltejs/kit";
 import { MAX_STR_LENGTH, VALID_EMAIL_REGEX } from "$lib/validation";
+import { adminAuth } from "$lib/server/admin";
 
 /** @type {import('./$types').Actions} */
 export const actions = {
@@ -11,8 +12,8 @@ export const actions = {
     // Purpose: checks credentials, and authenticates user OR returns error message
     // Parameters: form data (email, password)
     // Returns: redirection to / OR error message
-    logIn: async ({ request }) => {
-        
+    logIn: async ({ request, cookies }) => {
+
         // Extract variables from form submission
         const data = await request.formData();
         const email = data.get("email");
@@ -32,14 +33,19 @@ export const actions = {
         if (!Boolean(email.match(VALID_EMAIL_REGEX))) {
             return { error: "Email is not in a valid format" }
         }
-        
+
         try {
-            // API request to Firebase Auth to authenticate user and return the found user record
-            let user = await signInWithEmailAndPassword(auth, email, password);
+            const expiresIn = 60 * 60 * 24 * 5 * 1000; // session expires in 5 days
 
-            // If logged in, redirect to carnivals dashboard
-            throw redirect(303, '/carnivals');
+            // API request to Firebase Auth to get token of user
+            let credential = await signInWithEmailAndPassword(auth, email, password);
+            const idToken = await credential.user.getIdToken();
 
+            // Verify token and set session cookie
+            const decodedIdToken = await adminAuth.verifyIdToken(idToken);
+            const cookie = await adminAuth.createSessionCookie(idToken, { expiresIn });
+            const options = { maxAge: expiresIn, httpOnly: true, secure: true, path: "/" };
+            cookies.set("__session", cookie, options);
         } catch (e) {
             if (e instanceof Error) {
                 console.log("Log in error", e);
@@ -56,5 +62,8 @@ export const actions = {
                 return { error: "There was an error with the database -- " + e.message };
             }
         }
+
+        // If logged in, redirect to carnivals dashboard
+        throw redirect(303, '/carnivals');
     }
 };

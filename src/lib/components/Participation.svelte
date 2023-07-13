@@ -4,12 +4,13 @@
     import { onMount } from "svelte";
     
     export let id, eventID, dnf, dq, placing, result, points;
-    export let events;
+    export let events, carnivals;
 
     // Initialise to N/A
     let type = "N/A";
     let ageGroup = "N/A";
     let division = "N/A";
+    let carnivalName = "N/A";
 
     // Run on component creation
     onMount(() => {
@@ -27,18 +28,21 @@
         }
 
         // Translate IDs to event type, age group, division
-        for (const event of events) {
-            if (event.id == eventID) {
-                type = event.type;
-                ageGroup = event.ageGroup;
-                division = event.division;
-            }
-        }
+        var event = events.find(item => item.id == eventID);
+        type = event.type;
+        ageGroup = event.ageGroup;
+        division = event.division;
+        const carnivalID = event.carnivalID;
+
+        // Translate IDs to event type, age group, division
+        var carnival = carnivals.find(item => item.id == carnivalID);
+        carnivalName = carnival.name;
     });
 </script>
  
 <!--Each row of participations-->
 <tr class="participation">
+    <td>{carnivalName}</td>
     <td>{type}</td>
     <td>{ageGroup}</td>
     <td>{division}</td>
@@ -48,4 +52,8 @@
     <td>{result}</td>
     <td>{points}</td>
 </tr>
+
+<style>
+    @import "$lib/css/components.css";
+</style>
     

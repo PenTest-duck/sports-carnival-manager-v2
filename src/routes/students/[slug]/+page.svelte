@@ -117,6 +117,7 @@
         <table>
             <!--Table headers-->
             <tr>
+                <th>Carnival</th>
                 <th>Event</th>
                 <th>Age Group</th>
                 <th>Division</th>
@@ -129,7 +130,7 @@
 
             <!--Row of each result's event, age group, division, placing, DNF, DQ, result value, and points-->
             {#each data.results as result}
-            <Participation {...result} events={data.events}/>
+            <Participation {...result} events={data.events} carnivals={data.carnivals}/>
             {/each}
         </table>
     </div>

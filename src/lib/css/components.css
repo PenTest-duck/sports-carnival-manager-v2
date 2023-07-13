@@ -1,0 +1,26 @@
+.btn {
+    margin-top: 15px;
+    border: none;
+}
+
+#open-href {
+    color: white;
+}
+
+#open-href:hover {
+    color: white;
+}
+
+#cancel-btn {
+    background-color: rgb(110, 164, 192);
+    border: none;
+}
+
+#remove-btn {
+    background-color: red;
+    margin-top: 25px;
+}
+
+td {
+    max-width: 200px;
+}

@@ -21,8 +21,6 @@ export const actions = {
         const email = data.get("email");
         const password = data.get("password");
 
-        let uid;
-
         // Check no fields are empty
         if (firstName == "" || lastName == "" || email == "" || password == "") {
             return { error: "All fields must be filled" }
@@ -55,28 +53,18 @@ export const actions = {
         try {
             // @ts-ignore
             // API request to Firebase Auth to create account
-            let user = await createUserWithEmailAndPassword(auth, email, password);
-            
-            // Immediately log in as the new user
-            const { currentUser } = auth;
-            if (currentUser) {
-                uid = currentUser.uid;
-            }
+            let credential = await createUserWithEmailAndPassword(auth, email, password);
 
             // Adds user to the MySQL database
             // RoleID is set to 1 or "Staff", which is the default privilege
             await sequelize.query("INSERT INTO staff VALUES (:uid, :email, :firstName, :lastName, 1)", {
                 replacements: {
-                    uid: uid,
+                    uid: credential.user.uid,
                     email: email,
                     firstName: firstName,
                     lastName: lastName
                 }
             });
-
-            // Redirect to main dashboard
-            throw redirect(303, '/');
-
         } catch (e) {
             if (e instanceof Error) {
                 console.log("Sign up error: ", e);
@@ -85,5 +73,8 @@ export const actions = {
                 return { error: "There was an error with the database -- " + e.message };
             }
         }
+
+        // Redirect to login page
+        throw redirect(303, '/auth/login');
     }
 };

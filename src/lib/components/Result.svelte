@@ -37,8 +37,12 @@
         <!--Remove button-->
         <form method="POST" action="?/removeResult">
             <input type="hidden" id="id" name="id" value={id}>
-            <button>Remove</button>
+            <button id="remove-btn" class="btn"><i class="fa-solid fa-trash"></i></button>
         </form>
     </td>
 </tr>
+
+<style>
+    @import "$lib/css/components.css";
+</style>
     
