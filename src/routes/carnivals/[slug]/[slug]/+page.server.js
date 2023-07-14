@@ -63,7 +63,7 @@ export const actions = {
 
         // Check no fields are empty
         if (eventID == "" || studentID == "" || result == "") {
-            return { eventError: "All fields must be filled" }
+            return { resultError: "All fields must be filled" }
         }
 
         // Validate result value

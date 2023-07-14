@@ -11,15 +11,16 @@
     let ageGroup = "N/A";
     let division = "N/A";
     let carnivalName = "N/A";
+    let carnivalID = "";
 
     // Run on component creation
     onMount(() => {
         // Toggle checkbox based on DNF and DQ flags
         if (dnf == 1) {
-            document.getElementById("result-dnf-" + id).setAttribute("checked", "");
+            document.getElementById("result-dnf-" + id).setAttribute("style", "background-color: red");
         }
         if (dq == 1) {
-            document.getElementById("result-dq-" + id).setAttribute("checked", "");
+            document.getElementById("result-dq-" + id).setAttribute("style", "background-color: red");
         }
 
         // Set non-qualifying result placing to N/A
@@ -32,7 +33,7 @@
         type = event.type;
         ageGroup = event.ageGroup;
         division = event.division;
-        const carnivalID = event.carnivalID;
+        carnivalID = event.carnivalID;
 
         // Translate IDs to event type, age group, division
         var carnival = carnivals.find(item => item.id == carnivalID);
@@ -42,13 +43,13 @@
  
 <!--Each row of participations-->
 <tr class="participation">
-    <td>{carnivalName}</td>
-    <td>{type}</td>
+    <td><a href="/carnivals/{carnivalID}">{carnivalName}</a></td>
+    <td><a href="/carnivals/{carnivalID}/{eventID}">{type}</a></td>
     <td>{ageGroup}</td>
     <td>{division}</td>
     <td>{placing}</td>
-    <td><input type="checkbox" disabled id="result-dnf-{id}"></td>
-    <td><input type="checkbox" disabled id="result-dq-{id}"></td>
+    <td><input type="checkbox" disabled id="result-dnf-{id}" class="dnf-dq"></td>
+    <td><input type="checkbox" disabled id="result-dq-{id}" class="dnf-dq"></td>
     <td>{result}</td>
     <td>{points}</td>
 </tr>

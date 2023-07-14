@@ -11,7 +11,8 @@
 <div id="auth-container">
 
     <form method="POST" action="?/resetPassword">
-        <h1>Reset Password</h1>
+        <!--Heading and help reference-->
+        <h1>Reset Password <a href="https://docs.google.com/document/d/1EDETbrxlj94bFKMae59e_JWl4_bBhmmf#heading=h.b3v2am9z60yb" target="_blank"><i class="fa fa-question-circle help"></i></a></h1>
     
         <!--Display error message from server process-->
         {#if form?.error}

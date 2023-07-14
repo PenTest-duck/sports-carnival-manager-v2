@@ -42,7 +42,8 @@
     <h1>Student</h1>
 
     <div id="student-details">
-        <h3 class="details-display">Student Details</h3>
+        <!--Heading and help reference-->
+        <h3 class="details-display">Student Details <a href="https://docs.google.com/document/d/1EDETbrxlj94bFKMae59e_JWl4_bBhmmf#heading=h.v6m1px1jer9i" target="_blank"><i class="fa fa-question-circle help"></i></a></h3>
 
         <!--Edit or Cancel/Save buttons to show when needed-->
         {#if !editingStudent}
@@ -113,7 +114,9 @@
     </div>
 
     <div id="participation-history">
-        <h3>Participation History</h3>
+        <!--Heading and help reference-->
+        <h3 class="details-display">Participation History <a href="https://docs.google.com/document/d/1EDETbrxlj94bFKMae59e_JWl4_bBhmmf#heading=h.wu05h0gqw9bu" target="_blank"><i class="fa fa-question-circle help"></i></a></h3>
+
         <table>
             <!--Table headers-->
             <tr>

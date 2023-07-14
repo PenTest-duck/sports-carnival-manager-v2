@@ -15,8 +15,10 @@
 </script>
 
 <div id="main-container">
+
     <div id="carnival-list">
-        <h3>Carnival List</h3>
+        <!--Heading and help reference-->
+        <h3>Carnival List <a href="https://docs.google.com/document/d/1EDETbrxlj94bFKMae59e_JWl4_bBhmmf#heading=h.fpzwwo9zyu4c" target="_blank"><i class="fa fa-question-circle help"></i></a></h3>
 
         <table>
             <!--Table headers-->
@@ -40,7 +42,8 @@
     <dialogue open>
         <article>
             <div id="create-carnival">
-                <h3>Create Carnival</h3>
+                <!--Heading and help reference-->
+                <h3>Create Carnival <a href="https://docs.google.com/document/d/1EDETbrxlj94bFKMae59e_JWl4_bBhmmf#heading=h.bid2vyvtcpv5" target="_blank"><i class="fa fa-question-circle help"></i></a></h3>
         
                 <!--Display error message from server process-->
                 {#if form?.error}

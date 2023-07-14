@@ -9,10 +9,10 @@ import { sequelize } from "../../hooks.server";
 // Returns: array of records
 export async function load() {
     
-    // Fetch all records for Athletics Carnival
+    // Fetch all records for each carnival type
     const athleticsRecords = await sequelize.query("CALL GetRecords (1)");
+    const swimmingRecords = await sequelize.query("CALL GetRecords (2)");
+    const crossCountryRecords = await sequelize.query("CALL GetRecords (3)");
 
-    console.log(athleticsRecords);
-
-    return { athleticsRecords };
+    return { athleticsRecords, swimmingRecords, crossCountryRecords };
 };

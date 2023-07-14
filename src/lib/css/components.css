@@ -24,3 +24,8 @@
 td {
     max-width: 200px;
 }
+
+.dnf-dq {
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+}

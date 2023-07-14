@@ -10,10 +10,10 @@
     onMount(() => {
         // Toggle checkbox based on DNF and DQ flags
         if (dnf == 1) {
-            document.getElementById("result-dnf-" + id).setAttribute("checked", "");
+            document.getElementById("result-dnf-" + id).setAttribute("style", "background-color: red");
         }
         if (dq == 1) {
-            document.getElementById("result-dq-" + id).setAttribute("checked", "");
+            document.getElementById("result-dq-" + id).setAttribute("style", "background-color: red");
         }
 
         // Set non-qualifying result placing to N/A
@@ -30,8 +30,8 @@
     <td>{firstName}</td>
     <td>{lastName}</td>
     <td>{house}</td>
-    <td><input type="checkbox" disabled id="result-dnf-{id}"></td>
-    <td><input type="checkbox" disabled id="result-dq-{id}"></td>
+    <td><input type="checkbox" disabled id="result-dnf-{id}" class="dnf-dq"></td>
+    <td><input type="checkbox" disabled id="result-dq-{id}" class="dnf-dq"></td>
     <td>{result}</td>
     <td>
         <!--Remove button-->

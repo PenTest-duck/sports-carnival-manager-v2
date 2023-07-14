@@ -1,5 +1,7 @@
 <script>
     // @ts-nocheck
+    // Import component
+    import RecordsTable from "$lib/components/RecordsTable.svelte";
     
     // Fetch loaded data
     /** @type {import('./$types').PageData} */
@@ -8,28 +10,20 @@
 </script>
     
 <div id="main-container">
-    <h1>Records</h1>
+    <!--Heading and help reference-->
+    <h1>Records <a href="https://docs.google.com/document/d/1EDETbrxlj94bFKMae59e_JWl4_bBhmmf#heading=h.d52km2unpdlz" target="_blank"><i class="fa fa-question-circle help"></i></a></h1>
 
-    <table>
-        <!--Table headers-->
-        <tr>
-            <th>Event</th>
-            <th>Age Group</th>
-            <th>Name</th>
-            <th>Result</th>
-        </tr>
+    <!--Athletics records-->
+    <h3>Athletics Carnival</h3>
+    <RecordsTable records={data.athleticsRecords} />
 
-        <!--Row of each record's event, age group and result-->
-        {#each data.athleticsRecords as athleticsRecord}
-        <tr>
-            <td>{athleticsRecord.type}</td>
-            <td>{athleticsRecord.ageGroup}</td>
-            <td><a href="/students/{athleticsRecord.studentID}">{athleticsRecord.firstName} {athleticsRecord.lastName}</a></td>
-            <td>{athleticsRecord.result}</td>
-        </tr>
-        {/each}
-        
-    </table>
+    <!--Swimming records-->
+    <h3>Swimming Carnival</h3>
+    <RecordsTable records={data.swimmingRecords} />
+
+    <!--Cross country records-->
+    <h3>Cross Country</h3>
+    <RecordsTable records={data.crossCountryRecords} />
 </div>
 
 <style>

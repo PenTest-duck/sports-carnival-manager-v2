@@ -35,7 +35,7 @@ CREATE TABLE `carnivallocation` (
 
 LOCK TABLES `carnivallocation` WRITE;
 /*!40000 ALTER TABLE `carnivallocation` DISABLE KEYS */;
-INSERT INTO `carnivallocation` VALUES (1,'White Oval'),(2,'Doyles'),(3,'Quad');
+INSERT INTO `carnivallocation` VALUES (1,'White Oval'),(2,'Doyles'),(3,'Pool');
 /*!40000 ALTER TABLE `carnivallocation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -62,7 +62,7 @@ CREATE TABLE `carnivals` (
   CONSTRAINT `carnivals_ibfk_1` FOREIGN KEY (`typeID`) REFERENCES `carnivaltype` (`typeID`),
   CONSTRAINT `carnivals_ibfk_2` FOREIGN KEY (`locationID`) REFERENCES `carnivallocation` (`locationID`),
   CONSTRAINT `carnivals_ibfk_3` FOREIGN KEY (`staffID`) REFERENCES `staff` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -71,7 +71,7 @@ CREATE TABLE `carnivals` (
 
 LOCK TABLES `carnivals` WRITE;
 /*!40000 ALTER TABLE `carnivals` DISABLE KEYS */;
-INSERT INTO `carnivals` VALUES (14,'abc',1,'2023-03-13','08:32:00','12:29:00',2,'ySRlwnQ7RYQhmCiyPZBc3xsZL2K3'),(15,'TKS Athletics Carnival',1,'2023-03-26','10:00:00','15:00:00',1,'ySRlwnQ7RYQhmCiyPZBc3xsZL2K3'),(16,'chriscomp',1,'2023-10-19','00:30:00','12:30:00',1,'SGQvN4MeBuPr9MiMd2E3krCJs4s2');
+INSERT INTO `carnivals` VALUES (15,'TKS Athletics Carnival',1,'2023-03-26','10:00:00','15:00:00',1,'ySRlwnQ7RYQhmCiyPZBc3xsZL2K3'),(16,'chriscomp',1,'2023-10-19','00:30:00','12:30:00',1,'SGQvN4MeBuPr9MiMd2E3krCJs4s2'),(19,'Builders\' Athletics Carnival',1,'2023-07-31','09:30:00','15:00:00',1,'ySRlwnQ7RYQhmCiyPZBc3xsZL2K3'),(20,'TKS Swimming Carnival',2,'2023-07-30','08:30:00','13:00:00',3,'2LNaoUJKESMNyGRQGrUP9CrHHFn1'),(21,'TKS Cross Country',3,'2023-07-29','10:45:00','12:30:00',2,'stBLh17oasRYoWpAnkcq8ohtwvr2');
 /*!40000 ALTER TABLE `carnivals` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -134,7 +134,7 @@ CREATE TABLE `eventcategory` (
   `id` int NOT NULL AUTO_INCREMENT,
   `category` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -143,7 +143,7 @@ CREATE TABLE `eventcategory` (
 
 LOCK TABLES `eventcategory` WRITE;
 /*!40000 ALTER TABLE `eventcategory` DISABLE KEYS */;
-INSERT INTO `eventcategory` VALUES (1,'field'),(2,'track'),(3,'relay');
+INSERT INTO `eventcategory` VALUES (1,'field'),(2,'track'),(3,'relay'),(4,'swim'),(5,'swim relay'),(6,'swim all age relay'),(7,'cross country');
 /*!40000 ALTER TABLE `eventcategory` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -190,7 +190,7 @@ CREATE TABLE `eventrecord` (
   CONSTRAINT `eventrecord_ibfk_1` FOREIGN KEY (`ageGroupID`) REFERENCES `eventAgeGroup` (`id`),
   CONSTRAINT `eventrecord_ibfk_3` FOREIGN KEY (`typeID`) REFERENCES `eventtype` (`id`),
   CONSTRAINT `eventrecord_ibfk_4` FOREIGN KEY (`resultID`) REFERENCES `results` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -199,7 +199,7 @@ CREATE TABLE `eventrecord` (
 
 LOCK TABLES `eventrecord` WRITE;
 /*!40000 ALTER TABLE `eventrecord` DISABLE KEYS */;
-INSERT INTO `eventrecord` VALUES (21,2,1,42),(25,2,2,44),(32,4,1,32),(33,4,4,37);
+INSERT INTO `eventrecord` VALUES (21,2,1,42),(25,2,2,44),(32,4,1,32),(39,4,4,37),(44,1,1,52);
 /*!40000 ALTER TABLE `eventrecord` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -217,23 +217,16 @@ CREATE TABLE `events` (
   `ageGroupID` int DEFAULT NULL,
   `divisionID` int DEFAULT NULL,
   `startTime` time DEFAULT NULL,
-  `recordID` int DEFAULT NULL,
-  `weightingID` int DEFAULT NULL,
-  `removed` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `typeID` (`typeID`),
   KEY `ageGroupID` (`ageGroupID`),
   KEY `divisionID` (`divisionID`),
-  KEY `recordID` (`recordID`),
-  KEY `weightingID` (`weightingID`),
   KEY `events_ibfk_7` (`carnivalID`),
   CONSTRAINT `events_ibfk_1` FOREIGN KEY (`typeID`) REFERENCES `eventtype` (`id`),
   CONSTRAINT `events_ibfk_2` FOREIGN KEY (`ageGroupID`) REFERENCES `eventAgeGroup` (`id`),
   CONSTRAINT `events_ibfk_3` FOREIGN KEY (`divisionID`) REFERENCES `eventdivision` (`id`),
-  CONSTRAINT `events_ibfk_5` FOREIGN KEY (`recordID`) REFERENCES `eventrecord` (`id`),
-  CONSTRAINT `events_ibfk_7` FOREIGN KEY (`carnivalID`) REFERENCES `carnivals` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `events_ibfk_8` FOREIGN KEY (`weightingID`) REFERENCES `eventweighting2` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `events_ibfk_7` FOREIGN KEY (`carnivalID`) REFERENCES `carnivals` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -242,7 +235,7 @@ CREATE TABLE `events` (
 
 LOCK TABLES `events` WRITE;
 /*!40000 ALTER TABLE `events` DISABLE KEYS */;
-INSERT INTO `events` VALUES (6,15,2,2,6,'09:20:00',NULL,NULL,0),(7,15,2,1,7,'09:15:00',NULL,NULL,0),(8,15,4,4,1,'12:30:00',NULL,NULL,0),(9,15,4,1,1,'00:00:00',NULL,NULL,0),(10,14,4,4,1,'18:05:00',NULL,NULL,0),(11,15,8,1,1,'13:50:00',NULL,NULL,0);
+INSERT INTO `events` VALUES (6,15,2,2,6,'09:20:00'),(7,15,2,1,7,'09:15:00'),(8,15,4,4,1,'12:30:00'),(9,15,4,1,1,'00:00:00'),(15,15,3,1,1,'12:19:00'),(16,16,7,1,1,'12:30:00'),(17,19,1,1,1,'10:30:00'),(18,19,11,1,1,'11:20:00');
 /*!40000 ALTER TABLE `events` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -265,7 +258,7 @@ CREATE TABLE `eventtype` (
   KEY `categoryID` (`categoryID`),
   CONSTRAINT `eventtype_ibfk_1` FOREIGN KEY (`carnivalTypeID`) REFERENCES `carnivaltype` (`typeID`),
   CONSTRAINT `eventtype_ibfk_2` FOREIGN KEY (`categoryID`) REFERENCES `eventcategory` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -274,7 +267,7 @@ CREATE TABLE `eventtype` (
 
 LOCK TABLES `eventtype` WRITE;
 /*!40000 ALTER TABLE `eventtype` DISABLE KEYS */;
-INSERT INTO `eventtype` VALUES (1,1,2,'100m Sprint','s',1),(2,1,2,'200m Sprint','s',1),(3,1,2,'400m Sprint','s',1),(4,1,1,'Long Jump','m',0),(5,1,1,'High Jump','cm',0),(6,1,2,'800m Run','s',1),(7,1,2,'1500m Run','s',1),(8,1,2,'3000m Run','s',1),(9,1,2,'Hurdles','s',1),(10,1,1,'Shot Put','cm',0),(11,1,3,'4x400m Relay','s',1),(12,1,3,'4x100m Relay','s',1),(13,2,NULL,'100m Freestyle','s',1);
+INSERT INTO `eventtype` VALUES (1,1,2,'100m Sprint','s',1),(2,1,2,'200m Sprint','s',1),(3,1,2,'400m Sprint','s',1),(4,1,1,'Long Jump','m',0),(5,1,1,'High Jump','cm',0),(6,1,2,'800m Run','s',1),(7,1,2,'1500m Run','s',1),(8,1,2,'3000m Run','s',1),(9,1,2,'Hurdles','s',1),(10,1,1,'Shot Put','cm',0),(11,1,3,'4x400m Relay','s',1),(12,1,3,'4x100m Relay','s',1),(13,2,4,'50m Freestyle','s',1),(14,2,4,'50m Backstroke','s',1),(15,2,4,'50m Breaststroke','s',1),(16,2,4,'50m Butterfly','s',1),(17,2,4,'100m Freestyle','s',1),(18,2,4,'200m Freestyle','s',1),(19,2,4,'400m Freestyle','s',1),(20,2,4,'200m Medley','s',1),(21,2,5,'4x50m Relay','s',1),(22,2,5,'6x50m All Age Relay','s',1),(23,3,6,'Junior Course','s',1),(24,3,6,'Intermediate Course','s',1),(25,3,6,'Senior Course','s',1),(26,3,6,'Opens Course','s',1);
 /*!40000 ALTER TABLE `eventtype` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -296,7 +289,7 @@ CREATE TABLE `eventweighting2` (
   KEY `divisionID` (`divisionID`),
   CONSTRAINT `eventweighting2_ibfk_1` FOREIGN KEY (`categoryID`) REFERENCES `eventcategory` (`id`),
   CONSTRAINT `eventweighting2_ibfk_2` FOREIGN KEY (`divisionID`) REFERENCES `eventdivision` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=136 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -305,7 +298,7 @@ CREATE TABLE `eventweighting2` (
 
 LOCK TABLES `eventweighting2` WRITE;
 /*!40000 ALTER TABLE `eventweighting2` DISABLE KEYS */;
-INSERT INTO `eventweighting2` VALUES (1,1,1,1,50),(2,1,1,2,48),(3,1,1,3,46),(4,1,1,4,45),(5,1,1,5,44),(6,1,1,6,43),(7,1,1,7,42),(8,1,1,8,41),(9,1,1,9,40),(10,1,1,10,39),(11,1,1,11,38),(12,1,1,12,37),(13,1,1,13,36),(14,1,1,14,35),(15,1,1,15,34),(16,1,1,16,33),(17,1,1,17,32),(18,1,1,18,31),(19,1,1,19,30),(20,1,1,20,29),(21,1,1,21,28),(22,1,1,22,27),(23,1,1,23,26),(24,1,1,24,25),(25,1,1,25,24),(26,1,1,26,23),(27,1,1,27,22),(28,1,1,28,21),(29,1,1,29,20),(30,1,1,30,19),(31,1,1,31,18),(32,1,1,32,17),(33,2,1,1,50),(34,2,1,2,48),(35,2,1,3,46),(36,2,1,4,45),(37,2,1,5,44),(38,2,1,6,43),(39,2,1,7,42),(40,2,1,8,41),(41,2,1,9,40),(42,2,1,10,39),(43,2,1,11,38),(44,2,1,12,37),(45,2,2,1,36),(46,2,2,2,35),(47,2,2,3,34),(48,2,2,4,33),(49,2,2,5,32),(50,2,2,6,31),(51,2,2,7,30),(52,2,2,8,29),(53,2,2,9,28),(54,2,2,10,27),(55,2,2,11,26),(56,2,2,12,25),(57,2,3,1,24),(58,2,3,2,23),(59,2,3,3,22),(60,2,3,4,21),(61,2,3,5,20),(62,2,3,6,19),(63,2,3,7,18),(64,2,3,8,17),(65,2,3,9,16),(66,2,3,10,15),(67,2,3,11,14),(68,2,3,12,13),(69,2,4,1,12),(70,2,4,2,11),(71,2,4,3,10),(72,2,4,4,9),(73,2,4,5,8),(74,2,4,6,7),(75,2,4,7,6),(76,2,4,8,5),(77,2,4,9,4),(78,2,4,10,3),(79,2,4,11,2),(80,2,4,12,1),(81,3,1,1,50),(82,3,1,2,48),(83,3,1,3,46),(84,3,1,4,45),(85,3,1,5,44),(86,3,1,6,43),(87,3,1,7,42),(88,3,1,8,41),(89,3,1,9,40),(90,3,1,10,39),(91,3,1,11,38),(92,3,1,12,37);
+INSERT INTO `eventweighting2` VALUES (1,1,1,1,50),(2,1,1,2,48),(3,1,1,3,46),(4,1,1,4,45),(5,1,1,5,44),(6,1,1,6,43),(7,1,1,7,42),(8,1,1,8,41),(9,1,1,9,40),(10,1,1,10,39),(11,1,1,11,38),(12,1,1,12,37),(13,1,1,13,36),(14,1,1,14,35),(15,1,1,15,34),(16,1,1,16,33),(17,1,1,17,32),(18,1,1,18,31),(19,1,1,19,30),(20,1,1,20,29),(21,1,1,21,28),(22,1,1,22,27),(23,1,1,23,26),(24,1,1,24,25),(25,1,1,25,24),(26,1,1,26,23),(27,1,1,27,22),(28,1,1,28,21),(29,1,1,29,20),(30,1,1,30,19),(31,1,1,31,18),(32,1,1,32,17),(33,2,1,1,50),(34,2,1,2,48),(35,2,1,3,46),(36,2,1,4,45),(37,2,1,5,44),(38,2,1,6,43),(39,2,1,7,42),(40,2,1,8,41),(41,2,1,9,40),(42,2,1,10,39),(43,2,1,11,38),(44,2,1,12,37),(45,2,2,1,36),(46,2,2,2,35),(47,2,2,3,34),(48,2,2,4,33),(49,2,2,5,32),(50,2,2,6,31),(51,2,2,7,30),(52,2,2,8,29),(53,2,2,9,28),(54,2,2,10,27),(55,2,2,11,26),(56,2,2,12,25),(57,2,3,1,24),(58,2,3,2,23),(59,2,3,3,22),(60,2,3,4,21),(61,2,3,5,20),(62,2,3,6,19),(63,2,3,7,18),(64,2,3,8,17),(65,2,3,9,16),(66,2,3,10,15),(67,2,3,11,14),(68,2,3,12,13),(69,2,4,1,12),(70,2,4,2,11),(71,2,4,3,10),(72,2,4,4,9),(73,2,4,5,8),(74,2,4,6,7),(75,2,4,7,6),(76,2,4,8,5),(77,2,4,9,4),(78,2,4,10,3),(79,2,4,11,2),(80,2,4,12,1),(81,3,1,1,50),(82,3,1,2,48),(83,3,1,3,46),(84,3,1,4,45),(85,3,1,5,44),(86,3,1,6,43),(87,3,1,7,42),(88,3,1,8,41),(89,3,1,9,40),(90,3,1,10,39),(91,3,1,11,38),(92,3,1,12,37),(93,4,1,1,18),(94,4,1,2,16),(95,4,1,3,15),(96,4,1,4,14),(97,4,1,5,13),(98,4,1,6,12),(99,4,1,7,11),(100,4,1,8,10),(101,4,2,1,9),(102,4,2,2,7),(103,4,2,3,6),(104,4,2,4,5),(105,4,2,5,4),(106,4,2,6,3),(107,4,2,7,2),(108,4,2,8,1),(109,5,1,1,35),(110,5,1,2,30),(111,5,1,3,27),(112,5,1,4,24),(113,5,1,5,21),(114,5,1,6,18),(115,5,1,7,17),(116,5,1,8,16),(117,5,2,1,15),(118,5,2,2,13),(119,5,2,3,10),(120,5,2,4,7),(121,5,2,5,4),(122,5,2,6,3),(123,5,2,7,2),(124,5,2,8,1),(125,6,1,1,35),(126,6,1,2,30),(127,6,1,3,27),(128,6,1,4,24),(129,6,1,5,21),(130,6,1,6,18),(131,6,1,7,17),(132,6,1,8,16),(133,6,1,9,15),(134,6,1,10,13),(135,7,1,1,1);
 /*!40000 ALTER TABLE `eventweighting2` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -332,7 +325,7 @@ CREATE TABLE `house` (
 
 LOCK TABLES `house` WRITE;
 /*!40000 ALTER TABLE `house` DISABLE KEYS */;
-INSERT INTO `house` VALUES (1,'Baker Hake','BAH',192,2),(2,'Bishop Barker Harris','BBH',0,6),(3,'Britten','BRI',57,4),(4,'Broughton Forrest','BRF',0,6),(5,'Burkitt','BUR',0,6),(6,'Dalmas','DAL',66,3),(7,'Kurrle','KUR',219,1),(8,'Macarthur Waddy','MAW',0,6),(9,'Macquarie','MAQ',0,6),(10,'Wickham','WIC',48,5),(11,'Gowan Brae','GB',0,6);
+INSERT INTO `house` VALUES (1,'Baker Hake','BAH',0,1),(2,'Bishop Barker Harris','BBH',0,1),(3,'Britten','BRI',0,1),(4,'Broughton Forrest','BRF',0,1),(5,'Burkitt','BUR',0,1),(6,'Dalmas','DAL',0,1),(7,'Kurrle','KUR',0,1),(8,'Macarthur Waddy','MAW',0,1),(9,'Macquarie','MAQ',0,1),(10,'Wickham','WIC',0,1),(11,'Gowan Brae','GB',0,1);
 /*!40000 ALTER TABLE `house` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -357,7 +350,7 @@ CREATE TABLE `results` (
   KEY `results_ibfk_2` (`eventID`),
   CONSTRAINT `results_ibfk_1` FOREIGN KEY (`studentID`) REFERENCES `students` (`id`) ON DELETE CASCADE,
   CONSTRAINT `results_ibfk_2` FOREIGN KEY (`eventID`) REFERENCES `events` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -366,7 +359,7 @@ CREATE TABLE `results` (
 
 LOCK TABLES `results` WRITE;
 /*!40000 ALTER TABLE `results` DISABLE KEYS */;
-INSERT INTO `results` VALUES (11,6,3,0,0,12.34,3,10),(13,7,3,0,0,34.88,2,11),(14,6,4,1,0,14.4,99999,0),(15,8,3,0,0,6.54,4,45),(17,8,4,0,0,6.88,3,46),(19,9,1,0,0,1,2,48),(21,8,7,0,0,6,5,44),(22,8,7,0,1,999,99999,0),(23,8,7,1,0,998,99999,0),(24,8,6,0,0,5.88,6,43),(27,6,6,0,0,25.01,4,9),(28,8,6,0,0,4,7,42),(30,8,6,0,0,2,8,41),(31,7,6,0,0,35.01,3,10),(32,9,6,0,0,2,1,50),(33,6,4,0,0,5.12,2,11),(34,10,7,0,0,7.11,1,50),(35,10,1,0,1,-1,99999,0),(36,8,7,0,0,7.65,2,48),(37,8,7,0,0,7.77,1,50),(42,7,6,0,0,0.4,1,12),(44,6,6,0,0,1,1,12);
+INSERT INTO `results` VALUES (11,6,3,0,0,12.34,3,10),(13,7,3,0,0,34.88,2,11),(14,6,4,1,0,14.4,99999,0),(15,8,3,0,0,6.54,4,45),(17,8,4,0,0,6.88,3,46),(19,9,1,0,0,1,2,48),(21,8,7,0,0,6,5,44),(22,8,7,0,1,999,99999,0),(23,8,7,1,0,998,99999,0),(24,8,6,0,0,5.88,6,43),(27,6,6,0,0,25.01,4,9),(28,8,6,0,0,4,7,42),(30,8,6,0,0,2,8,41),(31,7,6,0,0,35.01,3,10),(32,9,6,0,0,2,1,50),(33,6,4,0,0,5.12,2,11),(36,8,7,0,0,7.65,2,48),(37,8,7,0,0,7.77,1,50),(42,7,6,0,0,0.4,1,12),(44,6,6,0,0,1,1,12),(52,17,1,0,0,14.1,1,50),(53,17,6,1,1,13.92,99999,0);
 /*!40000 ALTER TABLE `results` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -395,7 +388,7 @@ CREATE TABLE `staff` (
 
 LOCK TABLES `staff` WRITE;
 /*!40000 ALTER TABLE `staff` DISABLE KEYS */;
-INSERT INTO `staff` VALUES ('3Kg9dfAoNKSCwSMA6BwgzjZI3Il1','taylor.swift@gmail.com','Taylor','Swift',1),('An7bRVnZY1bEFiSwFszxV7kLMc23','patelhariwork@gmail.com','Viraj','Patel',1),('SGQvN4MeBuPr9MiMd2E3krCJs4s2','aadityashankar@gmail.com','Aaditya','Shankar',1),('stBLh17oasRYoWpAnkcq8ohtwvr2','postman@pat.com','Postman','Pat',1),('ySRlwnQ7RYQhmCiyPZBc3xsZL2K3','bob@builder.com','Bob','Builder',1);
+INSERT INTO `staff` VALUES ('2LNaoUJKESMNyGRQGrUP9CrHHFn1','shaunthesheep3@farm.com','Shaun','Sheep',1),('3Kg9dfAoNKSCwSMA6BwgzjZI3Il1','taylor.swift@gmail.com','Taylor','Swift',1),('An7bRVnZY1bEFiSwFszxV7kLMc23','patelhariwork@gmail.com','Viraj','Patel',1),('SGQvN4MeBuPr9MiMd2E3krCJs4s2','aadityashankar@gmail.com','Aaditya','Shankar',1),('stBLh17oasRYoWpAnkcq8ohtwvr2','postman@pat.com','Postman','Pat',1),('ySRlwnQ7RYQhmCiyPZBc3xsZL2K3','bob@builder.com','Bob','Builder',1);
 /*!40000 ALTER TABLE `staff` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -439,7 +432,7 @@ CREATE TABLE `students` (
   PRIMARY KEY (`id`),
   KEY `houseID` (`houseID`),
   CONSTRAINT `students_ibfk_1` FOREIGN KEY (`houseID`) REFERENCES `house` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -448,7 +441,7 @@ CREATE TABLE `students` (
 
 LOCK TABLES `students` WRITE;
 /*!40000 ALTER TABLE `students` DISABLE KEYS */;
-INSERT INTO `students` VALUES (1,'Chris','Yoo',10,1034483),(3,'Dwayne','Johnson',6,1234567),(4,'Will','Smith',3,2345678),(6,'Rock','Daw',7,69699634),(7,'Elon','Ma',1,3254123);
+INSERT INTO `students` VALUES (1,'Chris','Yoo',10,1034483),(3,'Dwayne','Johnson',6,1234567),(4,'Will','Smith',3,2345678),(6,'Rock','Daw',7,69699634),(7,'Elon','Ma',2,3254123);
 /*!40000 ALTER TABLE `students` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -540,13 +533,58 @@ addResultLoop: BEGIN
 				LEAVE updatePoints;
 			END IF;
             
-            # Get corresponding points for each placing and division
-            # The championship and top 3 divisions have varying points - any results in lower divisions is awarded the same as Division 3
-            IF (cursor_divisionID = 1 OR cursor_divisionID = 2 OR cursor_divisionID = 3 OR cursor_divisionID = 4) THEN
-				SELECT points INTO cursor_points FROM eventweighting2 WHERE categoryID = cursor_categoryID AND divisionID = cursor_divisionID AND placing = cursor_placing;
-            ELSE 
-				SELECT points INTO cursor_points FROM eventweighting2 WHERE categoryID = cursor_categoryID AND divisionID = 4 AND placing = cursor_placing;
+            # Athletics field events
+            IF (cursor_categoryID = 1) THEN
+				# Any below 32nd will receive same points as 32nd place
+				IF (cursor_placing > 32) THEN
+					SET cursor_placing = 32;
+                END IF;
             END IF;
+            
+            # Athletics track & relay events
+            IF (cursor_categoryID = 2 OR cursor_categoryID = 3) THEN
+				# Any below 12th will receive same points as 12th place
+				IF (cursor_placing > 12) THEN
+					SET cursor_placing = 12;
+                END IF;
+                
+                # Any below Division 3 will receive same points scale as Division 3
+                # This will only apply to track events
+                IF (cursor_divisionID > 4) THEN
+					SET cursor_divisionID = 4;
+                END IF;
+			END IF;
+            
+            # Swimming individual and relay events
+            IF (cursor_categoryID = 4 OR cursor_categoryID = 5) THEN
+				# Any below 8th will receive same points as 8th place
+				IF (cursor_placing > 8) THEN
+					SET cursor_placing = 8;
+                END IF;
+                
+				# All non-championship divisions receive same points scale
+				IF (cursor_divisionID > 2) THEN
+					SET cursor_divisionID = 2;
+                END IF;
+            END IF;
+            
+            # Swimming all-age relay events
+            IF (cursor_categoryID = 6) THEN
+				# Any below 10th will receive same points as 10th place
+				IF (cursor_placing > 10) THEN
+					SET cursor_placing = 10;
+                END IF;
+            END IF;
+            
+            # Cross country events
+            IF (cursor_categoryID = 7) THEN
+				# All results get 1 point
+				SET cursor_placing = 1;
+                SET cursor_divisionID = 1;
+            END IF;
+            
+            # Match corresponding points
+            SELECT points INTO cursor_points FROM eventweighting2 WHERE categoryID = cursor_categoryID AND divisionID = cursor_divisionID AND placing = cursor_placing;
             
             # If result is a new row, insert it and save its ID
             # Otherwise, edit the existing row
@@ -606,11 +644,13 @@ DELIMITER ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `CalculateHousePlacings`(
+	#IN carnivalID int
 )
 BEGIN
 	# Set up temporary tables
 	DROP TEMPORARY TABLE IF EXISTS tmpUnsortedHouses;
     DROP TEMPORARY TABLE IF EXISTS tmpSortedHouses;
+    DROP TEMPORARY TABLE IF EXISTS tmpResultsInCarnival;
     CREATE TEMPORARY TABLE tmpUnsortedHouses (
 		id int,
         points int
@@ -620,10 +660,20 @@ BEGIN
         points int,
         placing int
     );
+    CREATE TEMPORARY TABLE tmpResultsInCarnival (
+		id int,
+        studentID int,
+        points int
+    );
     
     # Load all houses into tmpUnsortedHouses and reset their points to 0
     INSERT INTO tmpUnsortedHouses(id) SELECT id FROM house;
     UPDATE tmpUnsortedHouses SET points = 0 WHERE 1 = 1;
+    
+    # Load all results in specified carnival to tmpResultsInCarnival
+    INSERT INTO tmpResultsInCarnival (id, studentID, points) SELECT id, studentID, points FROM results WHERE results.eventID IN (
+		SELECT id FROM events WHERE events.carnivalID = carnivalID
+    );
     
     # Calculate house points and placing
     BEGIN
@@ -684,6 +734,7 @@ BEGIN
     # Clean up temporary tables
     DROP TEMPORARY TABLE IF EXISTS tmpUnsortedHouses;
     DROP TEMPORARY TABLE IF EXISTS tmpSortedHouses;
+    DROP TEMPORARY TABLE IF EXISTS tmpResultsInCarnival;
 
 END ;;
 DELIMITER ;
@@ -838,7 +889,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateEvent`(
 )
 BEGIN
 	# Insert new event into events table
-    INSERT INTO events VALUES (NULL, carnivalID, typeID, ageGroupID, divisionID, startTime, NULL, NULL, 0);
+    INSERT INTO events VALUES (NULL, carnivalID, typeID, ageGroupID, divisionID, startTime);
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -893,7 +944,7 @@ BEGIN
 	# If carnivalID is specified as 0, get all events 
     # Otherwise, get events in specified carnival
 	IF (carnivalID = 0) THEN
-		SELECT events.id, eventtype.type, eventAgeGroup.ageGroup, eventdivision.division, events.startTime, eventtype.unit
+		SELECT events.id, eventtype.type, eventAgeGroup.ageGroup, eventdivision.division, events.startTime, eventtype.unit, events.carnivalID
 			FROM events
 			INNER JOIN carnivals ON events.carnivalID = carnivals.id
 			INNER JOIN eventtype ON events.typeID = eventtype.id
@@ -901,7 +952,7 @@ BEGIN
 			INNER JOIN eventdivision ON events.divisionID = eventdivision.id
 			ORDER BY events.startTime ASC;
     ELSE 
-		SELECT events.id, eventtype.type, eventAgeGroup.ageGroup, eventdivision.division, events.startTime, eventtype.unit
+		SELECT events.id, eventtype.type, eventAgeGroup.ageGroup, eventdivision.division, events.startTime, eventtype.unit, events.carnivalID
 			FROM events
 			INNER JOIN carnivals ON events.carnivalID = carnivals.id
 			INNER JOIN eventtype ON events.typeID = eventtype.id
@@ -910,6 +961,71 @@ BEGIN
 			WHERE events.carnivalID = carnivalID
 			ORDER BY events.startTime ASC;
 	END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `GetHouses` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetHouses`()
+BEGIN
+	# Set up temporary tables
+    DROP TEMPORARY TABLE IF EXISTS tmpCarnivals;
+	DROP TEMPORARY TABLE IF EXISTS tmpHouseScoreboard;
+    CREATE TEMPORARY TABLE tmpCarnivals (
+		id int
+    );
+    CREATE TEMPORARY TABLE tmpHouseScoreboard (
+		id int,
+        house varchar(255),
+        initials varchar(255),
+        points int,
+        placing int,
+        carnivalID int
+    );
+    
+    # Load ID of all carnivals into tmpCarnivals
+    INSERT INTO tmpCarnivals (id) SELECT id FROM carnivals;
+    
+    BEGIN
+		# Initialise variables
+		DECLARE cursor_id int DEFAULT 0;
+		DECLARE done int DEFAULT FALSE;
+		DECLARE cursor_e CURSOR FOR SELECT id FROM tmpCarnivals;
+		DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+		
+        # Loop through each carnival ID and update house placing
+		OPEN cursor_e;
+		updateHouses: LOOP
+			# Establishes a 'for loop' through each carnival ID
+			FETCH cursor_e INTO cursor_id;
+			IF done THEN
+				LEAVE updateHouses;
+			END IF;
+            
+            CALL UpdateHousesForOneCarnival (cursor_id);
+            
+            INSERT INTO tmpHouseScoreboard (id, house, initials, points, placing) SELECT * FROM house ORDER BY placing;
+            UPDATE tmpHouseScoreboard SET carnivalID = cursor_id WHERE carnivalID IS NULL;
+		END LOOP;
+		CLOSE cursor_e;
+    END;
+    
+    SELECT * FROM tmpHouseScoreboard;
+    
+    # Clean up temporary tables
+    DROP TEMPORARY TABLE IF EXISTS tmpCarnivals;
+    DROP TEMPORARY TABLE IF EXISTS tmpHouseScoreboard;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -932,7 +1048,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetOneCarnival`(
 BEGIN
 	# Fetch specified carnival
     # Translate carnival type / carnival location / staff from foreign keys
-	SELECT carnivals.id, carnivals.name, carnivals.typeID, carnivaltype.type, carnivals.date, carnivals.startTime, carnivals.endTime, carnivallocation.location, staff.firstName, staff.lastName
+	SELECT carnivals.id, carnivals.name, carnivals.typeID, carnivaltype.type, carnivals.date, carnivals.startTime, carnivals.endTime, carnivallocation.location, staff.firstName, staff.lastName, carnivals.staffID
 		FROM carnivals
 		INNER JOIN carnivaltype ON carnivals.typeID = carnivaltype.typeID
         INNER JOIN carnivallocation ON carnivals.locationID = carnivallocation.locationID
@@ -960,7 +1076,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetOneEvent`(
 BEGIN
 	# Fetch specified event
     # Translate carnival / event type / event age group / event division from foreign keys
-	SELECT events.id, events.carnivalID, eventtype.type, eventAgeGroup.ageGroup, eventdivision.division, events.startTime, eventtype.unit
+	SELECT events.id, events.carnivalID, eventtype.type, eventAgeGroup.ageGroup, eventdivision.division, events.startTime, eventtype.unit, events.typeID
 		FROM events
 		INNER JOIN carnivals ON events.carnivalID = carnivals.id
         INNER JOIN eventtype ON events.typeID = eventtype.id
@@ -1026,7 +1142,7 @@ BEGIN
 	# Translate event type / event age group / result / student from foreign keys
     # Check record belongs to carnival type
     # Order by type name then age group
-    SELECT eventrecord.id, eventtype.type, eventAgeGroup.ageGroup, students.firstName, students.lastName, results.result, results.studentID
+    SELECT eventrecord.id, eventtype.type, eventAgeGroup.ageGroup, students.firstName, students.lastName, results.result, results.studentID, eventtype.unit
 		FROM eventrecord 
 		INNER JOIN eventtype ON eventrecord.typeID = eventtype.id
         INNER JOIN eventAgeGroup ON eventrecord.ageGroupID = eventAgeGroup.id
@@ -1085,11 +1201,11 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetStudents`()
 BEGIN
 	# Fetch all students
     # Translate house from foreign keys
-    # Order by house name
+    # Order by house name, then last name, then first name
 	SELECT students.id, students.firstName, students.lastName, house.house, students.number
 		FROM students
         INNER JOIN house ON students.houseID = house.id
-        ORDER BY house.house ASC;
+        ORDER BY house.house, students.lastName, students.firstName ASC;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1309,13 +1425,58 @@ BEGIN
 				LEAVE updatePoints;
 			END IF;
             
-            # Get corresponding points for each placing and division
-            # The championship and top 3 divisions have varying points - any results in lower divisions is awarded the same as Division 3
-            IF (cursor_divisionID = 1 OR cursor_divisionID = 2 OR cursor_divisionID = 3 OR cursor_divisionID = 4) THEN
-				SELECT points INTO cursor_points FROM eventweighting2 WHERE categoryID = cursor_categoryID AND divisionID = cursor_divisionID AND placing = cursor_placing;
-            ELSE 
-				SELECT points INTO cursor_points FROM eventweighting2 WHERE categoryID = cursor_categoryID AND divisionID = 4 AND placing = cursor_placing;
+            # Athletics field events
+            IF (cursor_categoryID = 1) THEN
+				# Any below 32nd will receive same points as 32nd place
+				IF (cursor_placing > 32) THEN
+					SET cursor_placing = 32;
+                END IF;
             END IF;
+            
+            # Athletics track & relay events
+            IF (cursor_categoryID = 2 OR cursor_categoryID = 3) THEN
+				# Any below 12th will receive same points as 12th place
+				IF (cursor_placing > 12) THEN
+					SET cursor_placing = 12;
+                END IF;
+                
+                # Any below Division 3 will receive same points scale as Division 3
+                # This will only apply to track events
+                IF (cursor_divisionID > 4) THEN
+					SET cursor_divisionID = 4;
+                END IF;
+			END IF;
+            
+            # Swimming individual and relay events
+            IF (cursor_categoryID = 4 OR cursor_categoryID = 5) THEN
+				# Any below 8th will receive same points as 8th place
+				IF (cursor_placing > 8) THEN
+					SET cursor_placing = 8;
+                END IF;
+                
+				# All non-championship divisions receive same points scale
+				IF (cursor_divisionID > 2) THEN
+					SET cursor_divisionID = 2;
+                END IF;
+            END IF;
+            
+            # Swimming all-age relay events
+            IF (cursor_categoryID = 6) THEN
+				# Any below 10th will receive same points as 10th place
+				IF (cursor_placing > 10) THEN
+					SET cursor_placing = 10;
+                END IF;
+            END IF;
+            
+            # Cross country events
+            IF (cursor_categoryID = 7) THEN
+				# All results get 1 point
+				SET cursor_placing = 1;
+                SET cursor_divisionID = 1;
+            END IF;
+            
+            # Match corresponding points
+            SELECT points INTO cursor_points FROM eventweighting2 WHERE categoryID = cursor_categoryID AND divisionID = cursor_divisionID AND placing = cursor_placing;
             
             # Update results row with new placing and points
             UPDATE results SET results.placing = cursor_placing, results.points = cursor_points WHERE results.id = cursor_id;
@@ -1391,6 +1552,114 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `UpdateHousesForOneCarnival` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateHousesForOneCarnival`(
+	IN carnivalID int
+)
+BEGIN
+	# Set up temporary tables
+	DROP TEMPORARY TABLE IF EXISTS tmpUnsortedHouses;
+    DROP TEMPORARY TABLE IF EXISTS tmpSortedHouses;
+    DROP TEMPORARY TABLE IF EXISTS tmpResultsInCarnival;
+    CREATE TEMPORARY TABLE tmpUnsortedHouses (
+		id int,
+        points int
+    );
+    CREATE TEMPORARY TABLE tmpSortedHouses (
+		id int,
+        points int,
+        placing int
+    );
+    CREATE TEMPORARY TABLE tmpResultsInCarnival (
+		id int,
+        studentID int,
+        points int
+    );
+    
+    # Load all houses into tmpUnsortedHouses and reset their points to 0
+    INSERT INTO tmpUnsortedHouses(id) SELECT id FROM house;
+    UPDATE tmpUnsortedHouses SET points = 0 WHERE 1 = 1;
+    
+    # Load all results in specified carnival to tmpResultsInCarnival
+    INSERT INTO tmpResultsInCarnival (id, studentID, points) SELECT id, studentID, points FROM results WHERE results.eventID IN (
+		SELECT id FROM events WHERE events.carnivalID = carnivalID
+    );
+    
+    # Calculate house points and placing
+    BEGIN
+		# Initialise variables
+		DECLARE cursor_houseID int DEFAULT 0;
+		DECLARE cursor_studentID int DEFAULT 0;
+		DECLARE cursor_points int DEFAULT 0;
+		DECLARE done int DEFAULT FALSE;
+		DECLARE cursor_e CURSOR FOR SELECT studentID, points FROM tmpResultsInCarnival;
+		DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+		# Loop through each result then add its points to the corresponding student's house
+		OPEN cursor_e;
+		updateHousePointsAndPlacings: LOOP
+			# Establishes a 'for loop' through each result
+			FETCH cursor_e INTO cursor_studentID, cursor_points;
+			IF done THEN
+				LEAVE updateHousePointsAndPlacings;
+			END IF;
+            
+            # Add points to student's house
+            SELECT houseID INTO cursor_houseID FROM students WHERE students.id = cursor_studentID;
+            UPDATE tmpUnsortedHouses SET points = points + cursor_points WHERE tmpUnsortedHouses.id = cursor_houseID;
+            
+		END LOOP;
+		CLOSE cursor_e;
+        
+        # Sort the newly updated houses and insert into tmpSortedHouses
+        INSERT INTO tmpSortedHouses(id, points, placing) SELECT id, points, RANK() OVER (ORDER BY points DESC) FROM tmpUnsortedHouses;
+    END;
+    
+    # Insert updated rows back into the house table
+    BEGIN
+		# Initialise variables
+		DECLARE cursor_id int DEFAULT 0;
+		DECLARE cursor_points int DEFAULT 0;
+        DECLARE cursor_placing int DEFAULT 0;
+		DECLARE done int DEFAULT FALSE;
+		DECLARE cursor_e CURSOR FOR SELECT id, points, placing FROM tmpSortedHouses;
+		DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+		# Loop through each sorted house then update row in the house table
+		OPEN cursor_e;
+		updateHouseTable: LOOP
+			# Establishes a 'for loop' through each house
+			FETCH cursor_e INTO cursor_id, cursor_points, cursor_placing;
+			IF done THEN
+				LEAVE updateHouseTable;
+			END IF;
+            
+            # Update corresponding row in the house table
+            UPDATE house SET house.points = cursor_points, house.placing = cursor_placing WHERE house.id = cursor_id;
+            
+		END LOOP;
+		CLOSE cursor_e;
+    END;
+    
+    # Clean up temporary tables
+    DROP TEMPORARY TABLE IF EXISTS tmpUnsortedHouses;
+    DROP TEMPORARY TABLE IF EXISTS tmpSortedHouses;
+    DROP TEMPORARY TABLE IF EXISTS tmpResultsInCarnival;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -1401,4 +1670,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-13 10:18:57
+-- Dump completed on 2023-07-14 23:29:43

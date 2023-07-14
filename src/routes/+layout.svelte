@@ -29,15 +29,11 @@
       		<li><a href="/students">Students</a></li>
       		<li><a href="/houses">Houses</a></li>
       		<li><a href="/records">Records</a></li>
+			<li><a href="https://docs.google.com/document/d/1EDETbrxlj94bFKMae59e_JWl4_bBhmmf">User Manual</a></li>
 
 			<!--Display logged-in user's name-->
-			{#if data.staffName != ""}
-				<li>Hello {data.staffName}</li>
-				<li><form method="POST" action="/auth/?/logout"><button>Logout</button></form></li>
-			{:else}
-				<li><a href="/auth/signup" role="button">Sign Up</a></li>
-				<li><a href="/auth/login" role="button">Login</a></li>
-			{/if}
+			<li>Hello {data.staffName}</li>
+			<li><form method="POST" action="/auth/?/logout"><button>Logout</button></form></li>
     	</ul>
     	{/if}
   	</nav>
@@ -50,5 +46,10 @@
 	div {
 		margin-left: 5%;
 		margin-right: 5%;
+	}
+
+	button {
+		background-color: rgb(158, 189, 203);
+		border: none;
 	}
 </style>

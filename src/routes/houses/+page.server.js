@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Imports
 import { sequelize } from "../../hooks.server"; 
 
@@ -9,14 +10,21 @@ import { sequelize } from "../../hooks.server";
 // Returns: array of house records, ordered by their placing
 export async function load() {
 
-    // Update placings for each house on the MySQL database
-    await sequelize.query("CALL CalculateHousePlacings");
+    // Fetch list of all carnivals
+    const carnivals = await sequelize.query("CALL GetCarnivals");
 
-    // Fetch list of all houses, sorted by placing
-    const housesQueryResponse = await sequelize.query("SELECT * FROM house ORDER BY placing");
-    const houses = housesQueryResponse[0];
+    if (carnivals.length > 0) {
+        // Fetch list of all houses, sorted by placing
+        const houses = await sequelize.query("CALL GetHouses");
+        console.log(houses);
 
-    console.log(houses);
+        return { houses, carnivals };
+    }
 
-    return { houses };
+    return { carnivals };
+};
+
+/** @type {import('./$types').Actions} */
+export const actions = {
+    
 };

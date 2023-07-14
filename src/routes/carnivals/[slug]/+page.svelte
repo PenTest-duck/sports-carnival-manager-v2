@@ -36,9 +36,10 @@
         dataChanged = true;
     }
 
-    // Check if event only has championship division
-    const championshipEventTypeIDs = [4, 5, 10, 11, 12];
     let selectedEventType;
+
+    // Check if event only has championship division
+    const championshipEventTypeIDs = [4, 5, 10, 11, 12, 18, 19, 20, 21, 22, 23, 24, 25, 26];
     let onlyChampionship = false;
 
     function toggleChampionships() {
@@ -49,13 +50,27 @@
         }
     }
 
+    // Check if event is an all-age event
+    const allAgeEventTypeIDs = [22];
+    let allAge = false;
+
+    function toggleAllAge() {
+        if (allAgeEventTypeIDs.includes(selectedEventType)) {
+            allAge = true;
+        } else {
+            allAge = false;
+        }
+    }
+
+
 </script>
 
 <div id="main-container">
     <h1>Carnival</h1>
 
     <div id="carnival-details">
-        <h3 class="details-display">Carnival Details</h3>
+        <!--Heading and help reference-->
+        <h3 class="details-display">Carnival Details <a href="https://docs.google.com/document/d/1EDETbrxlj94bFKMae59e_JWl4_bBhmmf#heading=h.r8yxfdaf05ft" target="_blank"><i class="fa fa-question-circle help"></i></a></h3>
 
         <!--Edit or Cancel/Save buttons to show when needed-->
         {#if !editingCarnival}
@@ -136,7 +151,7 @@
                             <!--Carnival staff dropdown select-->
                             <select name="carnival-staff-id" id="carnival-staff-id" on:change={setDataChanged}>
                                 {#each data.staffs as staff}
-                                <option value="{staff.id}">{staff.firstName} {staff.lastName}</option>
+                                <option value="{staff.id}" selected={staff.id === data.carnival.staffID || null}>{staff.firstName} {staff.lastName}</option>
                                 {/each}
                             </select>
                         </td>
@@ -149,7 +164,8 @@
     </div>
 
     <div id="events-list">
-        <h3>Events</h3>
+        <!--Heading and help reference-->
+        <h3>Event List <a href="https://docs.google.com/document/d/1EDETbrxlj94bFKMae59e_JWl4_bBhmmf#heading=h.qniv0lty9ocw" target="_blank"><i class="fa fa-question-circle help"></i></a></h3>
 
         <table>
             <!--Table headers-->
@@ -170,7 +186,8 @@
     <dialogue open>
         <article>
             <div id="create-event">
-                <h3>Create Event</h3>
+                <!--Heading and help reference-->
+                <h3>Create Event <a href="https://docs.google.com/document/d/1EDETbrxlj94bFKMae59e_JWl4_bBhmmf#heading=h.uhtk5xmzguft" target="_blank"><i class="fa fa-question-circle help"></i></a></h3>
 
                 <form method="POST" action="?/addEvent">
 
@@ -183,7 +200,7 @@
                     <label>
                         Type
                         <!--Event type dropdown select-->
-                        <select name="event-type-id" id="event-type-id" bind:value={selectedEventType} on:change={toggleChampionships}>
+                        <select name="event-type-id" id="event-type-id" bind:value={selectedEventType} on:mousemove|once={toggleChampionships} on:change={toggleChampionships} on:change={toggleAllAge}>
                             {#each data.eventTypes as type}
                             <option value="{type.id}">{type.type}</option>
                             {/each}

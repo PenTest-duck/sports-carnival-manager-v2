@@ -30,3 +30,8 @@
 .details-display {
     display: inline-block;
 }
+
+.help {
+    margin-left: 10px;
+    color: rgb(51, 153, 255);
+}

@@ -44,7 +44,7 @@ export const actions = {
             // Verify token and set session cookie
             const decodedIdToken = await adminAuth.verifyIdToken(idToken);
             const cookie = await adminAuth.createSessionCookie(idToken, { expiresIn });
-            const options = { maxAge: expiresIn, httpOnly: true, secure: true, path: "/" };
+            const options = { maxAge: expiresIn, httpOnly: true, secure: false, path: "/", sameSite: "strict" };
             cookies.set("__session", cookie, options);
         } catch (e) {
             if (e instanceof Error) {

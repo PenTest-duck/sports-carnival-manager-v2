@@ -36,6 +36,16 @@
         dataChanged = true;
     }
 
+    // Check if event only has championship division
+    const championshipEventTypeIDs = [4, 5, 10, 11, 12, 18, 19, 20, 21, 22, 23, 24, 25, 26];
+    let onlyChampionship = false;
+
+    if (championshipEventTypeIDs.includes(data.event.typeID)) {
+        onlyChampionship = true;
+    } else {
+        onlyChampionship = false;
+    }
+
 </script>
 
 <div id="main-container">
@@ -45,7 +55,8 @@
     <p><a href="/carnivals/{data.event.carnivalID}">Back to Carnival</a></p>
 
     <div id="event-details">
-        <h3 class="details-display">Event Details</h3>
+        <!--Heading and help reference-->
+        <h3 class="details-display">Event Details <a href="https://docs.google.com/document/d/1EDETbrxlj94bFKMae59e_JWl4_bBhmmf#heading=h.yo8j3bffw9q9" target="_blank"><i class="fa fa-question-circle help"></i></a></h3>
 
         <!--Edit or Cancel/Save buttons to show when needed-->
         {#if !editingEvent}
@@ -90,10 +101,16 @@
                     {#if editingEvent}
                         <td>
                             <!--Event division dropdown select-->
-                            <select name="event-division-id" id="event-division-id" on:input={setDataChanged}>
-                            {#each data.eventDivisions as division}
-                            <option value="{division.id}" selected={division.division === data.event.division || null}>{division.division}</option>
-                            {/each}
+                            <select name="event-division-id" id="event-division-id">
+                                <!--If championship only event, only show championship-->
+                                {#if onlyChampionship}
+                                    <option value="1">Championships</option>
+                                <!--Otherwise show all divisions-->
+                                {:else}
+                                    {#each data.eventDivisions as division}
+                                    <option value="{division.id}" selected={division.division === data.event.division || null}>{division.division}</option>
+                                    {/each}
+                                {/if}
                             </select>
                         </td>
                     {:else}
@@ -124,7 +141,8 @@
     </div>
 
     <div id="add-result">
-        <h3>Results</h3>
+        <!--Heading and help reference-->
+        <h3>Results <a href="https://docs.google.com/document/d/1EDETbrxlj94bFKMae59e_JWl4_bBhmmf#heading=h.y8klqxedu9ec" target="_blank"><i class="fa fa-question-circle help"></i></a></h3>
 
         <form method="POST" action="?/addResult">
             <!--Display error message from saving result-->
@@ -138,14 +156,14 @@
                     <th>Student</th>
                     <th>DNF</th>
                     <th>DQ</th>
-                    <th>Result</th>
+                    <th>Result ({data.event.unit})</th>
                 </tr>
 
                 <!--Add result input fields-->
                 <tr>
                     <td>
                         <!--Result student dropdown select-->
-                        <select name="event-student-id" id="event-student-id">
+                        <select name="event-student-id" id="event-student-id" style="margin-top: 10px">
                             {#each data.students as student}
                             <option value="{student.id}">[{student.initials}] {student.firstName} {student.lastName}</option>
                             {/each}
@@ -153,8 +171,8 @@
                     </td>
                     <td><input type="checkbox" name="event-dnf"></td>
                     <td><input type="checkbox" name="event-dq"></td>
-                    <td><input type="text" name="event-result"></td>
-                    <button>Add</button>
+                    <td><input type="text" name="event-result" style="margin-top: 10px"></td>
+                    <button style="margin-top: 20px">Add</button>
                 </tr>
             </table>
         </form>
