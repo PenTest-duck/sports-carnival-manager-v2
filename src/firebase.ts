@@ -8,14 +8,18 @@ import { writable } from "svelte/store";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+
+// Import environment variables
+import { FIREBASE_API_KEY, FIREBASE_AUTHDOMAIN, FIREBASE_PROJECT_ID, FIREBASE_STORAGE_BUCKET, FIREBASE_MESSAGING_SENDER_ID, FIREBASE_APP_ID, FIREBASE_MEASUREMENT_ID } from "$env/static/private";
+
 const firebaseConfig = {
-	apiKey: "AIzaSyCu4aXiuVJPtC6t3HTiCkzdia-8Vu6a9rI",
-  	authDomain: "sports-carnival-manager.firebaseapp.com",
-  	projectId: "sports-carnival-manager",
-  	storageBucket: "sports-carnival-manager.appspot.com",
-  	messagingSenderId: "587550867359",
-  	appId: "1:587550867359:web:ba40be47895078d1d247aa",
-  	measurementId: "G-4GVYSV4GH4"
+	apiKey: FIREBASE_API_KEY,
+  	authDomain: FIREBASE_AUTHDOMAIN,
+  	projectId: FIREBASE_PROJECT_ID,
+  	storageBucket: FIREBASE_STORAGE_BUCKET,
+  	messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
+  	appId: FIREBASE_APP_ID,
+  	measurementId: FIREBASE_MEASUREMENT_ID
 };
 
 // Initialize Firebase

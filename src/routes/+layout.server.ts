@@ -18,7 +18,8 @@ export async function load({ route, cookies }) {
     const sessionCookie = cookies.get("__session");
     
     // If session cookie set, verify it on Firebase
-    // Otherwise, if no session cookie set, redirect to login
+    // Otherwise, if no session cookie set, redirect to 
+    console.log(sessionCookie);
     if (sessionCookie != null && sessionCookie != "") {
         try {
             // Verify session cookie on Firebase
