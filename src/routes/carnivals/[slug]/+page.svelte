@@ -15,6 +15,13 @@
     let editingCarnival = false;
     let dataChanged = false;
 
+    let carnivalName = data.carnival.name;
+    let carnivalDate = data.carnival.date;
+    let carnivalStartTime = data.carnival.startTime.slice(0, -3);
+    let carnivalEndTime = data.carnival.endTime.slice(0, -3);
+    let carnivalLocationID = data.carnival.locationID;
+    let carnivalStaffID = data.carnival.staff;
+
     // Changes form to editable values
     function setEditingCarnival() {
         editingCarnival = true;
@@ -24,6 +31,13 @@
     function cancelEditingCarnival() {
         editingCarnival = false;
         dataChanged = false;
+
+        carnivalName = data.carnival.name;
+        carnivalDate = data.carnival.date;
+        carnivalStartTime = data.carnival.startTime.slice(0, -3);
+        carnivalEndTime = data.carnival.endTime.slice(0, -3);
+        carnivalLocationID = data.carnival.locationID;
+        carnivalStaffID = data.carnival.staff;
     }
 
     // Submits the POST request with edited values
@@ -32,8 +46,15 @@
     }
 
     // Enable save button if data edited
-    function setDataChanged() {
+    $: if (carnivalName != data.carnival.name 
+        || carnivalDate != data.carnival.date 
+        || carnivalStartTime != data.carnival.startTime.slice(0, -3)
+        || carnivalEndTime != data.carnival.endTime.slice(0, -3)
+        || carnivalLocationID != data.carnival.locationID
+        || carnivalStaffID != data.carnival.staffID) {
         dataChanged = true;
+    } else {
+        dataChanged = false;
     }
 
     let selectedEventType;
@@ -106,7 +127,7 @@
                     <th>Name</th>
                     <!--Display editable or non-editable field-->
                     {#if editingCarnival}
-                        <td><input type="text" name="carnival-name" value={data.carnival.name} on:input={setDataChanged}></td>
+                        <td><input type="text" name="carnival-name" bind:value={carnivalName}></td>
                     {:else}
                         <td>{data.carnival.name}</td>
                     {/if}
@@ -119,7 +140,7 @@
                     <th>Date</th>
                     <!--Display editable or non-editable field-->
                     {#if editingCarnival}
-                        <td><input type="date" name="carnival-date" value={data.carnival.date} on:input={setDataChanged} onfocus="this.showPicker()"></td>
+                        <td><input type="date" name="carnival-date" bind:value={carnivalDate} onfocus="this.showPicker()"></td>
                     {:else}
                         <td>{data.carnival.date}</td>
                     {/if}
@@ -128,7 +149,7 @@
                     <th>Start Time</th>
                     <!--Display editable or non-editable field-->
                     {#if editingCarnival}
-                        <td><input type="time" name="carnival-start-time" value={data.carnival.startTime.slice(0, -3)} on:input={setDataChanged} onfocus="this.showPicker()"></td>
+                        <td><input type="time" name="carnival-start-time" bind:value={carnivalStartTime} onfocus="this.showPicker()"></td>
                     {:else}
                         <td>{data.carnival.startTime.slice(0, -3)}</td>
                     {/if}
@@ -137,7 +158,7 @@
                     <th>End Time</th>
                     <!--Display editable or non-editable field-->
                     {#if editingCarnival}
-                        <td><input type="time" name="carnival-end-time" value={data.carnival.endTime.slice(0, -3)} on:input={setDataChanged} onfocus="this.showPicker()"></td>
+                        <td><input type="time" name="carnival-end-time" bind:value={carnivalEndTime} onfocus="this.showPicker()"></td>
                     {:else}
                         <td>{data.carnival.endTime.slice(0, -3)}</td>
                     {/if}
@@ -148,9 +169,9 @@
                     {#if editingCarnival}
                         <td>
                             <!--Carnival location dropdown select-->
-                            <select name="carnival-location-id" id="carnival-location-id" on:input={setDataChanged}>
+                            <select name="carnival-location-id" id="carnival-location-id" bind:value={carnivalLocationID}>
                             {#each data.carnivalLocations as location}
-                            <option value="{location.locationID}" selected={location.location === data.carnival.location || null}>{location.location}</option>
+                            <option value="{location.locationID}" selected={location.locationID == carnivalLocationID || null}>{location.location}</option>
                             {/each}
                             </select>
                         </td>
@@ -164,9 +185,9 @@
                     {#if editingCarnival}
                         <td>
                             <!--Carnival staff dropdown select-->
-                            <select name="carnival-staff-id" id="carnival-staff-id" on:change={setDataChanged}>
+                            <select name="carnival-staff-id" id="carnival-staff-id" bind:value={carnivalStaffID}>
                                 {#each data.staffs as staff}
-                                <option value="{staff.id}" selected={staff.id === data.carnival.staffID || null}>{staff.firstName} {staff.lastName}</option>
+                                <option value="{staff.id}" selected={staff.id == carnivalStaffID || null}>{staff.firstName} {staff.lastName}</option>
                                 {/each}
                             </select>
                         </td>

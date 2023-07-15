@@ -16,6 +16,11 @@
     let editingStudent = false;
     let dataChanged = false;
 
+    let studentFirstName = data.student.firstName;
+    let studentLastName = data.student.lastName;
+    let studentHouseID = data.student.houseID;
+    let studentNumber = data.student.number;
+
     // Changes form to editable values
     function setEditingStudent() {
         editingStudent = true;
@@ -25,6 +30,11 @@
     function cancelEditingStudent() {
         editingStudent = false;
         dataChanged = false;
+
+        studentFirstName = data.student.firstName;
+        studentLastName = data.student.lastName;
+        studentHouseID = data.student.houseID;
+        studentNumber = data.student.number;
     }
 
     // Submits the POST request with edited values
@@ -33,8 +43,13 @@
     }
 
     // Enable save button if data edited
-    function setDataChanged() {
+    $: if (studentFirstName != data.student.firstName
+        || studentLastName != data.student.lastName
+        || studentHouseID != data.student.houseID
+        || studentNumber != data.student.number) {
         dataChanged = true;
+    } else {
+        dataChanged = false;
     }
 </script>
 
@@ -72,7 +87,7 @@
                     <th>First Name</th>
                     <!--Display editable or non-editable field-->
                     {#if editingStudent}
-                        <td><input type="text" name="student-first-name" value={data.student.firstName} on:input={setDataChanged}></td>
+                        <td><input type="text" name="student-first-name" bind:value={studentFirstName}></td>
                     {:else}
                         <td>{data.student.firstName}</td>
                     {/if}
@@ -82,7 +97,7 @@
                     <th>Last Name</th>
                     <!--Display editable or non-editable field-->
                     {#if editingStudent}
-                        <td><input type="text" name="student-last-name" value={data.student.lastName} on:input={setDataChanged}></td>
+                        <td><input type="text" name="student-last-name" bind:value={studentLastName}></td>
                     {:else}
                         <td>{data.student.lastName}</td>
                     {/if}
@@ -94,9 +109,9 @@
                     {#if editingStudent}
                         <td>
                             <!--Display dropdown of houses-->
-                            <select name="student-house-id" id="student-house-id" on:input={setDataChanged}>
+                            <select name="student-house-id" id="student-house-id" bind:value={studentHouseID}>
                                 {#each data.houses as house}
-                                    <option value="{house.id}" selected={house.house === data.student.house || null}>{house.house}</option>
+                                    <option value="{house.id}" selected={house.id == studentHouseID|| null}>{house.house}</option>
                                 {/each}
                             </select>
                         </td>
@@ -109,7 +124,7 @@
                     <th>Student Number</th>
                     <!--Display editable or non-editable field-->
                     {#if editingStudent}
-                        <td><input type="text" name="student-number" value={data.student.number} on:input={setDataChanged}></td>
+                        <td><input type="text" name="student-number" bind:value={studentNumber}></td>
                     {:else}
                         <td>{data.student.number}</td>
                     {/if}

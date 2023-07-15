@@ -20,12 +20,13 @@ export async function load({ params, url }) {
     const eventQueryResponse = await sequelize.query("CALL GetOneEvent (:id)", {
         replacements: { id: params.slug }
     });
-    let event = eventQueryResponse[0]
+    const event = eventQueryResponse[0]
 
-    // Replace null records with "N/A"
-    if (event.record == null) {
-        event.record = "N/A";
-    }
+    // Fetch event record
+    const eventRecordQueryResponse = await sequelize.query("SELECT result FROM results WHERE id = (SELECT resultID FROM eventrecord WHERE typeID = (:eventTypeID))", {
+        replacements: { eventTypeID: event.typeID }
+    });
+    const eventRecord = eventRecordQueryResponse[0][0];
 
     // Fetch list of all event age groups and divisions
     const eventAgeGroupsQueryResponse = await sequelize.query("SELECT * FROM eventAgeGroup");
@@ -45,9 +46,9 @@ export async function load({ params, url }) {
     const carnivalQueryResponse = await sequelize.query("CALL GetOneCarnival (:carnivalID)", {
         replacements: { carnivalID: event.carnivalID }
     });
-    const carnival = carnivalQueryResponse[0]
+    const carnival = carnivalQueryResponse[0];
 
-    return { event, eventAgeGroups, eventDivisions, students, results, carnival, msg };
+    return { event, eventAgeGroups, eventDivisions, students, results, carnival, msg, eventRecord };
 };
 
 /** @type {import('./$types').Actions} */

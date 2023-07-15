@@ -15,6 +15,10 @@
     let editingEvent = false;
     let dataChanged = false;
 
+    let eventAgeGroupID = data.event.ageGroupID;
+    let eventDivisionID = data.event.divisionID;
+    let eventStartTime = data.event.startTime.slice(0, -3);
+
     // Changes form to editable values
     function setEditingEvent() {
         editingEvent = true;
@@ -24,6 +28,10 @@
     function cancelEditingEvent() {
         editingEvent = false;
         dataChanged = false;
+
+        eventAgeGroupID = data.event.ageGroupID;
+        eventDivisionID = data.event.divisionID;
+        eventStartTime = data.event.startTime.slice(0, -3);
     }
 
     // Submits the POST request with edited values
@@ -32,8 +40,12 @@
     }
 
     // Enable save button if data edited
-    function setDataChanged() {
+    $: if (eventAgeGroupID != data.event.ageGroupID
+        || eventDivisionID != data.event.divisionID
+        || eventStartTime != data.event.startTime.slice(0, -3)) {
         dataChanged = true;
+    } else {
+        dataChanged = false;
     }
 
     // Check if event only has championship division
@@ -99,9 +111,9 @@
                     {#if editingEvent}
                         <td>
                             <!--Event age group dropdown select-->
-                            <select name="event-age-group-id" id="event-age-group-id" on:input={setDataChanged}>
+                            <select name="event-age-group-id" id="event-age-group-id" bind:value={eventAgeGroupID}>
                             {#each data.eventAgeGroups as ageGroup}
-                            <option value="{ageGroup.id}" selected={ageGroup.ageGroup === data.event.ageGroup || null}>{ageGroup.ageGroup}</option>
+                            <option value="{ageGroup.id}" selected={ageGroup.id == eventAgeGroupID || null}>{ageGroup.ageGroup}</option>
                             {/each}
                             </select>
                         </td>
@@ -116,14 +128,14 @@
                     {#if editingEvent}
                         <td>
                             <!--Event division dropdown select-->
-                            <select name="event-division-id" id="event-division-id">
+                            <select name="event-division-id" id="event-division-id" bind:value={eventDivisionID}>
                                 <!--If championship only event, only show championship-->
                                 {#if onlyChampionship}
                                     <option value="1">Championships</option>
                                 <!--Otherwise show all divisions-->
                                 {:else}
                                     {#each data.eventDivisions as division}
-                                    <option value="{division.id}" selected={division.division === data.event.division || null}>{division.division}</option>
+                                    <option value="{division.id}" selected={division.id === eventDivisionID || null}>{division.division}</option>
                                     {/each}
                                 {/if}
                             </select>
@@ -137,7 +149,7 @@
                     <th>Start Time</th>
                     <!--Display editable or non-editable field-->
                     {#if editingEvent}
-                        <td><input type="time" name="event-start-time" value={data.event.startTime} min={data.carnival.startTime} max={data.carnival.endTime} on:input={setDataChanged} onfocus="this.showPicker()"></td>
+                        <td><input type="time" name="event-start-time" bind:value={eventStartTime} min={data.carnival.startTime} max={data.carnival.endTime} onfocus="this.showPicker()"></td>
                     {:else}
                         <td>{data.event.startTime.slice(0, -3)}</td>
                     {/if}
@@ -145,7 +157,11 @@
 
                 <tr>
                     <th>Record</th>
-                    <td>{data.event.record}</td>
+                    {#if data.eventRecord}
+                        <td>{data.eventRecord.result} {data.event.unit}</td>
+                    {:else}
+                        <td>N/A</td>
+                    {/if}
                 </tr>
 
                 <!--Hidden input fields for validating start time is within range of carnival start and end times-->
