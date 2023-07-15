@@ -50,7 +50,7 @@ export const actions = {
         }
 
         // If password reset email sent, redirect to login page
-        const msg = "Password reset email sent. Please check your inbox."
+        const msg = "Password reset email sent"
         throw redirect(303, '/auth/login?msg=' + msg);
     }
 };

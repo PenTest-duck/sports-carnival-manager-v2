@@ -137,7 +137,7 @@
                     <th>Start Time</th>
                     <!--Display editable or non-editable field-->
                     {#if editingEvent}
-                        <td><input type="time" name="event-start-time" value={data.event.startTime} min={data.carnival.startTime} max={data.carnival.endTime} on:input={setDataChanged}></td>
+                        <td><input type="time" name="event-start-time" value={data.event.startTime} min={data.carnival.startTime} max={data.carnival.endTime} on:input={setDataChanged} onfocus="this.showPicker()"></td>
                     {:else}
                         <td>{data.event.startTime.slice(0, -3)}</td>
                     {/if}

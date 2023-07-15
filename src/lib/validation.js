@@ -10,7 +10,7 @@ const MIN_PASSWORD_LENGTH = 8;
 const MAX_PASSWORD_LENGTH = 40;
 
 // Define regex 
-const VALID_NAME_REGEX = /^[A-Za-z ]+$/;
+const VALID_NAME_REGEX = /^[A-Za-z '\-,.]+$/;
 const VALID_NUMBER_REGEX = /^\d+$/;   // Can only contain digits - culls out decimals
 const VALID_DATE_REGEX = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/; // YYYY-MM-DD (limited to year 2999)
 const VALID_TIME_REGEX = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/; // HH:MM (24 hour)
@@ -27,7 +27,7 @@ const SYMBOL_REGEX = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
 // Parameters: name
 // Returns: "Valid" OR error message
 export function validatePersonName(name) {
-    // Check name only contains alphabet
+    // Check name only contains alphabet or common symbols
     if (!Boolean(name.match(VALID_NAME_REGEX))) {
         return "Name can only contain alphabet";
     }
@@ -78,7 +78,7 @@ export function validateNumber(number) {
 export function validateDate(date) {
     // Check date matches YYYY-MM-DD
     if (!Boolean(date.match(VALID_DATE_REGEX))) {
-        return "Date is in incorrect format";
+        return "Date is in invalid format";
     }
 
     // Check date is not before today
@@ -98,7 +98,7 @@ export function validateDate(date) {
 export function validateTime(time) {
     // Check time matches HH:MM
     if (!Boolean(time.match(VALID_TIME_REGEX))) {
-        return "Time must be in HH:MM format";
+        return "Time is in invalid format";
     }
 
     return "Valid";

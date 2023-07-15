@@ -79,17 +79,17 @@
         
                     <label>
                         Date
-                        <input type="date" name="carnival-date">
+                        <input type="date" name="carnival-date" onfocus="this.showPicker()">
                     </label>
         
                     <label>
                         Start Time
-                        <input type="time" name="carnival-start-time">
+                        <input type="time" name="carnival-start-time" onfocus="this.showPicker()">
                     </label>
         
                     <label>
                         End Time
-                        <input type="time" name="carnival-end-time">
+                        <input type="time" name="carnival-end-time" onfocus="this.showPicker()">
                     </label>
         
                     <label>

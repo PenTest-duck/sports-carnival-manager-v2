@@ -119,7 +119,7 @@
                     <th>Date</th>
                     <!--Display editable or non-editable field-->
                     {#if editingCarnival}
-                        <td><input type="date" name="carnival-date" value={data.carnival.date} on:input={setDataChanged}></td>
+                        <td><input type="date" name="carnival-date" value={data.carnival.date} on:input={setDataChanged} onfocus="this.showPicker()"></td>
                     {:else}
                         <td>{data.carnival.date}</td>
                     {/if}
@@ -128,7 +128,7 @@
                     <th>Start Time</th>
                     <!--Display editable or non-editable field-->
                     {#if editingCarnival}
-                        <td><input type="time" name="carnival-start-time" value={data.carnival.startTime.slice(0, -3)} on:input={setDataChanged}></td>
+                        <td><input type="time" name="carnival-start-time" value={data.carnival.startTime.slice(0, -3)} on:input={setDataChanged} onfocus="this.showPicker()"></td>
                     {:else}
                         <td>{data.carnival.startTime.slice(0, -3)}</td>
                     {/if}
@@ -137,7 +137,7 @@
                     <th>End Time</th>
                     <!--Display editable or non-editable field-->
                     {#if editingCarnival}
-                        <td><input type="time" name="carnival-end-time" value={data.carnival.endTime.slice(0, -3)} on:input={setDataChanged}></td>
+                        <td><input type="time" name="carnival-end-time" value={data.carnival.endTime.slice(0, -3)} on:input={setDataChanged} onfocus="this.showPicker()"></td>
                     {:else}
                         <td>{data.carnival.endTime.slice(0, -3)}</td>
                     {/if}
@@ -245,7 +245,7 @@
 
                     <label>
                         Start Time
-                        <input type="time" min={data.carnival.startTime} max={data.carnival.endTime} name="event-start-time"> 
+                        <input type="time" min={data.carnival.startTime} max={data.carnival.endTime} name="event-start-time" onfocus="this.showPicker()"> 
                     </label>
 
                     <!--Hidden input fields for validating start time is within range of carnival start and end times-->
