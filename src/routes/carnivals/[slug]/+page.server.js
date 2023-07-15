@@ -2,13 +2,17 @@
 // Imports
 import { sequelize } from "../../../hooks.server"; 
 import { validateCarnival, validateEvent } from "$lib/validation";
+import { redirect } from "@sveltejs/kit";
 
 /** @type {import('./$types').PageServerLoad} */
 // Function: load()
-// Purpose: upon page load, fetches carnival details and list of all events
+// Purpose: upon page load, fetches carnival details and list of all events + message
 // Parameters: URL path
-// Returns: carnival record, array of carnival locations, array of staff, array of events, array of event types, array of event age groups, array of event divisions
-export async function load({ params }) {
+// Returns: carnival record, array of carnival locations, array of staff, array of events, array of event types, array of event age groups, array of event divisions + message
+export async function load({ params, url }) {
+    // Fetch confirmation message from URL
+    const msg = url.searchParams.get("msg");
+
     // Get URL path (contains carnival ID)
     const slug = params.slug;
 
@@ -41,7 +45,7 @@ export async function load({ params }) {
     const eventAgeGroups = eventAgeGroupsQueryResponse[0];
     const eventDivisions = eventDivisionsQueryResponse[0];
 
-    return { slug, carnival, carnivalLocations, staffs, events, eventTypes, eventAgeGroups, eventDivisions };
+    return { slug, carnival, carnivalLocations, staffs, events, eventTypes, eventAgeGroups, eventDivisions, msg };
 };
 
 /** @type {import('./$types').Actions} */
@@ -87,6 +91,10 @@ export const actions = {
             console.log("Error: ", e);
             return { eventError: "There was an unexpected error with the server" }
         }
+
+        // Show confirmation message
+        const msg = "Event successfully added";
+        throw redirect(303, "?msg=" + msg);
     },
 
     // Function: removeEvent
@@ -105,8 +113,12 @@ export const actions = {
             });
         } catch (e) {
             console.log("Error: ", e);
-            return { eventError: "There was an unexpected error with the server" }
+            return { eventRemoveError: "There was an unexpected error with the server" }
         }
+
+        // Show confirmation message
+        const msg = "Event successfully removed";
+        throw redirect(303, "?msg=" + msg);
     },
 
     // Function: editCarnival
@@ -152,5 +164,9 @@ export const actions = {
             console.log("Error: ", e);
             return { carnivalError: "There was an unexpected error with the server" }
         }
+
+        // Show confirmation message
+        const msg = "Carnival successfully edited";
+        throw redirect(303, "?msg=" + msg);
     }
 };

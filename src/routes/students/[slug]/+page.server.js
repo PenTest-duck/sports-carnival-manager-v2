@@ -1,13 +1,17 @@
 // Imports
 import { sequelize } from "../../../hooks.server"; 
 import { validateStudent } from "$lib/validation";
+import { redirect } from "@sveltejs/kit";
 
 /** @type {import('./$types').PageServerLoad} */
 // Function: load()
-// Purpose: upon page load, fetches array of students, houses, results, and events
-// Parameters: N/A
-// Returns: array of students, array of houses, array of results, array of events
-export async function load({ params }) {
+// Purpose: upon page load, fetches array of students, houses, results, and events + message
+// Parameters: URL
+// Returns: array of students, array of houses, array of results, array of events + message
+export async function load({ params, url }) {
+    // Fetch confirmation message from URL
+    const msg = url.searchParams.get("msg");
+
     // Fetch student record given the specified StudentID
     const studentsQueryResponse = await sequelize.query("CALL GetOneStudent (:id)", {
         replacements: { id: params.slug }
@@ -31,7 +35,7 @@ export async function load({ params }) {
     // Fetch list of all carnivals
     const carnivals = await sequelize.query("CALL GetCarnivals");
     
-    return { student, houses, results, events, carnivals };
+    return { student, houses, results, events, carnivals, msg };
 };
 
 /** @type {import('./$types').Actions} */
@@ -75,5 +79,9 @@ export const actions = {
             console.log("Error: ", e);
             return { error: "There was an unexpected error with the server" };
         }
+
+        // Show confirmation message
+        const msg = "Student successfully edited";
+        throw redirect(303, "?msg=" + msg);
     }
 };

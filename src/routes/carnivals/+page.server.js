@@ -2,14 +2,18 @@
 // Imports
 import { sequelize } from "../../hooks.server"; 
 import { validateCarnival } from "$lib/validation";
+import { redirect } from "@sveltejs/kit";
 
 /** @type {import('./$types').PageServerLoad} */
 
 // Function: load()
-// Purpose: upon page load, fetches array of carnivals, carnival types, carnival locations, and staff
-// Parameters: N/A
-// Returns: array of carnivals, array of carnival types, array of carnival locations, array of staff
-export async function load() {
+// Purpose: upon page load, fetches array of carnivals, carnival types, carnival locations, and staff + message
+// Parameters: URL path
+// Returns: array of carnivals, array of carnival types, array of carnival locations, array of staff + message
+export async function load({ url }) {
+    // Fetch confirmation message from URL
+    const msg = url.searchParams.get("msg");
+
     // Fetch list of all carnivals
     const carnivals = await sequelize.query("CALL GetCarnivals");
 
@@ -23,7 +27,7 @@ export async function load() {
     const staffsQueryResponse = await sequelize.query("SELECT * FROM staff");
     const staffs = staffsQueryResponse[0];
 
-    return { carnivals, carnivalTypes, carnivalLocations, staffs };
+    return { carnivals, carnivalTypes, carnivalLocations, staffs, msg };
 };
 
 /** @type {import('./$types').Actions} */
@@ -71,6 +75,10 @@ export const actions = {
             console.log("Error: ", e);
             return { error: "There was an unexpected error with the server" }
         }
+
+        // Show confirmation message
+        const msg = "Carnival successfully added";
+        throw redirect(303, "?msg=" + msg);
     },
 
     // Function: removeCarnival
@@ -89,7 +97,11 @@ export const actions = {
             });
         } catch (e) {
             console.log("Error: ", e);
-            return { error: "There was an unexpected error with the server" }
+            return { carnivalRemoveError: "There was an unexpected error with the server" }
         }
+
+        // Show confirmation message
+        const msg = "Carnival successfully removed";
+        throw redirect(303, "?msg=" + msg);
     }
 };

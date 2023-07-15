@@ -49,10 +49,30 @@
 </script>
 
 <div id="main-container">
-    <h1>Event</h1>
+    <h1>{data.carnival.name} / {data.event.type}</h1>
 
     <!--Back button to carnival-->
     <p><a href="/carnivals/{data.event.carnivalID}">Back to Carnival</a></p>
+
+    <!--Display confirmation message-->
+    {#if data.msg}
+        <p id="msg">{data.msg}</p>
+    {/if}
+
+    <!--Display error message from saving event details-->
+    {#if form?.eventError}
+        <p id="error">Edit Event: {form?.eventError}</p>
+    {/if}
+
+    <!--Display error message from saving result-->
+    {#if form?.resultError}
+        <p id="error">Add Result: {form?.resultError}</p>
+    {/if}
+
+    <!--Display error message from removing result-->
+    {#if form?.resultRemoveError}
+        <p id="error">Remove Result: {form?.resultRemoveError}</p>
+    {/if}
 
     <div id="event-details">
         <!--Heading and help reference-->
@@ -64,11 +84,6 @@
         {:else}
             <button class="edit-button" on:click={cancelEditingEvent}>Cancel</button>
             <button class="edit-button" on:click={editEvent} disabled={!dataChanged || null}>Save</button>
-        {/if}
-
-        <!--Display error message from saving event details-->
-        {#if form?.eventError}
-            <p id="error">{form?.eventError}</p>
         {/if}
 
         <form method="POST" action="?/editEvent" id="editEventForm">
@@ -145,10 +160,6 @@
         <h3>Results <a href="https://docs.google.com/document/d/1EDETbrxlj94bFKMae59e_JWl4_bBhmmf#heading=h.y8klqxedu9ec" target="_blank"><i class="fa fa-question-circle help"></i></a></h3>
 
         <form method="POST" action="?/addResult">
-            <!--Display error message from saving result-->
-            {#if form?.resultError}
-                <p id="error">{form?.resultError}</p>
-            {/if}
 
             <table>
                 <!--Table headers-->

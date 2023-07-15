@@ -75,6 +75,7 @@ export const actions = {
         }
 
         // Redirect to login page
-        throw redirect(303, '/auth/login');
+        const msg = "Account successfully created"
+        throw redirect(303, '/auth/login?msg=' + msg);
     }
 };

@@ -6,6 +6,13 @@ import { redirect } from "@sveltejs/kit";
 import { MAX_STR_LENGTH, VALID_EMAIL_REGEX } from "$lib/validation";
 import { adminAuth } from "$lib/server/admin";
 
+/** @type {import('./$types').PageServerLoad} */
+// Fetch confirmation messsage from URL
+export async function load({ url }) {
+    const msg = url.searchParams.get("msg");
+    return { msg };
+};
+
 /** @type {import('./$types').Actions} */
 export const actions = {
     // Function: login()

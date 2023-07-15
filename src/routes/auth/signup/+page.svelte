@@ -34,7 +34,7 @@
         </label>
         <label>
             Email Address
-            <input type="email" id="email" name="email" placeholder="Email address">
+            <input type="text" id="email" name="email" placeholder="Email address">
         </label>
         <label>
             Password

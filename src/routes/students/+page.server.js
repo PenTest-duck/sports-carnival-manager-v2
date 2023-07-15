@@ -1,13 +1,16 @@
 // Imports
 import { sequelize } from "../../hooks.server"; 
 import { validateStudent } from "$lib/validation";
+import { redirect } from "@sveltejs/kit";
 
 /** @type {import('./$types').PageServerLoad} */
 // Function: load()
-// Purpose: upon page load, fetches array of students and houses
-// Parameters: N/A
-// Returns: array of students, array of houses
-export async function load() {
+// Purpose: upon page load, fetches array of students and houses + message
+// Parameters: URL
+// Returns: array of students, array of houses + message
+export async function load({ url }) {
+    // Fetch confirmation message from URL
+    const msg = url.searchParams.get("msg");
 
     // Fetch list of all students
     const students = await sequelize.query("CALL GetStudents");
@@ -18,7 +21,7 @@ export async function load() {
 
     console.log(students);
 
-    return { students, houses };
+    return { students, houses, msg };
 };
 
 /** @type {import('./$types').Actions} */
@@ -61,6 +64,10 @@ export const actions = {
             console.log("Error: ", e);
             return { error: "There was an unexpected error with the server" };
         }
+
+        // Show confirmation message
+        const msg = "Student successfully added";
+        throw redirect(303, "?msg=" + msg);
     },
 
     // Function: removeStudent()
@@ -79,7 +86,11 @@ export const actions = {
             });
         } catch (e) {
             console.log("Error: ", e);
-            return { error: "There was an unexpected error with the server" };
+            return { removeStudentError: "There was an unexpected error with the server" };
         }
+
+        // Show confirmation message
+        const msg = "Student successfully removed";
+        throw redirect(303, "?msg=" + msg);
     }
 };

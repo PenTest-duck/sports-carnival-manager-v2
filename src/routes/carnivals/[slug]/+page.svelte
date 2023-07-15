@@ -66,7 +66,27 @@
 </script>
 
 <div id="main-container">
-    <h1>Carnival</h1>
+    <h1>{data.carnival.name}</h1>
+
+    <!--Display confirmation message-->
+    {#if data.msg}
+        <p id="msg">{data.msg}</p>
+    {/if}
+
+    <!--Display error message from saving carnival details-->
+    {#if form?.carnivalError}
+        <p id="error">Edit Carnival: {form?.carnivalError}</p>
+    {/if}
+
+    <!--Display error message from creating event-->
+    {#if form?.eventError}
+        <p id="error">Create Event: {form?.eventError}</p>
+    {/if}
+
+    <!--Display error message from removing event-->
+    {#if form?.eventRemoveError}
+        <p id="error">Remove Event: {form?.eventRemoveError}</p>
+    {/if}
 
     <div id="carnival-details">
         <!--Heading and help reference-->
@@ -78,11 +98,6 @@
         {:else}
             <button class="edit-button" on:click={cancelEditingCarnival}>Cancel</button>
             <button class="edit-button" on:click={editCarnival} disabled={!dataChanged || null}>Save</button>
-        {/if}
-
-        <!--Display error message from saving carnival details-->
-        {#if form?.carnivalError}
-            <p id="error">{form?.carnivalError}</p>
         {/if}
 
         <form method="POST" action="?/editCarnival" id="editCarnivalForm">
@@ -190,11 +205,6 @@
                 <h3>Create Event <a href="https://docs.google.com/document/d/1EDETbrxlj94bFKMae59e_JWl4_bBhmmf#heading=h.uhtk5xmzguft" target="_blank"><i class="fa fa-question-circle help"></i></a></h3>
 
                 <form method="POST" action="?/addEvent">
-
-                    <!--Display error message from creating event-->
-                    {#if form?.eventError}
-                        <p id="error">{form?.eventError}</p>
-                    {/if}
                     
                     <!--Add event input fields-->
                     <label>

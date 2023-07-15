@@ -17,6 +17,21 @@
 <div id="main-container">
     <h1>Students</h1>
 
+    <!--Display confirmation message-->
+    {#if data.msg}
+        <p id="msg">{data.msg}</p>
+    {/if}
+
+    <!--Display error message from adding student-->
+    {#if form?.error}
+        <p id="error">Add Student: {form?.error}</p>
+    {/if}
+
+    <!--Display error message from removing student-->
+    {#if form?.removeStudentError}
+        <p id="error">Remove Student: {form?.removeStudentError}</p>
+    {/if}
+
     <div id="students-list">
         <!--Heading and help reference-->
         <h3>Student List <a href="https://docs.google.com/document/d/1EDETbrxlj94bFKMae59e_JWl4_bBhmmf#heading=h.5464uj4uu5io" target="_blank"><i class="fa fa-question-circle help"></i></a></h3>
@@ -40,11 +55,6 @@
     <div id="add-student">
         <!--Heading and help reference-->
         <h3>Add Student <a href="https://docs.google.com/document/d/1EDETbrxlj94bFKMae59e_JWl4_bBhmmf#heading=h.lqpozl3zdveg" target="_blank"><i class="fa fa-question-circle help"></i></a></h3>
-
-        <!--Display error message from server process-->
-        {#if form?.error}
-            <p id="error">{form?.error}</p>
-        {/if}
 
         <form method="POST" action="?/addStudent">
             <!--Add student input fields-->

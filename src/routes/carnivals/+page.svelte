@@ -18,7 +18,22 @@
 
     <div id="carnival-list">
         <!--Heading and help reference-->
-        <h3>Carnival List <a href="https://docs.google.com/document/d/1EDETbrxlj94bFKMae59e_JWl4_bBhmmf#heading=h.fpzwwo9zyu4c" target="_blank"><i class="fa fa-question-circle help"></i></a></h3>
+        <h1>Carnival List <a href="https://docs.google.com/document/d/1EDETbrxlj94bFKMae59e_JWl4_bBhmmf#heading=h.fpzwwo9zyu4c" target="_blank"><i class="fa fa-question-circle help"></i></a></h1>
+
+        <!--Display confirmation message-->
+        {#if data.msg}
+            <p id="msg">{data.msg}</p>
+        {/if}
+
+        <!--Display error message from creating carnival-->
+        {#if form?.error}
+            <p id="error">Create Carnival: {form?.error}</p>
+        {/if}
+
+        <!--Display error message from removing carnival-->
+        {#if form?.carnivalRemoveError}
+            <p id="error">Remove Carnival: {form?.carnivalRemoveError}</p>
+        {/if}
 
         <table>
             <!--Table headers-->
@@ -44,11 +59,6 @@
             <div id="create-carnival">
                 <!--Heading and help reference-->
                 <h3>Create Carnival <a href="https://docs.google.com/document/d/1EDETbrxlj94bFKMae59e_JWl4_bBhmmf#heading=h.bid2vyvtcpv5" target="_blank"><i class="fa fa-question-circle help"></i></a></h3>
-        
-                <!--Display error message from server process-->
-                {#if form?.error}
-                    <p id="error">{form?.error}</p>
-                {/if}
         
                 <form method="POST" action="?/addCarnival">
                     <!--Add carnival input fields-->

@@ -1,4 +1,8 @@
 <script>
+    // Import loaded data
+    /** @type {import('./$types').PageData} */
+    export let data;
+
     // Fetch action data
     /** @type {import('./$types').ActionData} */
     export let form;
@@ -19,10 +23,15 @@
             <p id="error">{form?.error}</p>
         {/if}
 
+        <!--Display confirmation message-->
+        {#if data.msg}
+            <p id="msg">{data.msg}</p>
+        {/if}
+
         <!--Log in input fields-->
         <label>
             Email Address
-            <input type="email" id="email" name="email" placeholder="Email address">
+            <input type="text" id="email" name="email" placeholder="Email address">
         </label>
         <label>
             Password

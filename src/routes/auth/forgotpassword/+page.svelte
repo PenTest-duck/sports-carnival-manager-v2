@@ -22,7 +22,7 @@
         <!--Password reset input field-->
         <label>
             Email Address
-            <input type="email" id="email" name="email" placeholder="Email address">
+            <input type="text" id="email" name="email" placeholder="Email address">
         </label>
         <button>Send reset email</button>
 

@@ -36,9 +36,6 @@ export const actions = {
             // Send API Request to Firebase Auth to send a reset email 
             await sendPasswordResetEmail(auth, email);
 
-            // If password reset email sent, redirect to login page
-            throw redirect(303, '/auth/login');
-
         } catch (e) {
             if (e instanceof Error) {
                 console.log("Password reset error", e);
@@ -51,5 +48,9 @@ export const actions = {
                 return { error: "There was an error with the database -- " + e.message };
             }
         }
+
+        // If password reset email sent, redirect to login page
+        const msg = "Password reset email sent. Please check your inbox."
+        throw redirect(303, '/auth/login?msg=' + msg);
     }
 };

@@ -39,7 +39,17 @@
 </script>
 
 <div id="main-container">
-    <h1>Student</h1>
+    <h1>{data.student.firstName} {data.student.lastName}</h1>
+
+    <!--Display confirmation message-->
+    {#if data.msg}
+        <p id="msg">{data.msg}</p>
+    {/if}
+
+    <!--Display error message from saving student details-->
+    {#if form?.error}
+        <p id="error">Edit Student: {form?.error}</p>
+    {/if}
 
     <div id="student-details">
         <!--Heading and help reference-->
@@ -54,11 +64,6 @@
             <button class="edit-button" on:click={cancelEditingStudent}>Cancel</button>
             <!--If data edited, enable save button-->
             <button class="edit-button" on:click={editStudent} disabled={!dataChanged || null}>Save</button>
-        {/if}
-
-        <!--Display error message from server process-->
-        {#if form?.error}
-            <p id="error">{form?.error}</p>
         {/if}
 
         <form method="POST" action="?/editStudent" id="editStudentForm">

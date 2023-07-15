@@ -20,6 +20,10 @@
     color: red;
 }
 
+#msg {
+    color: rgb(51, 204, 51);
+}
+
 .edit-button {
     float: right; 
     display: inline-block; 
