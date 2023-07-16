@@ -35,7 +35,7 @@ CREATE TABLE `carnivallocation` (
 
 LOCK TABLES `carnivallocation` WRITE;
 /*!40000 ALTER TABLE `carnivallocation` DISABLE KEYS */;
-INSERT INTO `carnivallocation` VALUES (1,'White Oval'),(2,'Doyles'),(3,'Quad');
+INSERT INTO `carnivallocation` VALUES (1,'White Oval'),(2,'Doyles'),(3,'Pool');
 /*!40000 ALTER TABLE `carnivallocation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -124,7 +124,7 @@ CREATE TABLE `eventcategory` (
   `id` int NOT NULL AUTO_INCREMENT,
   `category` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -133,7 +133,7 @@ CREATE TABLE `eventcategory` (
 
 LOCK TABLES `eventcategory` WRITE;
 /*!40000 ALTER TABLE `eventcategory` DISABLE KEYS */;
-INSERT INTO `eventcategory` VALUES (1,'field'),(2,'track'),(3,'relay');
+INSERT INTO `eventcategory` VALUES (1,'field'),(2,'track'),(3,'relay'),(4,'swim'),(5,'swim relay'),(6,'swim all age relay'),(7,'cross country');
 /*!40000 ALTER TABLE `eventcategory` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -197,22 +197,15 @@ CREATE TABLE `events` (
   `ageGroupID` int DEFAULT NULL,
   `divisionID` int DEFAULT NULL,
   `startTime` time DEFAULT NULL,
-  `recordID` int DEFAULT NULL,
-  `weightingID` int DEFAULT NULL,
-  `removed` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `typeID` (`typeID`),
   KEY `ageGroupID` (`ageGroupID`),
   KEY `divisionID` (`divisionID`),
-  KEY `recordID` (`recordID`),
-  KEY `weightingID` (`weightingID`),
   KEY `events_ibfk_7` (`carnivalID`),
   CONSTRAINT `events_ibfk_1` FOREIGN KEY (`typeID`) REFERENCES `eventtype` (`id`),
   CONSTRAINT `events_ibfk_2` FOREIGN KEY (`ageGroupID`) REFERENCES `eventAgeGroup` (`id`),
   CONSTRAINT `events_ibfk_3` FOREIGN KEY (`divisionID`) REFERENCES `eventdivision` (`id`),
-  CONSTRAINT `events_ibfk_5` FOREIGN KEY (`recordID`) REFERENCES `eventrecord` (`id`),
-  CONSTRAINT `events_ibfk_7` FOREIGN KEY (`carnivalID`) REFERENCES `carnivals` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `events_ibfk_8` FOREIGN KEY (`weightingID`) REFERENCES `eventweighting2` (`id`)
+  CONSTRAINT `events_ibfk_7` FOREIGN KEY (`carnivalID`) REFERENCES `carnivals` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -235,7 +228,7 @@ CREATE TABLE `eventtype` (
   KEY `categoryID` (`categoryID`),
   CONSTRAINT `eventtype_ibfk_1` FOREIGN KEY (`carnivalTypeID`) REFERENCES `carnivaltype` (`typeID`),
   CONSTRAINT `eventtype_ibfk_2` FOREIGN KEY (`categoryID`) REFERENCES `eventcategory` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -244,7 +237,7 @@ CREATE TABLE `eventtype` (
 
 LOCK TABLES `eventtype` WRITE;
 /*!40000 ALTER TABLE `eventtype` DISABLE KEYS */;
-INSERT INTO `eventtype` VALUES (1,1,2,'100m Sprint','s',1),(2,1,2,'200m Sprint','s',1),(3,1,2,'400m Sprint','s',1),(4,1,1,'Long Jump','m',0),(5,1,1,'High Jump','cm',0),(6,1,2,'800m Run','s',1),(7,1,2,'1500m Run','s',1),(8,1,2,'3000m Run','s',1),(9,1,2,'Hurdles','s',1),(10,1,1,'Shot Put','cm',0),(11,1,3,'4x400m Relay','s',1),(12,1,3,'4x100m Relay','s',1),(13,2,NULL,'100m Freestyle','s',1);
+INSERT INTO `eventtype` VALUES (1,1,2,'100m Sprint','s',1),(2,1,2,'200m Sprint','s',1),(3,1,2,'400m Sprint','s',1),(4,1,1,'Long Jump','m',0),(5,1,1,'High Jump','cm',0),(6,1,2,'800m Run','s',1),(7,1,2,'1500m Run','s',1),(8,1,2,'3000m Run','s',1),(9,1,2,'Hurdles','s',1),(10,1,1,'Shot Put','cm',0),(11,1,3,'4x400m Relay','s',1),(12,1,3,'4x100m Relay','s',1),(13,2,4,'50m Freestyle','s',1),(14,2,4,'50m Backstroke','s',1),(15,2,4,'50m Breaststroke','s',1),(16,2,4,'50m Butterfly','s',1),(17,2,4,'100m Freestyle','s',1),(18,2,4,'200m Freestyle','s',1),(19,2,4,'400m Freestyle','s',1),(20,2,4,'200m Medley','s',1),(21,2,5,'4x50m Relay','s',1),(22,2,5,'6x50m All Age Relay','s',1),(23,3,6,'Junior Course','s',1),(24,3,6,'Intermediate Course','s',1),(25,3,6,'Senior Course','s',1),(26,3,6,'Opens Course','s',1);
 /*!40000 ALTER TABLE `eventtype` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -266,7 +259,7 @@ CREATE TABLE `eventweighting2` (
   KEY `divisionID` (`divisionID`),
   CONSTRAINT `eventweighting2_ibfk_1` FOREIGN KEY (`categoryID`) REFERENCES `eventcategory` (`id`),
   CONSTRAINT `eventweighting2_ibfk_2` FOREIGN KEY (`divisionID`) REFERENCES `eventdivision` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=136 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -275,7 +268,7 @@ CREATE TABLE `eventweighting2` (
 
 LOCK TABLES `eventweighting2` WRITE;
 /*!40000 ALTER TABLE `eventweighting2` DISABLE KEYS */;
-INSERT INTO `eventweighting2` VALUES (1,1,1,1,50),(2,1,1,2,48),(3,1,1,3,46),(4,1,1,4,45),(5,1,1,5,44),(6,1,1,6,43),(7,1,1,7,42),(8,1,1,8,41),(9,1,1,9,40),(10,1,1,10,39),(11,1,1,11,38),(12,1,1,12,37),(13,1,1,13,36),(14,1,1,14,35),(15,1,1,15,34),(16,1,1,16,33),(17,1,1,17,32),(18,1,1,18,31),(19,1,1,19,30),(20,1,1,20,29),(21,1,1,21,28),(22,1,1,22,27),(23,1,1,23,26),(24,1,1,24,25),(25,1,1,25,24),(26,1,1,26,23),(27,1,1,27,22),(28,1,1,28,21),(29,1,1,29,20),(30,1,1,30,19),(31,1,1,31,18),(32,1,1,32,17),(33,2,1,1,50),(34,2,1,2,48),(35,2,1,3,46),(36,2,1,4,45),(37,2,1,5,44),(38,2,1,6,43),(39,2,1,7,42),(40,2,1,8,41),(41,2,1,9,40),(42,2,1,10,39),(43,2,1,11,38),(44,2,1,12,37),(45,2,2,1,36),(46,2,2,2,35),(47,2,2,3,34),(48,2,2,4,33),(49,2,2,5,32),(50,2,2,6,31),(51,2,2,7,30),(52,2,2,8,29),(53,2,2,9,28),(54,2,2,10,27),(55,2,2,11,26),(56,2,2,12,25),(57,2,3,1,24),(58,2,3,2,23),(59,2,3,3,22),(60,2,3,4,21),(61,2,3,5,20),(62,2,3,6,19),(63,2,3,7,18),(64,2,3,8,17),(65,2,3,9,16),(66,2,3,10,15),(67,2,3,11,14),(68,2,3,12,13),(69,2,4,1,12),(70,2,4,2,11),(71,2,4,3,10),(72,2,4,4,9),(73,2,4,5,8),(74,2,4,6,7),(75,2,4,7,6),(76,2,4,8,5),(77,2,4,9,4),(78,2,4,10,3),(79,2,4,11,2),(80,2,4,12,1),(81,3,1,1,50),(82,3,1,2,48),(83,3,1,3,46),(84,3,1,4,45),(85,3,1,5,44),(86,3,1,6,43),(87,3,1,7,42),(88,3,1,8,41),(89,3,1,9,40),(90,3,1,10,39),(91,3,1,11,38),(92,3,1,12,37);
+INSERT INTO `eventweighting2` VALUES (1,1,1,1,50),(2,1,1,2,48),(3,1,1,3,46),(4,1,1,4,45),(5,1,1,5,44),(6,1,1,6,43),(7,1,1,7,42),(8,1,1,8,41),(9,1,1,9,40),(10,1,1,10,39),(11,1,1,11,38),(12,1,1,12,37),(13,1,1,13,36),(14,1,1,14,35),(15,1,1,15,34),(16,1,1,16,33),(17,1,1,17,32),(18,1,1,18,31),(19,1,1,19,30),(20,1,1,20,29),(21,1,1,21,28),(22,1,1,22,27),(23,1,1,23,26),(24,1,1,24,25),(25,1,1,25,24),(26,1,1,26,23),(27,1,1,27,22),(28,1,1,28,21),(29,1,1,29,20),(30,1,1,30,19),(31,1,1,31,18),(32,1,1,32,17),(33,2,1,1,50),(34,2,1,2,48),(35,2,1,3,46),(36,2,1,4,45),(37,2,1,5,44),(38,2,1,6,43),(39,2,1,7,42),(40,2,1,8,41),(41,2,1,9,40),(42,2,1,10,39),(43,2,1,11,38),(44,2,1,12,37),(45,2,2,1,36),(46,2,2,2,35),(47,2,2,3,34),(48,2,2,4,33),(49,2,2,5,32),(50,2,2,6,31),(51,2,2,7,30),(52,2,2,8,29),(53,2,2,9,28),(54,2,2,10,27),(55,2,2,11,26),(56,2,2,12,25),(57,2,3,1,24),(58,2,3,2,23),(59,2,3,3,22),(60,2,3,4,21),(61,2,3,5,20),(62,2,3,6,19),(63,2,3,7,18),(64,2,3,8,17),(65,2,3,9,16),(66,2,3,10,15),(67,2,3,11,14),(68,2,3,12,13),(69,2,4,1,12),(70,2,4,2,11),(71,2,4,3,10),(72,2,4,4,9),(73,2,4,5,8),(74,2,4,6,7),(75,2,4,7,6),(76,2,4,8,5),(77,2,4,9,4),(78,2,4,10,3),(79,2,4,11,2),(80,2,4,12,1),(81,3,1,1,50),(82,3,1,2,48),(83,3,1,3,46),(84,3,1,4,45),(85,3,1,5,44),(86,3,1,6,43),(87,3,1,7,42),(88,3,1,8,41),(89,3,1,9,40),(90,3,1,10,39),(91,3,1,11,38),(92,3,1,12,37),(93,4,1,1,18),(94,4,1,2,16),(95,4,1,3,15),(96,4,1,4,14),(97,4,1,5,13),(98,4,1,6,12),(99,4,1,7,11),(100,4,1,8,10),(101,4,2,1,9),(102,4,2,2,7),(103,4,2,3,6),(104,4,2,4,5),(105,4,2,5,4),(106,4,2,6,3),(107,4,2,7,2),(108,4,2,8,1),(109,5,1,1,35),(110,5,1,2,30),(111,5,1,3,27),(112,5,1,4,24),(113,5,1,5,21),(114,5,1,6,18),(115,5,1,7,17),(116,5,1,8,16),(117,5,2,1,15),(118,5,2,2,13),(119,5,2,3,10),(120,5,2,4,7),(121,5,2,5,4),(122,5,2,6,3),(123,5,2,7,2),(124,5,2,8,1),(125,6,1,1,35),(126,6,1,2,30),(127,6,1,3,27),(128,6,1,4,24),(129,6,1,5,21),(130,6,1,6,18),(131,6,1,7,17),(132,6,1,8,16),(133,6,1,9,15),(134,6,1,10,13),(135,7,1,1,1);
 /*!40000 ALTER TABLE `eventweighting2` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -302,7 +295,7 @@ CREATE TABLE `house` (
 
 LOCK TABLES `house` WRITE;
 /*!40000 ALTER TABLE `house` DISABLE KEYS */;
-INSERT INTO `house` VALUES (1,'Baker Hake','BAH',192,2),(2,'Bishop Barker Harris','BBH',0,6),(3,'Britten','BRI',57,4),(4,'Broughton Forrest','BRF',0,6),(5,'Burkitt','BUR',0,6),(6,'Dalmas','DAL',66,3),(7,'Kurrle','KUR',219,1),(8,'Macarthur Waddy','MAW',0,6),(9,'Macquarie','MAQ',0,6),(10,'Wickham','WIC',48,5),(11,'Gowan Brae','GB',0,6);
+INSERT INTO `house` VALUES (1,'Baker Hake','BAH',0,2),(2,'Bishop Barker Harris','BBH',0,2),(3,'Britten','BRI',0,2),(4,'Broughton Forrest','BRF',0,2),(5,'Burkitt','BUR',0,2),(6,'Dalmas','DAL',0,2),(7,'Kurrle','KUR',70,1),(8,'Macarthur Waddy','MAW',0,2),(9,'Macquarie','MAQ',0,2),(10,'Wickham','WIC',0,2),(11,'Gowan Brae','GB',0,2);
 /*!40000 ALTER TABLE `house` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -410,76 +403,133 @@ CREATE TABLE `students` (
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AddResult`(
+	# Input parameters
 	IN inEventID int,
     IN inStudentID int,
-    IN inDnf bool,
-    IN inDq bool,
+    IN inDNF bool,
+    IN inDQ bool,
 	IN inResult float,
     IN ascending bool
 )
-ar: BEGIN
+addResultLoop: BEGIN
+	# Initialise variables
 	DECLARE newResultID int DEFAULT 0;
 
-	# Deal with DNF / DQ 
-	IF (inDnf = 1 OR inDq = 1) THEN
-		INSERT INTO results VALUES (NULL, inEventID, inStudentID, inDnf, inDq, inResult, 99999, 0);
-        LEAVE ar;
+	# Do not update placings / points / record for non-qualifying results
+    # Adds non-qualifying result to event then leaves procedure
+	IF (inDNF = 1 OR inDQ = 1) THEN
+		INSERT INTO results VALUES (NULL, inEventID, inStudentID, inDNF, inDQ, inResult, 99999, 0);
+        LEAVE addResultLoop;
 	END IF;
     
     # Set up temporary tables
-	DROP TEMPORARY TABLE IF EXISTS tmpres1;
-	DROP TEMPORARY TABLE IF EXISTS tmpres2;
-	CREATE TEMPORARY TABLE tmpres1 (
+	DROP TEMPORARY TABLE IF EXISTS tmpUnsortedResults;
+	DROP TEMPORARY TABLE IF EXISTS tmpSortedResults;
+	CREATE TEMPORARY TABLE tmpUnsortedResults (
 		id int,
 		res float
 	);
-	CREATE TEMPORARY TABLE tmpres2 (
+	CREATE TEMPORARY TABLE tmpSortedResults (
 		id int,
 		res float,
 		placing int
 	);
     
-    # Load temporary tables
-	INSERT INTO tmpres1(id, res) SELECT id, result FROM results WHERE eventID = inEventID AND dnf = 0 AND dq = 0;
-	INSERT INTO tmpres1(res) VALUES (inResult);
+    # Load all existing results + new result into tmpUnsortedResults
+	INSERT INTO tmpUnsortedResults(id, res) SELECT id, result FROM results WHERE eventID = inEventID AND dnf = 0 AND dq = 0;
+	INSERT INTO tmpUnsortedResults(res) VALUES (inResult);
+    
+    # Sort results by ascending/descending order then store in tmpSortedResults
 	IF (ascending = 1) THEN
-		INSERT INTO tmpres2(id, res, placing) SELECT id, res, RANK() OVER (ORDER BY res ASC) FROM tmpres1;
+		INSERT INTO tmpSortedResults(id, res, placing) SELECT id, res, RANK() OVER (ORDER BY res ASC) FROM tmpUnsortedResults;
 	ELSE
-		INSERT INTO tmpres2(id, res, placing) SELECT id, res, RANK() OVER (ORDER BY res DESC) FROM tmpres1;
+		INSERT INTO tmpSortedResults(id, res, placing) SELECT id, res, RANK() OVER (ORDER BY res DESC) FROM tmpUnsortedResults;
 	END IF;
     
 	# Update placings and points in table
 	BEGIN
+		# Initialise variables
 		DECLARE cursor_typeID int DEFAULT 0;
         DECLARE cursor_categoryID int DEFAULT 0;
         DECLARE cursor_divisionID int DEFAULT 0;
         DECLARE cursor_points int DEFAULT 0;
-        
 		DECLARE cursor_id int DEFAULT 0;
 		DECLARE cursor_placing int DEFAULT 0;
 		DECLARE done int DEFAULT FALSE;
-		DECLARE cursor_e CURSOR FOR SELECT id, placing FROM tmpres2;
+		DECLARE cursor_e CURSOR FOR SELECT id, placing FROM tmpSortedResults;
 		DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
         
+        # Load event division / type / category variables
         SELECT divisionID INTO cursor_divisionID FROM events WHERE events.id = inEventID;
         SELECT typeID INTO cursor_typeID FROM events WHERE events.id = inEventID;
         SELECT categoryID INTO cursor_categoryID FROM eventtype WHERE eventtype.id = cursor_typeID;
 		
+        # Loop through each result and update points
 		OPEN cursor_e;
-		read_loop: LOOP
+		updatePoints: LOOP
+			# Establishes a 'for loop' through each result
 			FETCH cursor_e INTO cursor_id, cursor_placing;
 			IF done THEN
-				LEAVE read_loop;
+				LEAVE updatePoints;
 			END IF;
             
-            IF (cursor_divisionID = 1 OR cursor_divisionID = 2 OR cursor_divisionID = 3 OR cursor_divisionID = 4) THEN
-				SELECT points INTO cursor_points FROM eventweighting2 WHERE categoryID = cursor_categoryID AND divisionID = cursor_divisionID AND placing = cursor_placing;
-            ELSE 
-				SELECT points INTO cursor_points FROM eventweighting2 WHERE categoryID = cursor_categoryID AND divisionID = 4 AND placing = cursor_placing;
+            # Athletics field events
+            IF (cursor_categoryID = 1) THEN
+				# Any below 32nd will receive same points as 32nd place
+				IF (cursor_placing > 32) THEN
+					SET cursor_placing = 32;
+                END IF;
             END IF;
             
+            # Athletics track & relay events
+            IF (cursor_categoryID = 2 OR cursor_categoryID = 3) THEN
+				# Any below 12th will receive same points as 12th place
+				IF (cursor_placing > 12) THEN
+					SET cursor_placing = 12;
+                END IF;
+                
+                # Any below Division 3 will receive same points scale as Division 3
+                # This will only apply to track events
+                IF (cursor_divisionID > 4) THEN
+					SET cursor_divisionID = 4;
+                END IF;
+			END IF;
+            
+            # Swimming individual and relay events
+            IF (cursor_categoryID = 4 OR cursor_categoryID = 5) THEN
+				# Any below 8th will receive same points as 8th place
+				IF (cursor_placing > 8) THEN
+					SET cursor_placing = 8;
+                END IF;
+                
+				# All non-championship divisions receive same points scale
+				IF (cursor_divisionID > 2) THEN
+					SET cursor_divisionID = 2;
+                END IF;
+            END IF;
+            
+            # Swimming all-age relay events
+            IF (cursor_categoryID = 6) THEN
+				# Any below 10th will receive same points as 10th place
+				IF (cursor_placing > 10) THEN
+					SET cursor_placing = 10;
+                END IF;
+            END IF;
+            
+            # Cross country events
+            IF (cursor_categoryID = 7) THEN
+				# All results get 1 point
+				SET cursor_placing = 1;
+                SET cursor_divisionID = 1;
+            END IF;
+            
+            # Match corresponding points
+            SELECT points INTO cursor_points FROM eventweighting2 WHERE categoryID = cursor_categoryID AND divisionID = cursor_divisionID AND placing = cursor_placing;
+            
+            # If result is a new row, insert it and save its ID
+            # Otherwise, edit the existing row
             IF cursor_id IS NULL THEN
-				INSERT INTO results VALUES (NULL, inEventID, inStudentID, inDnf, inDq, inResult, cursor_placing, cursor_points);
+				INSERT INTO results VALUES (NULL, inEventID, inStudentID, inDNF, inDQ, inResult, cursor_placing, cursor_points);
                 SELECT last_insert_id() INTO newResultID;
 			ELSE 
 				UPDATE results SET results.placing = cursor_placing, results.points = cursor_points WHERE results.id = cursor_id;
@@ -488,33 +538,35 @@ ar: BEGIN
 		CLOSE cursor_e;
     END;
     
-    #Update record
+    #Update event's record
     BEGIN
+		# Initialise variables
 		DECLARE inTypeID int DEFAULT 0;
         DECLARE inAgeGroupID int DEFAULT 0;
-        #DECLARE inDivisionID int DEFAULT 0;
         DECLARE previousResultID int DEFAULT 0;
         DECLARE previousResult float DEFAULT 0;
         
-        #SELECT typeID, ageGroupID, divisionID INTO inTypeID, inAgeGroupID, inDivisionID FROM events WHERE id = inEventID;
+        # Load event type / age group / record
         SELECT typeID, ageGroupID INTO inTypeID, inAgeGroupID FROM events WHERE id = inEventID;
-        SELECT eventrecord.resultID INTO previousResultID FROM eventrecord WHERE typeID = inTypeID AND ageGroupID = inAgeGroupID; #AND divisionID = inDivisionID;
+        SELECT eventrecord.resultID INTO previousResultID FROM eventrecord WHERE typeID = inTypeID AND ageGroupID = inAgeGroupID;
         
         IF (previousResultID != 0) THEN
+			# Compare new result against record then replace record with new result if necessary
 			SELECT result INTO previousResult FROM results WHERE id = previousResultID;
+            
 			IF ((ascending = 1 AND inResult < previousResult) OR (ascending = 0 AND inResult > previousResult)) THEN
-				DELETE FROM eventrecord WHERE typeID = inTypeID AND ageGroupID = inAgeGroupID; #AND divisionID = inDivisionID;
-				INSERT INTO eventrecord VALUES (NULL, inTypeID, inAgeGroupID, newResultID); #inDivisionID, newResultID);
+				DELETE FROM eventrecord WHERE typeID = inTypeID AND ageGroupID = inAgeGroupID;
+				INSERT INTO eventrecord VALUES (NULL, inTypeID, inAgeGroupID, newResultID);
 			END IF;
 		ELSE
-			INSERT INTO eventrecord VALUES (NULL, inTypeID, inAgeGroupID, newResultID); #inDivisionID, newResultID);
+			# If record doesn't exist, insert new result as record
+			INSERT INTO eventrecord VALUES (NULL, inTypeID, inAgeGroupID, newResultID);
         END IF;
     END;
     
-    #CALL CalculateHousePlacings;
-    
-    DROP TEMPORARY TABLE IF EXISTS tmpres1;
-	DROP TEMPORARY TABLE IF EXISTS tmpres2;
+    # Clean up temporary tables
+    DROP TEMPORARY TABLE IF EXISTS tmpUnsortedResults;
+	DROP TEMPORARY TABLE IF EXISTS tmpSortedResults;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -532,75 +584,97 @@ DELIMITER ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `CalculateHousePlacings`(
+	#IN carnivalID int
 )
 BEGIN
 	# Set up temporary tables
-	DROP TEMPORARY TABLE IF EXISTS tmphouse1;
-    DROP TEMPORARY TABLE IF EXISTS tmphouse2;
-    CREATE TEMPORARY TABLE tmphouse1 (
+	DROP TEMPORARY TABLE IF EXISTS tmpUnsortedHouses;
+    DROP TEMPORARY TABLE IF EXISTS tmpSortedHouses;
+    DROP TEMPORARY TABLE IF EXISTS tmpResultsInCarnival;
+    CREATE TEMPORARY TABLE tmpUnsortedHouses (
 		id int,
         points int
     );
-    CREATE TEMPORARY TABLE tmphouse2 (
+    CREATE TEMPORARY TABLE tmpSortedHouses (
 		id int,
         points int,
         placing int
     );
+    CREATE TEMPORARY TABLE tmpResultsInCarnival (
+		id int,
+        studentID int,
+        points int
+    );
     
-    # Load temporary table
-    INSERT INTO tmphouse1(id) SELECT id FROM house;
-    UPDATE tmphouse1 SET points = 0 WHERE 1 = 1;
+    # Load all houses into tmpUnsortedHouses and reset their points to 0
+    INSERT INTO tmpUnsortedHouses(id) SELECT id FROM house;
+    UPDATE tmpUnsortedHouses SET points = 0 WHERE 1 = 1;
     
-    # Calculate points and placing
+    # Load all results in specified carnival to tmpResultsInCarnival
+    INSERT INTO tmpResultsInCarnival (id, studentID, points) SELECT id, studentID, points FROM results WHERE results.eventID IN (
+		SELECT id FROM events WHERE events.carnivalID = carnivalID
+    );
+    
+    # Calculate house points and placing
     BEGIN
+		# Initialise variables
 		DECLARE cursor_houseID int DEFAULT 0;
-    
 		DECLARE cursor_studentID int DEFAULT 0;
 		DECLARE cursor_points int DEFAULT 0;
 		DECLARE done int DEFAULT FALSE;
 		DECLARE cursor_e CURSOR FOR SELECT studentID, points FROM results;
 		DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
+		# Loop through each result then add its points to the corresponding student's house
 		OPEN cursor_e;
-		read_loop: LOOP
+		updateHousePointsAndPlacings: LOOP
+			# Establishes a 'for loop' through each result
 			FETCH cursor_e INTO cursor_studentID, cursor_points;
 			IF done THEN
-				LEAVE read_loop;
+				LEAVE updateHousePointsAndPlacings;
 			END IF;
             
+            # Add points to student's house
             SELECT houseID INTO cursor_houseID FROM students WHERE students.id = cursor_studentID;
-            UPDATE tmphouse1 SET points = points + cursor_points WHERE tmphouse1.id = cursor_houseID;
+            UPDATE tmpUnsortedHouses SET points = points + cursor_points WHERE tmpUnsortedHouses.id = cursor_houseID;
             
 		END LOOP;
 		CLOSE cursor_e;
         
-        INSERT INTO tmphouse2(id, points, placing) SELECT id, points, RANK() OVER (ORDER BY points DESC) FROM tmphouse1;
+        # Sort the newly updated houses and insert into tmpSortedHouses
+        INSERT INTO tmpSortedHouses(id, points, placing) SELECT id, points, RANK() OVER (ORDER BY points DESC) FROM tmpUnsortedHouses;
     END;
     
-    # Insert back into house table
+    # Insert updated rows back into the house table
     BEGIN
+		# Initialise variables
 		DECLARE cursor_id int DEFAULT 0;
 		DECLARE cursor_points int DEFAULT 0;
         DECLARE cursor_placing int DEFAULT 0;
 		DECLARE done int DEFAULT FALSE;
-		DECLARE cursor_e CURSOR FOR SELECT id, points, placing FROM tmphouse2;
+		DECLARE cursor_e CURSOR FOR SELECT id, points, placing FROM tmpSortedHouses;
 		DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
+		# Loop through each sorted house then update row in the house table
 		OPEN cursor_e;
-		read_loop: LOOP
+		updateHouseTable: LOOP
+			# Establishes a 'for loop' through each house
 			FETCH cursor_e INTO cursor_id, cursor_points, cursor_placing;
 			IF done THEN
-				LEAVE read_loop;
+				LEAVE updateHouseTable;
 			END IF;
             
+            # Update corresponding row in the house table
             UPDATE house SET house.points = cursor_points, house.placing = cursor_placing WHERE house.id = cursor_id;
             
 		END LOOP;
 		CLOSE cursor_e;
     END;
     
-    DROP TEMPORARY TABLE IF EXISTS tmphouse1;
-    DROP TEMPORARY TABLE IF EXISTS tmphouse2;
+    # Clean up temporary tables
+    DROP TEMPORARY TABLE IF EXISTS tmpUnsortedHouses;
+    DROP TEMPORARY TABLE IF EXISTS tmpSortedHouses;
+    DROP TEMPORARY TABLE IF EXISTS tmpResultsInCarnival;
 
 END ;;
 DELIMITER ;
@@ -622,49 +696,61 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `CalculateRecord`(
 	in inTypeID int,
     in inAgeGroupID int
 )
-cr: BEGIN
+calculateRecord: BEGIN
+	# Initialise variables
 	DECLARE eventExists bool DEFAULT 0;
     DECLARE resultExists bool DEFAULT 0;
 
-	DROP TEMPORARY TABLE IF EXISTS tmprecord;
-    CREATE TEMPORARY TABLE tmprecord (
+	# Set up temporary table
+	DROP TEMPORARY TABLE IF EXISTS tmpCandidateEvents;
+    CREATE TEMPORARY TABLE tmpCandidateEvents (
 		id int
     );
 
-	INSERT INTO tmprecord(id) SELECT id FROM events WHERE typeID = inTypeID AND ageGroupID = inAgeGroupID;
+	# Load all events which match the type and age group into tmpCandidateEvents
+	INSERT INTO tmpCandidateEvents(id) SELECT id FROM events WHERE typeID = inTypeID AND ageGroupID = inAgeGroupID;
     
-	SELECT EXISTS (SELECT 1 FROM tmprecord) INTO eventExists;
-    
+    # Check if any events have been loaded
+    # If no events were loaded, then leave procedure
+	SELECT EXISTS (SELECT 1 FROM tmpCandidateEvents) INTO eventExists;
+
     IF (eventExists = 0) THEN
-		LEAVE cr;
+		LEAVE calculateRecord;
     END IF;
     
+    # Calculate and update new record
     BEGIN
+		# Initialise variables
 		DECLARE recordID int DEFAULT 0;
         DECLARE record float DEFAULT 0;
         DECLARE currentResultID int DEFAULT 0;
         DECLARE currentResult float DEFAULT 0;
         DECLARE inAscending bool DEFAULT 1;
-    
 		DECLARE cursor_id int DEFAULT 0;
 		DECLARE done int DEFAULT FALSE;
-		DECLARE cursor_e CURSOR FOR SELECT id FROM tmprecord;
+		DECLARE cursor_e CURSOR FOR SELECT id FROM tmpCandidateEvents;
 		DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
         
+        # Load whether ascending or descending
         SELECT ascending INTO inAscending FROM eventtype WHERE eventtype.id = inTypeID;
 
+		# Loop through each candidate event and find record
 		OPEN cursor_e;
-		read_loop: LOOP
+		findRecord: LOOP
+			# Establishes a 'for loop' through each candidate event
 			FETCH cursor_e INTO cursor_id;
 			IF done THEN
-				LEAVE read_loop;
+				LEAVE findRecord;
 			END IF;
             
             IF (recordID = 0) THEN
+				# If no records have been loaded, set it as the record
 				SELECT id, result INTO recordID, record FROM results WHERE eventID = cursor_id AND placing = 1;
 			ELSE 
+				# SELECT DISTINCT enables duplicate results to be ignored
 				SELECT DISTINCT id, result INTO currentResultID, currentResult FROM results WHERE eventID = cursor_id AND placing = 1;
                 
+				# Set result as the new record if it is better than current record
                 IF (inAscending = 1) THEN
 					IF (currentResult < record) THEN
 						SET record = currentResult;
@@ -680,13 +766,15 @@ cr: BEGIN
 		END LOOP;
 		CLOSE cursor_e;
          
+		# If record exists, then update eventrecord table
 		DELETE FROM eventrecord WHERE typeID = inTypeID AND ageGroupID = inAgeGroupID;
         IF (recordID != 0) THEN
 			INSERT INTO eventrecord VALUES (NULL, inTypeID, inAgeGroupID, recordID);
         END IF;
     END;
 
-	DROP TEMPORARY TABLE IF EXISTS tmprecord;
+	# Clean up temporary table
+	DROP TEMPORARY TABLE IF EXISTS tmpCandidateEvents;
     
 END ;;
 DELIMITER ;
@@ -714,6 +802,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateCarnival`(
     IN staffID varchar(255)
 )
 BEGIN
+	# Insert new carnival into carnivals table
     INSERT INTO carnivals VALUES (NULL, name, typeID, date, startTime, endTime, locationID, staffID);
 END ;;
 DELIMITER ;
@@ -739,7 +828,54 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateEvent`(
     IN startTime TIME
 )
 BEGIN
-    INSERT INTO events VALUES (NULL, carnivalID, typeID, ageGroupID, divisionID, startTime, NULL, NULL, 0);
+	# Insert new event into events table
+    INSERT INTO events VALUES (NULL, carnivalID, typeID, ageGroupID, divisionID, startTime);
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `EditEvent` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `EditEvent`(
+	IN id int,
+	IN ageGroupID int,
+    IN divisionID int,
+    IN startTime time
+)
+BEGIN
+	# Initialise variables
+	DECLARE eventTypeID int DEFAULT 0;
+    DECLARE previousAgeGroupID int DEFAULT 0;
+    DECLARE previousRecordResultID int DEFAULT 0;
+    
+    # Load event type and age group
+    SELECT events.typeID INTO eventTypeID FROM events WHERE events.id = id;
+    SELECT events.ageGroupID INTO previousAgeGroupID FROM events WHERE events.id = id;
+    
+    # Update event row
+	UPDATE events SET events.ageGroupID = ageGroupID, events.divisionID = divisionID, events.startTime = startTime WHERE events.id = id;
+    
+    # Update record of new age group
+    CALL CalculateRecord (eventTypeID, ageGroupID);
+    
+    # Update record of previous age group    
+    SELECT eventrecord.resultID INTO previousRecordResultID FROM eventrecord WHERE eventrecord.typeID = eventTypeID AND eventrecord.ageGroupID = previousAgeGroupID;
+    # Delete if previous event type's record was from this event
+    IF (previousRecordResultID IN (SELECT results.id FROM results WHERE results.eventID = id)) THEN
+		DELETE FROM eventrecord WHERE eventrecord.typeID = eventTypeID AND eventrecord.ageGroupID = previousAgeGroupID AND eventrecord.resultID = previousRecordResultID;
+    END IF;
+    
+    CALL CalculateRecord (eventTypeID, previousAgeGroupID);
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -758,6 +894,9 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetCarnivals`()
 BEGIN
+	# Fetch all carnivals
+    # Translate carnival type / carnival location / staff from foreign keys
+    # Order by date, then start time, then end time
 	SELECT carnivals.id, carnivals.name, carnivaltype.type, carnivals.date, carnivals.startTime, carnivals.endTime, carnivallocation.location, staff.firstName, staff.lastName
 		FROM carnivals
 		INNER JOIN carnivaltype ON carnivals.typeID = carnivaltype.typeID
@@ -784,8 +923,14 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetEvents`(
 	IN carnivalID int
 )
 BEGIN
+	# Fetch all events in carnival
+    # Translate carnival / event type / event age group / event division from foreign keys
+    # Order by start time
+    
+	# If carnivalID is specified as 0, get all events 
+    # Otherwise, get events in specified carnival
 	IF (carnivalID = 0) THEN
-		SELECT events.id, eventtype.type, eventAgeGroup.ageGroup, eventdivision.division, events.startTime, eventtype.unit
+		SELECT events.id, eventtype.type, eventAgeGroup.ageGroup, eventdivision.division, events.startTime, eventtype.unit, events.carnivalID
 			FROM events
 			INNER JOIN carnivals ON events.carnivalID = carnivals.id
 			INNER JOIN eventtype ON events.typeID = eventtype.id
@@ -793,7 +938,7 @@ BEGIN
 			INNER JOIN eventdivision ON events.divisionID = eventdivision.id
 			ORDER BY events.startTime ASC;
     ELSE 
-		SELECT events.id, eventtype.type, eventAgeGroup.ageGroup, eventdivision.division, events.startTime, eventtype.unit
+		SELECT events.id, eventtype.type, eventAgeGroup.ageGroup, eventdivision.division, events.startTime, eventtype.unit, events.carnivalID
 			FROM events
 			INNER JOIN carnivals ON events.carnivalID = carnivals.id
 			INNER JOIN eventtype ON events.typeID = eventtype.id
@@ -802,6 +947,71 @@ BEGIN
 			WHERE events.carnivalID = carnivalID
 			ORDER BY events.startTime ASC;
 	END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `GetHouses` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetHouses`()
+BEGIN
+	# Set up temporary tables
+    DROP TEMPORARY TABLE IF EXISTS tmpCarnivals;
+	DROP TEMPORARY TABLE IF EXISTS tmpHouseScoreboard;
+    CREATE TEMPORARY TABLE tmpCarnivals (
+		id int
+    );
+    CREATE TEMPORARY TABLE tmpHouseScoreboard (
+		id int,
+        house varchar(255),
+        initials varchar(255),
+        points int,
+        placing int,
+        carnivalID int
+    );
+    
+    # Load ID of all carnivals into tmpCarnivals
+    INSERT INTO tmpCarnivals (id) SELECT id FROM carnivals;
+    
+    BEGIN
+		# Initialise variables
+		DECLARE cursor_id int DEFAULT 0;
+		DECLARE done int DEFAULT FALSE;
+		DECLARE cursor_e CURSOR FOR SELECT id FROM tmpCarnivals;
+		DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+		
+        # Loop through each carnival ID and update house placing
+		OPEN cursor_e;
+		updateHouses: LOOP
+			# Establishes a 'for loop' through each carnival ID
+			FETCH cursor_e INTO cursor_id;
+			IF done THEN
+				LEAVE updateHouses;
+			END IF;
+            
+            CALL UpdateHousesForOneCarnival (cursor_id);
+            
+            INSERT INTO tmpHouseScoreboard (id, house, initials, points, placing) SELECT * FROM house ORDER BY placing;
+            UPDATE tmpHouseScoreboard SET carnivalID = cursor_id WHERE carnivalID IS NULL;
+		END LOOP;
+		CLOSE cursor_e;
+    END;
+    
+    SELECT * FROM tmpHouseScoreboard;
+    
+    # Clean up temporary tables
+    DROP TEMPORARY TABLE IF EXISTS tmpCarnivals;
+    DROP TEMPORARY TABLE IF EXISTS tmpHouseScoreboard;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -822,7 +1032,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetOneCarnival`(
 	IN id varchar(255)
 )
 BEGIN
-	SELECT carnivals.id, carnivals.name, carnivals.typeID, carnivaltype.type, carnivals.date, carnivals.startTime, carnivals.endTime, carnivallocation.location, staff.firstName, staff.lastName
+	# Fetch specified carnival
+    # Translate carnival type / carnival location / staff from foreign keys
+	SELECT carnivals.id, carnivals.name, carnivals.typeID, carnivaltype.type, carnivals.date, carnivals.startTime, carnivals.endTime, carnivallocation.location, staff.firstName, staff.lastName, carnivals.staffID, carnivals.locationID
 		FROM carnivals
 		INNER JOIN carnivaltype ON carnivals.typeID = carnivaltype.typeID
         INNER JOIN carnivallocation ON carnivals.locationID = carnivallocation.locationID
@@ -848,7 +1060,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetOneEvent`(
 	IN id int
 )
 BEGIN
-	SELECT events.id, events.carnivalID, eventtype.type, eventAgeGroup.ageGroup, eventdivision.division, events.startTime, eventtype.unit
+	# Fetch specified event
+    # Translate carnival / event type / event age group / event division / event record from foreign keys
+	SELECT events.id, events.carnivalID, eventtype.type, eventAgeGroup.ageGroup, eventdivision.division, events.startTime, eventtype.unit, events.typeID, events.ageGroupID, events.divisionID
 		FROM events
 		INNER JOIN carnivals ON events.carnivalID = carnivals.id
         INNER JOIN eventtype ON events.typeID = eventtype.id
@@ -875,11 +1089,12 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetOneStudent`(
 	IN id int
 )
 BEGIN
-	SELECT students.id, students.firstName, students.lastName, house.house, students.number
+	# Fetch specified student
+    # Translate house from foreign keys
+	SELECT students.id, students.firstName, students.lastName, house.house, students.number, students.houseID
 		FROM students
         INNER JOIN house ON students.houseID = house.id
-        WHERE students.id = id
-        ORDER BY house.house ASC;
+        WHERE students.id = id;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -900,24 +1115,31 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetRecords`(
 	IN inCarnivalTypeID int
 )
 BEGIN
-	
-    DROP TEMPORARY TABLE IF EXISTS tmpeventtype;
-    CREATE TEMPORARY TABLE tmpeventtype (
+	# Set up temporary table
+    DROP TEMPORARY TABLE IF EXISTS tmpEventTypes;
+    CREATE TEMPORARY TABLE tmpEventTypes (
 		id int
     );
     
-    INSERT INTO tmpeventtype(id) SELECT id FROM eventtype WHERE eventtype.carnivalTypeID = inCarnivalTypeID;
+    # Load event types within specified carnival type
+    INSERT INTO tmpEventTypes(id) SELECT id FROM eventtype WHERE eventtype.carnivalTypeID = inCarnivalTypeID;
     
-    SELECT eventrecord.id, eventtype.type, eventAgeGroup.ageGroup, students.firstName, students.lastName, results.result, results.studentID
+    # Fetch all records
+	# Translate event type / event age group / result / student from foreign keys
+    # Check record belongs to carnival type
+    # Order by type name then age group
+    SELECT eventrecord.id, eventtype.type, eventAgeGroup.ageGroup, students.firstName, students.lastName, results.result, results.studentID, eventtype.unit, results.eventID, events.carnivalID
 		FROM eventrecord 
 		INNER JOIN eventtype ON eventrecord.typeID = eventtype.id
         INNER JOIN eventAgeGroup ON eventrecord.ageGroupID = eventAgeGroup.id
         INNER JOIN results ON eventrecord.resultID = results.id
         INNER JOIN students ON results.studentID = students.id
-		WHERE EXISTS (SELECT 1 FROM tmpeventtype WHERE eventrecord.typeID=tmpeventtype.id)
+        INNER JOIN events ON results.eventID = events.id
+		WHERE EXISTS (SELECT 1 FROM tmpEventTypes WHERE eventrecord.typeID=tmpEventTypes.id)
         ORDER BY eventrecord.typeID, eventrecord.ageGroupID;
     
-    DROP TEMPORARY TABLE IF EXISTS tmpeventtype;
+    # Clean up temporary table
+    DROP TEMPORARY TABLE IF EXISTS tmpEventTypes;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -938,6 +1160,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetResultsForEvent`(
 	IN eventID int
 )
 BEGIN
+	# Fetch all results for specified event
+    # Translate house name from foreign key
+    # Order by placing
 	SELECT results.id, students.firstName, students.lastName, house.house, results.dnf, results.dq, results.result, results.placing, results.points
 		FROM results
 		INNER JOIN (students INNER JOIN house ON students.houseID = house.id) ON results.studentID = students.id
@@ -961,10 +1186,13 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetStudents`()
 BEGIN
+	# Fetch all students
+    # Translate house from foreign keys
+    # Order by house name, then last name, then first name
 	SELECT students.id, students.firstName, students.lastName, house.house, students.number
 		FROM students
         INNER JOIN house ON students.houseID = house.id
-        ORDER BY house.house ASC;
+        ORDER BY house.house, students.lastName, students.firstName ASC;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -983,6 +1211,9 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetStudentsForEventResults`()
 BEGIN
+	# Fetch all students
+    # Translate house from foreign keys
+    # Order by student's last name
 	SELECT students.id, students.firstName, students.lastName, house.initials, students.number
 		FROM students
         INNER JOIN house ON students.houseID = house.id
@@ -1007,24 +1238,29 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `RemoveCarnival`(
 	IN carnivalID int
 )
 BEGIN
-	DROP TEMPORARY TABLE IF EXISTS tmpcarnivalevents;
-    CREATE TEMPORARY TABLE tmpcarnivalevents (
+	# Set up temporary table
+	DROP TEMPORARY TABLE IF EXISTS tmpCarnivalEvents;
+    CREATE TEMPORARY TABLE tmpCarnivalEvents (
 		id int
 	);
     
-    INSERT INTO tmpcarnivalevents (id) SELECT id FROM events WHERE events.carnivalID = carnivalID;
+    # Load events within specified carnival
+    INSERT INTO tmpCarnivalEvents (id) SELECT id FROM events WHERE events.carnivalID = carnivalID;
     
     BEGIN
+		# Initialise variables
 		DECLARE cursor_id int DEFAULT 0;
         DECLARE done int DEFAULT FALSE;
-		DECLARE cursor_e CURSOR FOR SELECT id FROM tmpcarnivalevents;
+		DECLARE cursor_e CURSOR FOR SELECT id FROM tmpCarnivalEvents;
 		DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
         
+        # Loop through each event and remove them
         OPEN cursor_e;
-        delete_loop: LOOP
+        deleteEvents: LOOP
+			# Establishes a 'for loop' through each event in carnival
 			FETCH cursor_e INTO cursor_id;
             IF done THEN
-				LEAVE delete_loop;
+				LEAVE deleteEvents;
             END IF;
             
             CALL RemoveEvent (cursor_id);
@@ -1032,9 +1268,11 @@ BEGIN
         CLOSE cursor_e;
     END;
     
+    # Finally, delete carnival from carnivals table
     DELETE FROM carnivals WHERE carnivals.id = carnivalID;
     
-    DROP TEMPORARY TABLE IF EXISTS tmpcarnivalevents;
+	# Clean up temporary table
+    DROP TEMPORARY TABLE IF EXISTS tmpCarnivalEvents;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1055,24 +1293,29 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `RemoveEvent`(
 	IN eventID int
 )
 BEGIN
+	# Set up temporary table
 	DROP TEMPORARY TABLE IF EXISTS tmpeventresults;
     CREATE TEMPORARY TABLE tmpeventresults (
 		id int
 	);
     
+    # Load results within specified event
     INSERT INTO tmpeventresults (id) SELECT id FROM results WHERE results.eventID = eventID;
     
     BEGIN
+		# Initialise variable
 		DECLARE cursor_id int DEFAULT 0;
         DECLARE done int DEFAULT FALSE;
 		DECLARE cursor_e CURSOR FOR SELECT id FROM tmpeventresults;
 		DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
         
+        # Loop through each result and delete them
         OPEN cursor_e;
-        delete_loop: LOOP
+        deleteResults: LOOP
+			# Establishes a 'for loop' through each result in event
 			FETCH cursor_e INTO cursor_id;
             IF done THEN
-				LEAVE delete_loop;
+				LEAVE deleteResults;
             END IF;
             
             CALL RemoveResult (cursor_id);
@@ -1080,8 +1323,10 @@ BEGIN
         CLOSE cursor_e;
     END;
     
+    # Finally, delete event from the events table
     DELETE FROM events WHERE events.id = eventID;
     
+	# Clean up temporary table
     DROP TEMPORARY TABLE IF EXISTS tmpeventresults;
 END ;;
 DELIMITER ;
@@ -1103,12 +1348,13 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `RemoveResult`(
 	IN resultID int
 )
 BEGIN
-	# Get preliminary information
+	# Initialise variable
 	DECLARE inEventID int DEFAULT 0;
     DECLARE inAscending bool DEFAULT 1;
     DECLARE inTypeID int DEFAULT 0;
     DECLARE inAgeGroupID int DEFAULT 0;
     
+    # Load event / event type / event age group / ascending
     SELECT eventID INTO inEventID FROM results WHERE results.id = resultID;
     SELECT typeID, ageGroupID INTO inTypeID, inAgeGroupID FROM events WHERE events.id = inEventID;
     SELECT ascending INTO inAscending FROM eventtype WHERE eventtype.id = inTypeID;
@@ -1117,66 +1363,120 @@ BEGIN
     DELETE FROM results WHERE results.id = resultID;
     
     # Set up temporary tables
-    DROP TEMPORARY TABLE IF EXISTS tmpres1;
-	DROP TEMPORARY TABLE IF EXISTS tmpres2;
-	CREATE TEMPORARY TABLE tmpres1 (
+    DROP TEMPORARY TABLE IF EXISTS tmpUnsortedResults;
+	DROP TEMPORARY TABLE IF EXISTS tmpSortedResults;
+	CREATE TEMPORARY TABLE tmpUnsortedResults (
 		id int,
 		res float
 	);
-	CREATE TEMPORARY TABLE tmpres2 (
+	CREATE TEMPORARY TABLE tmpSortedResults (
 		id int,
 		res float,
 		placing int
 	);
     
-    # Load temporary tables
-	INSERT INTO tmpres1(id, res) SELECT id, result FROM results WHERE eventID = inEventID AND dnf = 0 AND dq = 0;
-	IF (inAscending = 1) THEN
-		INSERT INTO tmpres2(id, res, placing) SELECT id, res, RANK() OVER (ORDER BY res ASC) FROM tmpres1;
+    # Load all existing results into tmpUnsortedResults
+	INSERT INTO tmpUnsortedResults(id, res) SELECT id, result FROM results WHERE eventID = inEventID AND dnf = 0 AND dq = 0;
+	
+    # Sort results by ascending/descending order then store in tmpSortedResults
+    IF (inAscending = 1) THEN
+		INSERT INTO tmpSortedResults(id, res, placing) SELECT id, res, RANK() OVER (ORDER BY res ASC) FROM tmpUnsortedResults;
 	ELSE
-		INSERT INTO tmpres2(id, res, placing) SELECT id, res, RANK() OVER (ORDER BY res DESC) FROM tmpres1;
+		INSERT INTO tmpSortedResults(id, res, placing) SELECT id, res, RANK() OVER (ORDER BY res DESC) FROM tmpUnsortedResults;
 	END IF;
     
 	# Update placings and points in table
 	BEGIN
+		# Initialise variables
 		DECLARE cursor_typeID int DEFAULT 0;
         DECLARE cursor_categoryID int DEFAULT 0;
         DECLARE cursor_divisionID int DEFAULT 0;
         DECLARE cursor_points int DEFAULT 0;
-        
 		DECLARE cursor_id int DEFAULT 0;
 		DECLARE cursor_placing int DEFAULT 0;
 		DECLARE done int DEFAULT FALSE;
-		DECLARE cursor_e CURSOR FOR SELECT id, placing FROM tmpres2;
+		DECLARE cursor_e CURSOR FOR SELECT id, placing FROM tmpSortedResults;
 		DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
         
+        # Load event division / type / category variables
         SELECT divisionID INTO cursor_divisionID FROM events WHERE events.id = inEventID;
         SELECT typeID INTO cursor_typeID FROM events WHERE events.id = inEventID;
         SELECT categoryID INTO cursor_categoryID FROM eventtype WHERE eventtype.id = cursor_typeID;
 		
+         # Loop through each result and update points
 		OPEN cursor_e;
-		read_loop: LOOP
+		updatePoints: LOOP
+			# Establishes a 'for loop' through each result
 			FETCH cursor_e INTO cursor_id, cursor_placing;
 			IF done THEN
-				LEAVE read_loop;
+				LEAVE updatePoints;
 			END IF;
             
-            IF (cursor_divisionID = 1 OR cursor_divisionID = 2 OR cursor_divisionID = 3 OR cursor_divisionID = 4) THEN
-				SELECT points INTO cursor_points FROM eventweighting2 WHERE categoryID = cursor_categoryID AND divisionID = cursor_divisionID AND placing = cursor_placing;
-            ELSE 
-				SELECT points INTO cursor_points FROM eventweighting2 WHERE categoryID = cursor_categoryID AND divisionID = 4 AND placing = cursor_placing;
+            # Athletics field events
+            IF (cursor_categoryID = 1) THEN
+				# Any below 32nd will receive same points as 32nd place
+				IF (cursor_placing > 32) THEN
+					SET cursor_placing = 32;
+                END IF;
             END IF;
             
+            # Athletics track & relay events
+            IF (cursor_categoryID = 2 OR cursor_categoryID = 3) THEN
+				# Any below 12th will receive same points as 12th place
+				IF (cursor_placing > 12) THEN
+					SET cursor_placing = 12;
+                END IF;
+                
+                # Any below Division 3 will receive same points scale as Division 3
+                # This will only apply to track events
+                IF (cursor_divisionID > 4) THEN
+					SET cursor_divisionID = 4;
+                END IF;
+			END IF;
+            
+            # Swimming individual and relay events
+            IF (cursor_categoryID = 4 OR cursor_categoryID = 5) THEN
+				# Any below 8th will receive same points as 8th place
+				IF (cursor_placing > 8) THEN
+					SET cursor_placing = 8;
+                END IF;
+                
+				# All non-championship divisions receive same points scale
+				IF (cursor_divisionID > 2) THEN
+					SET cursor_divisionID = 2;
+                END IF;
+            END IF;
+            
+            # Swimming all-age relay events
+            IF (cursor_categoryID = 6) THEN
+				# Any below 10th will receive same points as 10th place
+				IF (cursor_placing > 10) THEN
+					SET cursor_placing = 10;
+                END IF;
+            END IF;
+            
+            # Cross country events
+            IF (cursor_categoryID = 7) THEN
+				# All results get 1 point
+				SET cursor_placing = 1;
+                SET cursor_divisionID = 1;
+            END IF;
+            
+            # Match corresponding points
+            SELECT points INTO cursor_points FROM eventweighting2 WHERE categoryID = cursor_categoryID AND divisionID = cursor_divisionID AND placing = cursor_placing;
+            
+            # Update results row with new placing and points
             UPDATE results SET results.placing = cursor_placing, results.points = cursor_points WHERE results.id = cursor_id;
 		END LOOP;
 		CLOSE cursor_e;
     END;
     
-    # Update record
+    # Update event record
     CALL CalculateRecord (inTypeID, inAgeGroupID);
     
-    DROP TEMPORARY TABLE IF EXISTS tmpres1;
-	DROP TEMPORARY TABLE IF EXISTS tmpres2;
+    # Clean up temporary tables
+    DROP TEMPORARY TABLE IF EXISTS tmpUnsortedResults;
+	DROP TEMPORARY TABLE IF EXISTS tmpSortedResults;
     
 END ;;
 DELIMITER ;
@@ -1198,24 +1498,29 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `RemoveStudent`(
 	IN studentID int
 )
 BEGIN
-	DROP TEMPORARY TABLE IF EXISTS tmpstudentresults;
-    CREATE TEMPORARY TABLE tmpstudentresults (
+	# Set up temporary table
+	DROP TEMPORARY TABLE IF EXISTS tmpStudentResults;
+    CREATE TEMPORARY TABLE tmpStudentResults (
 		id int
     );
 
-	INSERT INTO tmpstudentresults (id) SELECT id FROM results WHERE results.studentID = studentID;
+	# Load all results of student into tmpStudentResults
+	INSERT INTO tmpStudentResults (id) SELECT id FROM results WHERE results.studentID = studentID;
     
     BEGIN
+		# Initialise variables
 		DECLARE cursor_id int DEFAULT 0;
         DECLARE done int DEFAULT FALSE;
-		DECLARE cursor_e CURSOR FOR SELECT id FROM tmpstudentresults;
+		DECLARE cursor_e CURSOR FOR SELECT id FROM tmpStudentResults;
 		DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
         
+		# Loop through each result and delete them
         OPEN cursor_e;
-        delete_loop: LOOP
+        deleteStudentResults: LOOP
+			# Establishes a 'for loop' through each result of student
 			FETCH cursor_e INTO cursor_id;
             IF done THEN
-				LEAVE delete_loop;
+				LEAVE deleteStudentResults;
             END IF;
             
             CALL RemoveResult (cursor_id);
@@ -1223,9 +1528,119 @@ BEGIN
         CLOSE cursor_e;
     END;
 
+	# Finally, delete student from the students table
 	DELETE FROM students WHERE students.id = studentID;
+	
+    # Clean up temporary table
+    DROP TEMPORARY TABLE IF EXISTS tmpStudentResults;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `UpdateHousesForOneCarnival` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateHousesForOneCarnival`(
+	IN carnivalID int
+)
+BEGIN
+	# Set up temporary tables
+	DROP TEMPORARY TABLE IF EXISTS tmpUnsortedHouses;
+    DROP TEMPORARY TABLE IF EXISTS tmpSortedHouses;
+    DROP TEMPORARY TABLE IF EXISTS tmpResultsInCarnival;
+    CREATE TEMPORARY TABLE tmpUnsortedHouses (
+		id int,
+        points int
+    );
+    CREATE TEMPORARY TABLE tmpSortedHouses (
+		id int,
+        points int,
+        placing int
+    );
+    CREATE TEMPORARY TABLE tmpResultsInCarnival (
+		id int,
+        studentID int,
+        points int
+    );
     
-    DROP TEMPORARY TABLE IF EXISTS tmpstudentresults;
+    # Load all houses into tmpUnsortedHouses and reset their points to 0
+    INSERT INTO tmpUnsortedHouses(id) SELECT id FROM house;
+    UPDATE tmpUnsortedHouses SET points = 0 WHERE 1 = 1;
+    
+    # Load all results in specified carnival to tmpResultsInCarnival
+    INSERT INTO tmpResultsInCarnival (id, studentID, points) SELECT id, studentID, points FROM results WHERE results.eventID IN (
+		SELECT id FROM events WHERE events.carnivalID = carnivalID
+    );
+    
+    # Calculate house points and placing
+    BEGIN
+		# Initialise variables
+		DECLARE cursor_houseID int DEFAULT 0;
+		DECLARE cursor_studentID int DEFAULT 0;
+		DECLARE cursor_points int DEFAULT 0;
+		DECLARE done int DEFAULT FALSE;
+		DECLARE cursor_e CURSOR FOR SELECT studentID, points FROM tmpResultsInCarnival;
+		DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+		# Loop through each result then add its points to the corresponding student's house
+		OPEN cursor_e;
+		updateHousePointsAndPlacings: LOOP
+			# Establishes a 'for loop' through each result
+			FETCH cursor_e INTO cursor_studentID, cursor_points;
+			IF done THEN
+				LEAVE updateHousePointsAndPlacings;
+			END IF;
+            
+            # Add points to student's house
+            SELECT houseID INTO cursor_houseID FROM students WHERE students.id = cursor_studentID;
+            UPDATE tmpUnsortedHouses SET points = points + cursor_points WHERE tmpUnsortedHouses.id = cursor_houseID;
+            
+		END LOOP;
+		CLOSE cursor_e;
+        
+        # Sort the newly updated houses and insert into tmpSortedHouses
+        INSERT INTO tmpSortedHouses(id, points, placing) SELECT id, points, RANK() OVER (ORDER BY points DESC) FROM tmpUnsortedHouses;
+    END;
+    
+    # Insert updated rows back into the house table
+    BEGIN
+		# Initialise variables
+		DECLARE cursor_id int DEFAULT 0;
+		DECLARE cursor_points int DEFAULT 0;
+        DECLARE cursor_placing int DEFAULT 0;
+		DECLARE done int DEFAULT FALSE;
+		DECLARE cursor_e CURSOR FOR SELECT id, points, placing FROM tmpSortedHouses;
+		DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+		# Loop through each sorted house then update row in the house table
+		OPEN cursor_e;
+		updateHouseTable: LOOP
+			# Establishes a 'for loop' through each house
+			FETCH cursor_e INTO cursor_id, cursor_points, cursor_placing;
+			IF done THEN
+				LEAVE updateHouseTable;
+			END IF;
+            
+            # Update corresponding row in the house table
+            UPDATE house SET house.points = cursor_points, house.placing = cursor_placing WHERE house.id = cursor_id;
+            
+		END LOOP;
+		CLOSE cursor_e;
+    END;
+    
+    # Clean up temporary tables
+    DROP TEMPORARY TABLE IF EXISTS tmpUnsortedHouses;
+    DROP TEMPORARY TABLE IF EXISTS tmpSortedHouses;
+    DROP TEMPORARY TABLE IF EXISTS tmpResultsInCarnival;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1242,4 +1657,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-09 15:27:32
+-- Dump completed on 2023-07-16 16:39:52

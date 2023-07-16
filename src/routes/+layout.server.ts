@@ -34,8 +34,6 @@ export async function load({ route, cookies }) {
             loggedIn = true;
 
         } catch(e) {
-            console.log("Error: ", e);
-
             if (route.id != "/auth/login" && route.id != "/auth/signup" && route.id != "/auth/forgotpassword") {
                 throw redirect(301, '/auth/login');
             }

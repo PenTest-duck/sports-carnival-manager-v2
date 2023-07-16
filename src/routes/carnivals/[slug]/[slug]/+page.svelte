@@ -43,7 +43,7 @@
     $: if (eventAgeGroupID != data.event.ageGroupID
         || eventDivisionID != data.event.divisionID
         || eventStartTime != data.event.startTime.slice(0, -3)) {
-        dataChanged = true;
+            dataChanged = true;
     } else {
         dataChanged = false;
     }
@@ -61,10 +61,10 @@
 </script>
 
 <div id="main-container">
-    <h1>{data.carnival.name} / {data.event.type}</h1>
-
-    <!--Back button to carnival-->
-    <p><a href="/carnivals/{data.event.carnivalID}">Back to Carnival</a></p>
+    <h1>
+        <a href="/carnivals/{data.event.carnivalID}">{data.carnival.name}</a> / {data.event.type}
+        <h4 style="top: -50px">{data.event.ageGroup} - {data.event.division}</h4>
+    </h1>
 
     <!--Display confirmation message-->
     {#if data.msg}
@@ -128,17 +128,19 @@
                     {#if editingEvent}
                         <td>
                             <!--Event division dropdown select-->
-                            <select name="event-division-id" id="event-division-id" bind:value={eventDivisionID}>
-                                <!--If championship only event, only show championship-->
-                                {#if onlyChampionship}
+                            <!--If championship only event, only show championship-->
+                            {#if onlyChampionship}
+                                <select name="event-division-id" id="event-division-id">
                                     <option value="1">Championships</option>
-                                <!--Otherwise show all divisions-->
-                                {:else}
+                                </select>
+                            <!--Otherwise show all divisions-->
+                            {:else}
+                                <select name="event-division-id" id="event-division-id" bind:value={eventDivisionID}>
                                     {#each data.eventDivisions as division}
-                                    <option value="{division.id}" selected={division.id === eventDivisionID || null}>{division.division}</option>
+                                        <option value="{division.id}" selected={division.id === eventDivisionID || null}>{division.division}</option>
                                     {/each}
-                                {/if}
-                            </select>
+                                </select>
+                            {/if}
                         </td>
                     {:else}
                         <td>{data.event.division}</td>
@@ -149,7 +151,7 @@
                     <th>Start Time</th>
                     <!--Display editable or non-editable field-->
                     {#if editingEvent}
-                        <td><input type="time" name="event-start-time" bind:value={eventStartTime} min={data.carnival.startTime} max={data.carnival.endTime} onfocus="this.showPicker()"></td>
+                        <td><input type="time" name="event-start-time" bind:value={eventStartTime} onfocus="this.showPicker()"></td>
                     {:else}
                         <td>{data.event.startTime.slice(0, -3)}</td>
                     {/if}
@@ -208,7 +210,7 @@
             <!--Table headers-->
             <tr>
                 <th>Rank</th>
-                <th>Points</th>
+                <th>Points <a href="https://docs.google.com/document/d/1EDETbrxlj94bFKMae59e_JWl4_bBhmmf#heading=h.d16imucn6kw6" target="_blank"><i class="fa fa-question-circle help"></i></a></th>
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>House</th>

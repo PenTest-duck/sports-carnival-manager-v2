@@ -1,8 +1,8 @@
 // @ts-nocheck
 // Imports
 import { sequelize } from "../../../../hooks.server";
-import { validateEvent, validateResult } from "$lib/validation";
-import { redirect } from "@sveltejs/kit";
+import { validateEvent, validateResult, VALID_NUMBER_REGEX } from "$lib/validation";
+import { redirect, error } from "@sveltejs/kit";
 
 /** @type {import('./$types').PageServerLoad} */
 // Function: load()
@@ -13,18 +13,29 @@ export async function load({ params, url }) {
     // Fetch confirmation message from URL
     const msg = url.searchParams.get("msg");
 
-    // Get URL path (contains carnival ID)
+    // Get URL path (contains event ID) + check that it only contains numbers
     const slug = params.slug;
+    if (!slug.match(VALID_NUMBER_REGEX)) {
+        throw error("404", "Sorry, you have an invalid event ID in your URL.");
+    }
 
     // Fetch event details
     const eventQueryResponse = await sequelize.query("CALL GetOneEvent (:id)", {
-        replacements: { id: params.slug }
+        replacements: { id: slug }
     });
     const event = eventQueryResponse[0]
 
+    // 404 if event doesn't exist
+    if (event == null) {
+        throw error("404", "Sorry, that event doesn't exist.");
+    }
+
     // Fetch event record
-    const eventRecordQueryResponse = await sequelize.query("SELECT result FROM results WHERE id = (SELECT resultID FROM eventrecord WHERE typeID = (:eventTypeID))", {
-        replacements: { eventTypeID: event.typeID }
+    const eventRecordQueryResponse = await sequelize.query("SELECT result FROM results WHERE id = (SELECT resultID FROM eventrecord WHERE typeID = (:eventTypeID) AND ageGroupID = (:eventAgeGroupID))", {
+        replacements: { 
+            eventTypeID: event.typeID,
+            eventAgeGroupID: event.ageGroupID
+        }
     });
     const eventRecord = eventRecordQueryResponse[0][0];
 
@@ -67,7 +78,7 @@ export const actions = {
         const result = data.get("event-result");
 
         // Check no fields are empty
-        if (eventID == "" || studentID == "" || result == "") {
+        if (eventID == "" || eventID == null || studentID == "" || studentID == null || result == "" || result == null) {
             return { resultError: "All fields must be filled" }
         }
 
@@ -160,7 +171,7 @@ export const actions = {
 
         // Update Events MySQL table with new values
         try {
-            await sequelize.query('UPDATE events SET ageGroupID = :ageGroupID, divisionID = :divisionID, startTime = :startTime WHERE id = :id', {
+            await sequelize.query('CALL EditEvent (:id, :ageGroupID, :divisionID, :startTime)', {
                 replacements: {
                     id: id,
                     ageGroupID: ageGroupID,

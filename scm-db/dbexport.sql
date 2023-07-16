@@ -62,7 +62,7 @@ CREATE TABLE `carnivals` (
   CONSTRAINT `carnivals_ibfk_1` FOREIGN KEY (`typeID`) REFERENCES `carnivaltype` (`typeID`),
   CONSTRAINT `carnivals_ibfk_2` FOREIGN KEY (`locationID`) REFERENCES `carnivallocation` (`locationID`),
   CONSTRAINT `carnivals_ibfk_3` FOREIGN KEY (`staffID`) REFERENCES `staff` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -71,7 +71,7 @@ CREATE TABLE `carnivals` (
 
 LOCK TABLES `carnivals` WRITE;
 /*!40000 ALTER TABLE `carnivals` DISABLE KEYS */;
-INSERT INTO `carnivals` VALUES (15,'TKS Athletics Carnival',1,'2023-03-26','10:00:00','15:00:00',1,'ySRlwnQ7RYQhmCiyPZBc3xsZL2K3'),(16,'chriscomp',1,'2023-10-19','00:30:00','12:30:00',1,'SGQvN4MeBuPr9MiMd2E3krCJs4s2'),(19,'Builders\' Athletics Carnival',1,'2023-07-31','09:30:00','15:00:00',1,'ySRlwnQ7RYQhmCiyPZBc3xsZL2K3'),(20,'TKS Swimming Carnival',2,'2023-07-30','08:30:00','13:00:00',3,'2LNaoUJKESMNyGRQGrUP9CrHHFn1'),(21,'TKS Cross Country',3,'2023-07-29','10:45:00','12:30:00',2,'stBLh17oasRYoWpAnkcq8ohtwvr2');
+INSERT INTO `carnivals` VALUES (15,'TKS Athletics Carnival',1,'2023-08-27','10:00:00','15:00:00',1,'2LNaoUJKESMNyGRQGrUP9CrHHFn1'),(19,'Builders\' Athletics Carnival',1,'2023-07-31','09:30:00','15:00:00',1,'ySRlwnQ7RYQhmCiyPZBc3xsZL2K3'),(20,'TKS Swimming Carnival',2,'2023-07-30','08:30:00','13:00:00',3,'2LNaoUJKESMNyGRQGrUP9CrHHFn1'),(21,'TKS Cross Country',3,'2023-07-29','10:45:00','12:30:00',2,'SGQvN4MeBuPr9MiMd2E3krCJs4s2'),(25,'Sample Carnival #2',1,'2023-07-31','12:00:00','16:00:00',2,'stBLh17oasRYoWpAnkcq8ohtwvr2');
 /*!40000 ALTER TABLE `carnivals` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -190,7 +190,7 @@ CREATE TABLE `eventrecord` (
   CONSTRAINT `eventrecord_ibfk_1` FOREIGN KEY (`ageGroupID`) REFERENCES `eventAgeGroup` (`id`),
   CONSTRAINT `eventrecord_ibfk_3` FOREIGN KEY (`typeID`) REFERENCES `eventtype` (`id`),
   CONSTRAINT `eventrecord_ibfk_4` FOREIGN KEY (`resultID`) REFERENCES `results` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=136 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -199,7 +199,7 @@ CREATE TABLE `eventrecord` (
 
 LOCK TABLES `eventrecord` WRITE;
 /*!40000 ALTER TABLE `eventrecord` DISABLE KEYS */;
-INSERT INTO `eventrecord` VALUES (21,2,1,42),(25,2,2,44),(32,4,1,32),(39,4,4,37),(44,1,1,52);
+INSERT INTO `eventrecord` VALUES (45,16,1,57),(46,24,4,58),(47,23,1,59),(48,13,1,60),(62,1,3,52),(68,4,1,37),(135,2,6,62);
 /*!40000 ALTER TABLE `eventrecord` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -226,7 +226,7 @@ CREATE TABLE `events` (
   CONSTRAINT `events_ibfk_2` FOREIGN KEY (`ageGroupID`) REFERENCES `eventAgeGroup` (`id`),
   CONSTRAINT `events_ibfk_3` FOREIGN KEY (`divisionID`) REFERENCES `eventdivision` (`id`),
   CONSTRAINT `events_ibfk_7` FOREIGN KEY (`carnivalID`) REFERENCES `carnivals` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -235,7 +235,7 @@ CREATE TABLE `events` (
 
 LOCK TABLES `events` WRITE;
 /*!40000 ALTER TABLE `events` DISABLE KEYS */;
-INSERT INTO `events` VALUES (6,15,2,2,6,'09:20:00'),(7,15,2,1,7,'09:15:00'),(8,15,4,4,1,'12:30:00'),(9,15,4,1,1,'00:00:00'),(15,15,3,1,1,'12:19:00'),(16,16,7,1,1,'12:30:00'),(17,19,1,1,1,'10:30:00'),(18,19,11,1,1,'11:20:00');
+INSERT INTO `events` VALUES (6,15,2,6,6,'10:20:00'),(7,15,2,6,7,'10:15:00'),(8,15,4,1,1,'12:30:00'),(9,15,4,4,1,'12:00:00'),(15,15,3,1,1,'12:19:00'),(17,19,1,3,1,'10:30:00'),(18,19,11,1,1,'11:20:00'),(19,20,16,1,1,'11:20:00'),(20,21,24,4,1,'11:46:00'),(21,21,23,1,1,'11:05:00'),(23,20,16,2,1,'11:39:00'),(24,20,13,1,1,'12:26:00'),(25,20,16,4,4,'10:33:00'),(26,20,20,6,1,'12:47:00');
 /*!40000 ALTER TABLE `events` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -325,7 +325,7 @@ CREATE TABLE `house` (
 
 LOCK TABLES `house` WRITE;
 /*!40000 ALTER TABLE `house` DISABLE KEYS */;
-INSERT INTO `house` VALUES (1,'Baker Hake','BAH',0,1),(2,'Bishop Barker Harris','BBH',0,1),(3,'Britten','BRI',0,1),(4,'Broughton Forrest','BRF',0,1),(5,'Burkitt','BUR',0,1),(6,'Dalmas','DAL',0,1),(7,'Kurrle','KUR',0,1),(8,'Macarthur Waddy','MAW',0,1),(9,'Macquarie','MAQ',0,1),(10,'Wickham','WIC',0,1),(11,'Gowan Brae','GB',0,1);
+INSERT INTO `house` VALUES (1,'Baker Hake','BAH',0,2),(2,'Bishop Barker Harris','BBH',0,2),(3,'Britten','BRI',0,2),(4,'Broughton Forrest','BRF',0,2),(5,'Burkitt','BUR',0,2),(6,'Dalmas','DAL',0,2),(7,'Kurrle','KUR',70,1),(8,'Macarthur Waddy','MAW',0,2),(9,'Macquarie','MAQ',0,2),(10,'Wickham','WIC',0,2),(11,'Gowan Brae','GB',0,2);
 /*!40000 ALTER TABLE `house` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -350,7 +350,7 @@ CREATE TABLE `results` (
   KEY `results_ibfk_2` (`eventID`),
   CONSTRAINT `results_ibfk_1` FOREIGN KEY (`studentID`) REFERENCES `students` (`id`) ON DELETE CASCADE,
   CONSTRAINT `results_ibfk_2` FOREIGN KEY (`eventID`) REFERENCES `events` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -359,7 +359,7 @@ CREATE TABLE `results` (
 
 LOCK TABLES `results` WRITE;
 /*!40000 ALTER TABLE `results` DISABLE KEYS */;
-INSERT INTO `results` VALUES (11,6,3,0,0,12.34,3,10),(13,7,3,0,0,34.88,2,11),(14,6,4,1,0,14.4,99999,0),(15,8,3,0,0,6.54,4,45),(17,8,4,0,0,6.88,3,46),(19,9,1,0,0,1,2,48),(21,8,7,0,0,6,5,44),(22,8,7,0,1,999,99999,0),(23,8,7,1,0,998,99999,0),(24,8,6,0,0,5.88,6,43),(27,6,6,0,0,25.01,4,9),(28,8,6,0,0,4,7,42),(30,8,6,0,0,2,8,41),(31,7,6,0,0,35.01,3,10),(32,9,6,0,0,2,1,50),(33,6,4,0,0,5.12,2,11),(36,8,7,0,0,7.65,2,48),(37,8,7,0,0,7.77,1,50),(42,7,6,0,0,0.4,1,12),(44,6,6,0,0,1,1,12),(52,17,1,0,0,14.1,1,50),(53,17,6,1,1,13.92,99999,0);
+INSERT INTO `results` VALUES (11,6,3,0,0,12.34,4,9),(13,7,3,0,0,34.88,3,10),(14,6,4,1,0,14.4,99999,0),(15,8,3,0,0,6.54,4,45),(17,8,4,0,0,6.88,3,46),(19,9,1,0,0,1,2,48),(21,8,7,0,0,6,5,44),(22,8,7,0,1,999,99999,0),(23,8,7,1,0,998,99999,0),(24,8,6,0,0,5.88,6,43),(27,6,6,0,0,25.01,5,8),(28,8,6,0,0,4,7,42),(30,8,6,0,0,2,8,41),(31,7,6,0,0,35.01,4,9),(32,9,6,0,0,2,1,50),(33,6,4,0,0,5.12,3,10),(36,8,7,0,0,7.65,2,48),(37,8,7,0,0,7.77,1,50),(42,7,6,0,0,0.4,2,11),(44,6,6,0,0,1,2,11),(52,17,1,0,0,14.1,1,50),(53,17,6,1,1,13.92,99999,0),(57,19,4,0,0,45,1,18),(58,20,6,0,0,1050,1,35),(59,21,6,0,0,32,1,35),(60,24,6,0,0,15,1,18),(61,7,3,0,0,0.3,1,12),(62,6,7,0,0,0.2,1,12),(63,26,6,1,0,52,99999,0);
 /*!40000 ALTER TABLE `results` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -388,7 +388,7 @@ CREATE TABLE `staff` (
 
 LOCK TABLES `staff` WRITE;
 /*!40000 ALTER TABLE `staff` DISABLE KEYS */;
-INSERT INTO `staff` VALUES ('2LNaoUJKESMNyGRQGrUP9CrHHFn1','shaunthesheep3@farm.com','Shaun','Sheep',1),('3Kg9dfAoNKSCwSMA6BwgzjZI3Il1','taylor.swift@gmail.com','Taylor','Swift',1),('An7bRVnZY1bEFiSwFszxV7kLMc23','patelhariwork@gmail.com','Viraj','Patel',1),('SGQvN4MeBuPr9MiMd2E3krCJs4s2','aadityashankar@gmail.com','Aaditya','Shankar',1),('stBLh17oasRYoWpAnkcq8ohtwvr2','postman@pat.com','Postman','Pat',1),('ySRlwnQ7RYQhmCiyPZBc3xsZL2K3','bob@builder.com','Bob','Builder',1);
+INSERT INTO `staff` VALUES ('2LNaoUJKESMNyGRQGrUP9CrHHFn1','shaunthesheep3@farm.com','Shaun','Sheep',1),('3Kg9dfAoNKSCwSMA6BwgzjZI3Il1','taylor.swift@gmail.com','Taylor','Swift',1),('4xsuwwi7O3NFN4nJtqBOP3UmvJC2','Yoo_Ch@student.kings.edu.au','Chris','Yu',1),('An7bRVnZY1bEFiSwFszxV7kLMc23','patelhariwork@gmail.com','Viraj','Patel',1),('i7y85QRMeZNdGJeXovG3gWZYKft1','test@test.com','test','test',1),('SGQvN4MeBuPr9MiMd2E3krCJs4s2','aadityashankar@gmail.com','Aaditya','Shankar',1),('stBLh17oasRYoWpAnkcq8ohtwvr2','postman@pat.com','Postman','Pat',1),('yJLjW3ntPSSLdC33mRjn39uctgs2','emptiness@email.com',' ',' ',1),('ySRlwnQ7RYQhmCiyPZBc3xsZL2K3','bob@builder.com','Bob','Builder',1);
 /*!40000 ALTER TABLE `staff` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -432,7 +432,7 @@ CREATE TABLE `students` (
   PRIMARY KEY (`id`),
   KEY `houseID` (`houseID`),
   CONSTRAINT `students_ibfk_1` FOREIGN KEY (`houseID`) REFERENCES `house` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -441,7 +441,7 @@ CREATE TABLE `students` (
 
 LOCK TABLES `students` WRITE;
 /*!40000 ALTER TABLE `students` DISABLE KEYS */;
-INSERT INTO `students` VALUES (1,'Chris','Yoo',10,1034483),(3,'Dwayne','Johnson',6,1234567),(4,'Will','Smith',3,2345678),(6,'Rock','Daw',7,69699634),(7,'Elon','Ma',2,3254123);
+INSERT INTO `students` VALUES (1,'Chris','Yoo',10,1034483),(3,'Dwayne','Johnson',6,1234567),(4,'William','Smith',3,2345678),(6,'Rock','Daw',7,69699634),(7,'Elon','Ma',2,3254123);
 /*!40000 ALTER TABLE `students` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -896,6 +896,52 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `EditEvent` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `EditEvent`(
+	IN id int,
+	IN ageGroupID int,
+    IN divisionID int,
+    IN startTime time
+)
+BEGIN
+	# Initialise variables
+	DECLARE eventTypeID int DEFAULT 0;
+    DECLARE previousAgeGroupID int DEFAULT 0;
+    DECLARE previousRecordResultID int DEFAULT 0;
+    
+    # Load event type and age group
+    SELECT events.typeID INTO eventTypeID FROM events WHERE events.id = id;
+    SELECT events.ageGroupID INTO previousAgeGroupID FROM events WHERE events.id = id;
+    
+    # Update event row
+	UPDATE events SET events.ageGroupID = ageGroupID, events.divisionID = divisionID, events.startTime = startTime WHERE events.id = id;
+    
+    # Update record of new age group
+    CALL CalculateRecord (eventTypeID, ageGroupID);
+    
+    # Update record of previous age group    
+    SELECT eventrecord.resultID INTO previousRecordResultID FROM eventrecord WHERE eventrecord.typeID = eventTypeID AND eventrecord.ageGroupID = previousAgeGroupID;
+    # Delete if previous event type's record was from this event
+    IF (previousRecordResultID IN (SELECT results.id FROM results WHERE results.eventID = id)) THEN
+		DELETE FROM eventrecord WHERE eventrecord.typeID = eventTypeID AND eventrecord.ageGroupID = previousAgeGroupID AND eventrecord.resultID = previousRecordResultID;
+    END IF;
+    
+    CALL CalculateRecord (eventTypeID, previousAgeGroupID);
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `GetCarnivals` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -1048,7 +1094,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetOneCarnival`(
 BEGIN
 	# Fetch specified carnival
     # Translate carnival type / carnival location / staff from foreign keys
-	SELECT carnivals.id, carnivals.name, carnivals.typeID, carnivaltype.type, carnivals.date, carnivals.startTime, carnivals.endTime, carnivallocation.location, staff.firstName, staff.lastName, carnivals.staffID
+	SELECT carnivals.id, carnivals.name, carnivals.typeID, carnivaltype.type, carnivals.date, carnivals.startTime, carnivals.endTime, carnivallocation.location, staff.firstName, staff.lastName, carnivals.staffID, carnivals.locationID
 		FROM carnivals
 		INNER JOIN carnivaltype ON carnivals.typeID = carnivaltype.typeID
         INNER JOIN carnivallocation ON carnivals.locationID = carnivallocation.locationID
@@ -1075,8 +1121,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetOneEvent`(
 )
 BEGIN
 	# Fetch specified event
-    # Translate carnival / event type / event age group / event division from foreign keys
-	SELECT events.id, events.carnivalID, eventtype.type, eventAgeGroup.ageGroup, eventdivision.division, events.startTime, eventtype.unit, events.typeID
+    # Translate carnival / event type / event age group / event division / event record from foreign keys
+	SELECT events.id, events.carnivalID, eventtype.type, eventAgeGroup.ageGroup, eventdivision.division, events.startTime, eventtype.unit, events.typeID, events.ageGroupID, events.divisionID
 		FROM events
 		INNER JOIN carnivals ON events.carnivalID = carnivals.id
         INNER JOIN eventtype ON events.typeID = eventtype.id
@@ -1105,7 +1151,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetOneStudent`(
 BEGIN
 	# Fetch specified student
     # Translate house from foreign keys
-	SELECT students.id, students.firstName, students.lastName, house.house, students.number
+	SELECT students.id, students.firstName, students.lastName, house.house, students.number, students.houseID
 		FROM students
         INNER JOIN house ON students.houseID = house.id
         WHERE students.id = id;
@@ -1142,12 +1188,13 @@ BEGIN
 	# Translate event type / event age group / result / student from foreign keys
     # Check record belongs to carnival type
     # Order by type name then age group
-    SELECT eventrecord.id, eventtype.type, eventAgeGroup.ageGroup, students.firstName, students.lastName, results.result, results.studentID, eventtype.unit
+    SELECT eventrecord.id, eventtype.type, eventAgeGroup.ageGroup, students.firstName, students.lastName, results.result, results.studentID, eventtype.unit, results.eventID, events.carnivalID
 		FROM eventrecord 
 		INNER JOIN eventtype ON eventrecord.typeID = eventtype.id
         INNER JOIN eventAgeGroup ON eventrecord.ageGroupID = eventAgeGroup.id
         INNER JOIN results ON eventrecord.resultID = results.id
         INNER JOIN students ON results.studentID = students.id
+        INNER JOIN events ON results.eventID = events.id
 		WHERE EXISTS (SELECT 1 FROM tmpEventTypes WHERE eventrecord.typeID=tmpEventTypes.id)
         ORDER BY eventrecord.typeID, eventrecord.ageGroupID;
     
@@ -1670,4 +1717,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-14 23:29:43
+-- Dump completed on 2023-07-16 16:37:50

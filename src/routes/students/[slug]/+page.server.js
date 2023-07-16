@@ -1,7 +1,8 @@
+// @ts-nocheck
 // Imports
 import { sequelize } from "../../../hooks.server"; 
-import { validateStudent } from "$lib/validation";
-import { redirect } from "@sveltejs/kit";
+import { validateStudent, VALID_NUMBER_REGEX } from "$lib/validation";
+import { redirect, error } from "@sveltejs/kit";
 
 /** @type {import('./$types').PageServerLoad} */
 // Function: load()
@@ -12,11 +13,22 @@ export async function load({ params, url }) {
     // Fetch confirmation message from URL
     const msg = url.searchParams.get("msg");
 
+    // Get URL path (contains student ID) + check that it only contains numbers
+    const slug = params.slug;
+    if (!slug.match(VALID_NUMBER_REGEX)) {
+        throw error("404", "Sorry, you have an invalid student ID in your URL.");
+    }
+
     // Fetch student record given the specified StudentID
     const studentsQueryResponse = await sequelize.query("CALL GetOneStudent (:id)", {
-        replacements: { id: params.slug }
+        replacements: { id: slug }
     });
     const student = studentsQueryResponse[0];
+
+    // 404 if student doesn't exist
+    if (student == null) {
+        throw error("404", "Sorry, that student doesn't exist.");
+    }
 
     // Fetch list of all houses
     const housesQueryResponse = await sequelize.query("SELECT * FROM house");

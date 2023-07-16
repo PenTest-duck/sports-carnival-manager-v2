@@ -47,7 +47,7 @@
         || studentLastName != data.student.lastName
         || studentHouseID != data.student.houseID
         || studentNumber != data.student.number) {
-        dataChanged = true;
+            dataChanged = true;
     } else {
         dataChanged = false;
     }

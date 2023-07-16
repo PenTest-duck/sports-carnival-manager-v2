@@ -20,7 +20,7 @@
     let carnivalStartTime = data.carnival.startTime.slice(0, -3);
     let carnivalEndTime = data.carnival.endTime.slice(0, -3);
     let carnivalLocationID = data.carnival.locationID;
-    let carnivalStaffID = data.carnival.staff;
+    let carnivalStaffID = data.carnival.staffID;
 
     // Changes form to editable values
     function setEditingCarnival() {
@@ -37,7 +37,7 @@
         carnivalStartTime = data.carnival.startTime.slice(0, -3);
         carnivalEndTime = data.carnival.endTime.slice(0, -3);
         carnivalLocationID = data.carnival.locationID;
-        carnivalStaffID = data.carnival.staff;
+        carnivalStaffID = data.carnival.staffID;
     }
 
     // Submits the POST request with edited values
@@ -52,7 +52,7 @@
         || carnivalEndTime != data.carnival.endTime.slice(0, -3)
         || carnivalLocationID != data.carnival.locationID
         || carnivalStaffID != data.carnival.staffID) {
-        dataChanged = true;
+            dataChanged = true;
     } else {
         dataChanged = false;
     }
@@ -69,6 +69,11 @@
         } else {
             onlyChampionship = false;
         }
+    }
+
+    // Set onlyChampionship if first select option value is a championship-only event type
+    if (championshipEventTypeIDs.includes(data.eventTypes[0].id)) {
+        onlyChampionship = true;
     }
 
     // Check if event is an all-age event
@@ -231,7 +236,7 @@
                     <label>
                         Type
                         <!--Event type dropdown select-->
-                        <select name="event-type-id" id="event-type-id" bind:value={selectedEventType} on:mousemove|once={toggleChampionships} on:change={toggleChampionships} on:change={toggleAllAge}>
+                        <select name="event-type-id" id="event-type-id" bind:value={selectedEventType} on:change={toggleChampionships} on:change={toggleAllAge}>
                             {#each data.eventTypes as type}
                             <option value="{type.id}">{type.type}</option>
                             {/each}
@@ -266,7 +271,7 @@
 
                     <label>
                         Start Time
-                        <input type="time" min={data.carnival.startTime} max={data.carnival.endTime} name="event-start-time" onfocus="this.showPicker()"> 
+                        <input type="time" name="event-start-time" onfocus="this.showPicker()"> 
                     </label>
 
                     <!--Hidden input fields for validating start time is within range of carnival start and end times-->

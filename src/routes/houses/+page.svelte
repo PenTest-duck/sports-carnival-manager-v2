@@ -28,7 +28,7 @@
                 <th>Rank</th>
                 <th>Name</th>
                 <th>Initials</th>
-                <th>Points</th>
+                <th>Points <a href="https://docs.google.com/document/d/1EDETbrxlj94bFKMae59e_JWl4_bBhmmf#heading=h.d16imucn6kw6" target="_blank"><i class="fa fa-question-circle help"></i></a></th>
             </tr>
 
             <!--Row for each house's placing, name, initials and points-->

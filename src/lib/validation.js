@@ -11,7 +11,7 @@ const MAX_PASSWORD_LENGTH = 40;
 
 // Define regex 
 const VALID_NAME_REGEX = /^[A-Za-z '\-,.]+$/;
-const VALID_NUMBER_REGEX = /^\d+$/;   // Can only contain digits - culls out decimals
+export const VALID_NUMBER_REGEX = /^\d+$/;   // Can only contain digits - culls out decimals
 const VALID_DATE_REGEX = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/; // YYYY-MM-DD (limited to year 2999)
 const VALID_TIME_REGEX = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/; // HH:MM (24 hour)
 const VALID_RESULT_REGEX = /^[+]?([0-9]+([.][0-9]*)?|[.][0-9]+)$/; // positive float value
@@ -240,7 +240,7 @@ export function validateEvent(startTime, minTime, maxTime) {
     // Validate start time is within range of carnival start and end times
     // Direct string comparison possible as all are in 24-hour format
     if (startTime < minTime || startTime > maxTime) {
-        return "Event start time must be between carnival start and end times";
+        return `Event start time must be between carnival start and end times (${minTime.slice(0, -3)} - ${maxTime.slice(0, -3)})`;
     }
 
     return "Valid";

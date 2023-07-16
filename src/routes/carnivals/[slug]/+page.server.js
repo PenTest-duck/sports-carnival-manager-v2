@@ -1,8 +1,8 @@
 // @ts-nocheck
 // Imports
 import { sequelize } from "../../../hooks.server"; 
-import { validateCarnival, validateEvent } from "$lib/validation";
-import { redirect } from "@sveltejs/kit";
+import { validateCarnival, validateEvent, VALID_NUMBER_REGEX } from "$lib/validation";
+import { redirect, error } from "@sveltejs/kit";
 
 /** @type {import('./$types').PageServerLoad} */
 // Function: load()
@@ -13,14 +13,22 @@ export async function load({ params, url }) {
     // Fetch confirmation message from URL
     const msg = url.searchParams.get("msg");
 
-    // Get URL path (contains carnival ID)
+    // Get URL path (contains carnival ID) + check that it only contains numbers
     const slug = params.slug;
+    if (!slug.match(VALID_NUMBER_REGEX)) {
+        throw error("404", "Sorry, you have an invalid carnival ID in your URL.");
+    }
 
     // Fetch carnival details
     const carnivalQueryResponse = await sequelize.query("CALL GetOneCarnival (:id)", {
-        replacements: { id: params.slug }
+        replacements: { id: slug }
     });
     const carnival = carnivalQueryResponse[0]
+
+    // 404 if carnival doesn't exist
+    if (carnival == null) {
+        throw error("404", "Sorry, that carnival doesn't exist.");
+    }
 
     // Fetch list of all carnival locations
     const carnivalLocationsQueryResponse = await sequelize.query("SELECT * FROM carnivallocation");
