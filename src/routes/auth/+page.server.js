@@ -1,3 +1,4 @@
+// @ts-nocheck
 /** @type {import('./$types').Actions} */
 export const actions = {
     // Function: logout()
@@ -5,7 +6,9 @@ export const actions = {
     // Parameters: N/A
     // Returns: N/A
     logout: async ({ cookies }) => {
-        cookies.delete("__session", { path: "/" });
+        // Delete cookie
+        const options = {httpOnly: true, secure: false, path: "/", sameSite: "strict" };
+        cookies.delete("__session", options);
 
         // Redirects to login page due to auth validation in layout.server.ts
     }
