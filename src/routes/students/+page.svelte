@@ -29,7 +29,7 @@
 
     <!--Display error message from removing student-->
     {#if form?.removeStudentError}
-        <p id="error">Remove Student: {form?.removeStudentError}</p>
+        <p id="error">Remove Student: {form?.studentRemoveError}</p>
     {/if}
 
     <div id="students-list">

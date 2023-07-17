@@ -66,12 +66,12 @@ export const actions = {
         const number = data.get("student-number");
 
         // Check no fields are empty
-        if (firstName == "" || lastName == "" || houseID == "" || number == "") {
+        if (firstName == "" || firstName == null || lastName == "" || lastName == null || houseID == "" || houseID == null || number == "" || number == null) {
             return { error: "All fields must be filled" }
         }
 
         // Validate input parameters
-        const studentValidityMessage = validateStudent(firstName, lastName, number);
+        const studentValidityMessage = validateStudent(firstName, lastName, houseID, number);
         if (studentValidityMessage != "Valid") {
             return { error: studentValidityMessage }
         }

@@ -16,7 +16,6 @@ export async function load() {
     if (carnivals.length > 0) {
         // Fetch list of all houses, sorted by placing
         const houses = await sequelize.query("CALL GetHouses");
-        console.log(houses);
 
         return { houses, carnivals };
     }

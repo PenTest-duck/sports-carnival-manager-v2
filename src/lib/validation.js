@@ -22,6 +22,14 @@ const UPPERCASE_REGEX = /[A-Z]/;
 const NUMBER_REGEX = /\d/;
 const SYMBOL_REGEX = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
 
+// Define accepted values
+const MAX_CARNIVAL_TYPE = 3;
+const MAX_CARNIVAL_LOCATION = 3;
+const MAX_EVENT_TYPE = 26;
+const MAX_EVENT_AGE_GROUP = 6;
+const MAX_EVENT_DIVISION = 10;
+const MAX_HOUSE = 11;
+
 // Function: validatePersonName()
 // Purpose: check name is alphabet only and is not too long
 // Parameters: name
@@ -104,19 +112,6 @@ export function validateTime(time) {
     return "Valid";
 }
 
-// Function: validateResult()
-// Purpose: check result is in valid format
-// Parameters: result
-// Returns "Valid" OR error message
-export function validateResult(result) {
-    // Check result is a valid non-negative float
-    if (!Boolean(result.match(VALID_RESULT_REGEX))) {
-        return "Result is in an invalid format";
-    }
-
-    return "Valid";
-}
-
 // Function: validateEmail()
 // Purpose: check email conforms to valid format AND does not already exist in the database
 // Parameters: email
@@ -188,15 +183,37 @@ export function validatePassword(password) {
     return "Valid";
 }
 
+// Function: validateID()
+// Purpose: check ID is within accepted values
+// Parameters: ID, maximum accepted value, name of ID
+// Returns: "Valid" OR error message
+function validateID(id, maxValue, idName) {
+    // Check ID is a valid number
+    if (Boolean(id.match(VALID_NUMBER_REGEX))) {
+        // Check ID is within accepted range
+        if (1 <= parseInt(id) && parseInt(id) <= maxValue) {
+            return "Valid";
+        }
+    }
+
+    return `Invalid ${idName} ID. Please try again.`;
+}
+
 // Function: validateCarnival()
 // Purpose: perform validation on all parameters for carnival
-// Parameters: name, date, start time, end time
+// Parameters: name, type ID, date, start time, end time, location ID, staff ID
 // Returns: "Valid" OR error message
-export function validateCarnival(name, date, startTime, endTime) {
+export function validateCarnival(name, typeID, date, startTime, endTime, locationID, staffID) {
     // Validate name
     const nameValidityMessage = validateName(name);
     if (nameValidityMessage != "Valid") {
         return nameValidityMessage;
+    }
+
+    // Validate type ID
+    const typeIDValidityMessage = validateID(typeID, MAX_CARNIVAL_TYPE, "carnival type");
+    if (typeIDValidityMessage != "Valid") {
+        return typeIDValidityMessage;
     }
 
     // Validate date
@@ -217,6 +234,12 @@ export function validateCarnival(name, date, startTime, endTime) {
         return endTimeValidityMessage;
     }
 
+    // Validate location ID
+    const locationIDValidityMessage = validateID(locationID, MAX_CARNIVAL_LOCATION, "carnival location");
+    if (locationIDValidityMessage != "Valid") {
+        return locationIDValidityMessage;
+    }
+
     // Check end time is not before start time
     // Direct string comparison possible as both are in 24-hour format
     if (endTime < startTime) {
@@ -228,9 +251,57 @@ export function validateCarnival(name, date, startTime, endTime) {
 
 // Function: validateEvent()
 // Purpose: perform validation on all parameters for event
-// Parameters: event start time, carnival start time, carnival end time
+// Parameters: carnival/event ID, type ID, age group ID, division ID, event start time, carnival start time, carnival end time + mode (add/edit)
 // Returns: "Valid" OR error message
-export function validateEvent(startTime, minTime, maxTime) {
+export async function validateEvent(mode, carnivalOrEventID, typeID, ageGroupID, divisionID, startTime, minTime, maxTime) {
+
+    // For adding, validate carnival exists
+    // For editing, validate event exists
+    if (!Boolean(carnivalOrEventID.match(VALID_NUMBER_REGEX))) {
+        return "Invalid carnival or event ID. Please try again.";
+    }
+
+    try {
+        if (mode == "add") {
+            const existingCarnival = await sequelize.query("SELECT * FROM carnivals WHERE id = :carnivalID", {
+                replacements: { carnivalID: carnivalOrEventID }
+            });
+
+            if (existingCarnival[0][0] == null) {
+                return "Invalid carnival ID. Please try again.";
+            }
+        } else {
+            const existingEvent = await sequelize.query("SELECT * FROM events WHERE id = :eventID", {
+                replacements: { eventID: carnivalOrEventID }
+            });
+
+            if (existingEvent[0][0] == null) {
+                return "Invalid event ID. Please try again.";
+            }
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+        return "There was an unexpected error with the server";
+    }
+
+    // Validate type ID
+    const typeIDValidityMessage = validateID(typeID, MAX_EVENT_TYPE, "event type");
+    if (typeIDValidityMessage != "Valid") {
+        return typeIDValidityMessage;
+    }
+
+    // Validate age group ID
+    const ageGroupIDValidityMessage = validateID(ageGroupID, MAX_EVENT_AGE_GROUP, "event age group");
+    if (ageGroupIDValidityMessage != "Valid") {
+        return ageGroupIDValidityMessage;
+    }
+
+    // Validate division ID
+    const divisionIDValidityMessage = validateID(divisionID, MAX_EVENT_DIVISION, "event division");
+    if (divisionIDValidityMessage  != "Valid") {
+        return divisionIDValidityMessage;
+    }
+
     // Validate start time
     const startTimeValidityMessage = validateTime(startTime);
     if (startTimeValidityMessage != "Valid") {
@@ -246,11 +317,52 @@ export function validateEvent(startTime, minTime, maxTime) {
     return "Valid";
 }
 
+// Function: validateResult()
+// Purpose: perform validation on all parameters for student
+// Parameters: event ID, student ID, result
+// Returns "Valid" OR error message
+export async function validateResult(eventID, studentID, result) {
+    // Check event ID is valid
+    if (!Boolean(eventID.match(VALID_NUMBER_REGEX))) {
+        return "Invalid event ID. Please try again.";
+    }
+
+    // Check event exists
+    const existingEvent = await sequelize.query("SELECT * FROM events WHERE id = :eventID", {
+        replacements: { eventID: eventID }
+    });
+
+    if (existingEvent[0][0] == null) {
+        return "Invalid event ID. Please try again."
+    }
+
+    // Check student ID is valid
+    if (!Boolean(studentID.match(VALID_NUMBER_REGEX))) {
+        return "Invalid student ID. Please try again.";
+    }
+
+    // Check student exists
+    const existingStudent = await sequelize.query("SELECT * FROM students WHERE id = :studentID", {
+        replacements: { studentID: studentID }
+    });
+
+    if (existingStudent[0][0] == null) {
+        return "Invalid student ID. Please try again."
+    }
+
+    // Check result is a valid non-negative float
+    if (!Boolean(result.match(VALID_RESULT_REGEX))) {
+        return "Result is in an invalid format";
+    }
+
+    return "Valid";
+}
+
 // Function: validateStudent()
 // Purpose: perform validation on all parameters for student
-// Parameters: first name, last name, student number
+// Parameters: first name, last name, house ID, student number
 // Returns: "Valid" OR error message
-export function validateStudent(firstName, lastName, number) {
+export function validateStudent(firstName, lastName, houseID, number) {
     // Validate first name
     const firstNameValidityMessage = validatePersonName(firstName);
     if (firstNameValidityMessage != "Valid") {
@@ -261,6 +373,12 @@ export function validateStudent(firstName, lastName, number) {
     const lastNameValidityMessage = validatePersonName(lastName);
     if (lastNameValidityMessage != "Valid") {
         return lastNameValidityMessage;
+    }
+
+    // Validate house ID
+    const houseIDValidityMessage = validateID(houseID, MAX_HOUSE, "house");
+    if (houseIDValidityMessage != "Valid") {
+        return houseIDValidityMessage;
     }
 
     // Validate number

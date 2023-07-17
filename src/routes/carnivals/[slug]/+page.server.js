@@ -74,12 +74,12 @@ export const actions = {
         const maxTime = data.get("event-max-time") === "" ? null : data.get("event-max-time"); // if empty, set to null
 
         // Check no fields are empty
-        if (carnivalID == "" || typeID == "" || ageGroupID == "" || divisionID == "" || startTime == null) {
+        if (carnivalID == "" || carnivalID == null || typeID == "" || typeID == null || ageGroupID == "" || ageGroupID == null || divisionID == "" || divisionID == null|| startTime == null) {
             return { eventError: "All fields must be filled" }
         }
 
         // Validate input parameters
-        const eventValidityMessage = validateEvent(startTime, minTime, maxTime);
+        const eventValidityMessage = await validateEvent("add", carnivalID, typeID, ageGroupID, divisionID, startTime, minTime, maxTime);
         if (eventValidityMessage != "Valid") {
             return { eventError: eventValidityMessage }
         }
@@ -114,6 +114,11 @@ export const actions = {
         const data = await request.formData();
         const id = data.get("id");
 
+        // Check id is a valid integer
+        if (!Boolean(id.match(VALID_NUMBER_REGEX))) {
+            return { eventRemoveError: "Invalid event ID. Please try again." };
+        }
+
         // Invoke MySQL stored procedure to remove event and all its results, and update records and points
         try {
             await sequelize.query('CALL RemoveEvent (:id)', {
@@ -138,6 +143,7 @@ export const actions = {
         const data = await request.formData();
         const id = params.slug;
         const name = data.get("carnival-name");
+        const typeID = data.get("carnival-type-id");
         const date = data.get("carnival-date") === "" ? null : data.get("carnival-date"); // if empty, set to null
         const startTime = data.get("carnival-start-time")  === "" ? null : data.get("carnival-start-time"); // if empty, set to null
         const endTime = data.get("carnival-end-time")  === "" ? null : data.get("carnival-end-time"); // if empty, set to null
@@ -145,12 +151,12 @@ export const actions = {
         const staffID = data.get("carnival-staff-id");
 
         // Check no fields are empty
-        if (name == "" || date == null || startTime == null || endTime == null || locationID == "" || staffID == "") {
+        if (name == "" || name == null || date == null || typeID == "" || typeID == null || startTime == null || endTime == null || locationID == "" || locationID == null || staffID == "" || staffID == null) {
             return { carnivalError: "All fields must be filled" }
         }
 
         // Validate input parameters
-        const carnivalValidityMessage = validateCarnival(name, date, startTime, endTime);
+        const carnivalValidityMessage = validateCarnival(name, typeID, date, startTime, endTime, locationID, staffID);
         if (carnivalValidityMessage != "Valid") {
             return { carnivalError: carnivalValidityMessage }
         }

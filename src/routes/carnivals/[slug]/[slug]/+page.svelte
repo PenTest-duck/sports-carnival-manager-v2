@@ -166,6 +166,7 @@
                     {/if}
                 </tr>
 
+                <input type="hidden" name="event-type-id" value={data.event.typeID} />
                 <!--Hidden input fields for validating start time is within range of carnival start and end times-->
                 <input type="hidden" name="event-min-time" value={data.carnival.startTime} />
                 <input type="hidden" name="event-max-time" value={data.carnival.endTime} />

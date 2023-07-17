@@ -201,6 +201,8 @@
                     {/if}
                 </tr>
             </table>
+
+            <input type="hidden" name="carnival-type-id" id="carnival-type-id" value={data.carnival.typeID}>
         </form>
     </div>
 

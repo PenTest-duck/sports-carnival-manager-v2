@@ -1,7 +1,7 @@
 // @ts-nocheck
 // Imports
 import { sequelize } from "../../hooks.server"; 
-import { validateCarnival } from "$lib/validation";
+import { validateCarnival, VALID_NUMBER_REGEX } from "$lib/validation";
 import { redirect } from "@sveltejs/kit";
 
 /** @type {import('./$types').PageServerLoad} */
@@ -48,12 +48,12 @@ export const actions = {
         const staffID = data.get("carnival-staff-id");
 
         // Check no fields are empty
-        if (name == "" || typeID == "" || date == null || startTime == null || endTime == null || locationID == "" || staffID == "") {
-            return { error: "All fields must be filled" }
+        if (name == "" || name == null || date == null || typeID == "" || typeID == null || startTime == null || endTime == null || locationID == "" || locationID == null || staffID == "" || staffID == null) {
+            return { carnivalError: "All fields must be filled" }
         }
 
         // Validate input parameters
-        const carnivalValidityMessage = validateCarnival(name, date, startTime, endTime);
+        const carnivalValidityMessage = validateCarnival(name, typeID, date, startTime, endTime, locationID, staffID);
         if (carnivalValidityMessage != "Valid") {
             return { error: carnivalValidityMessage }
         }
@@ -89,6 +89,11 @@ export const actions = {
         // Extract variables from form submission
         const data = await request.formData();
         const id = data.get("id");
+
+        // Check id is a valid integer
+        if (!Boolean(id.match(VALID_NUMBER_REGEX))) {
+            return { carnivalRemoveError: "Invalid carnival ID. Please try again." };
+        }
 
         // Invoke MySQL stored procedure to remove carnival and all its events, and update records and points
         try {

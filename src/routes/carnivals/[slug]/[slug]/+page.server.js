@@ -83,7 +83,7 @@ export const actions = {
         }
 
         // Validate result value
-        const resultValidityMessage = validateResult(result);
+        const resultValidityMessage = await validateResult(eventID, studentID, result);
         if (resultValidityMessage != "Valid") {
             return { resultError: resultValidityMessage }
         }
@@ -129,6 +129,11 @@ export const actions = {
         const data = await request.formData();
         const id = data.get("id");
 
+        // Check id is a valid integer
+        if (!Boolean(id.match(VALID_NUMBER_REGEX))) {
+            return { resultRemoveError: "Invalid result ID. Please try again." };
+        }
+
         // Invoke MySQL stored procedure to remove result from the database and update placings and points
         try {
             await sequelize.query('CALL RemoveResult (:id)', {
@@ -152,6 +157,7 @@ export const actions = {
         // Extract variables from form submission
         const data = await request.formData();
         const id = params.slug;
+        const typeID = data.get("event-type-id");
         const ageGroupID = data.get("event-age-group-id");
         const divisionID = data.get("event-division-id");
         const startTime = data.get("event-start-time")  === "" ? null : data.get("event-start-time"); // if empty, set to null
@@ -159,12 +165,12 @@ export const actions = {
         const maxTime = data.get("event-max-time") === "" ? null : data.get("event-max-time"); // if empty, set to null
 
         // Check no fields are empty
-        if (id == "" || ageGroupID == "" || divisionID == null || startTime == null) {
+        if (id == "" || id == null || typeID == "" || typeID == null || ageGroupID == "" || ageGroupID == null || divisionID == "" || divisionID == null|| startTime == null) {
             return { eventError: "All fields must be filled" }
         }
 
         // Validate input parameters
-        const eventValidityMessage = validateEvent(startTime, minTime, maxTime);
+        const eventValidityMessage = await validateEvent("edit", id, typeID, ageGroupID, divisionID, startTime, minTime, maxTime);
         if (eventValidityMessage != "Valid") {
             return { eventError: eventValidityMessage }
         }

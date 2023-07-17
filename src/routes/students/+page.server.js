@@ -1,6 +1,7 @@
+// @ts-nocheck
 // Imports
 import { sequelize } from "../../hooks.server"; 
-import { validateStudent } from "$lib/validation";
+import { validateStudent, VALID_NUMBER_REGEX } from "$lib/validation";
 import { redirect } from "@sveltejs/kit";
 
 /** @type {import('./$types').PageServerLoad} */
@@ -18,8 +19,6 @@ export async function load({ url }) {
     // Fetch list of all houses
     const housesQueryResponse = await sequelize.query("SELECT * FROM house");
     const houses = housesQueryResponse[0];
-
-    console.log(students);
 
     return { students, houses, msg };
 };
@@ -40,12 +39,12 @@ export const actions = {
         const number = data.get("student-number");
 
         // Check no fields are empty
-        if (firstName == "" || lastName == "" || houseID == "" || number == "") {
+        if (firstName == "" || firstName == null || lastName == "" || lastName == null || houseID == "" || houseID == null || number == "" || number == null) {
             return { error: "All fields must be filled" }
         }
 
         // Validate input parameters
-        const studentValidityMessage = validateStudent(firstName, lastName, number);
+        const studentValidityMessage = validateStudent(firstName, lastName, houseID, number);
         if (studentValidityMessage != "Valid") {
             return { error: studentValidityMessage }
         }
@@ -79,6 +78,11 @@ export const actions = {
         const data = await request.formData();
         const id = data.get("id");
 
+        // Check id is a valid integer
+        if (!Boolean(id.match(VALID_NUMBER_REGEX))) {
+            return { studentRemoveError: "Invalid student ID. Please try again." };
+        }
+
         // Invoke MySQL stored procedure to remove student and all their results, and update placings and points
         try {
             await sequelize.query('CALL RemoveStudent (:id)', {
@@ -86,7 +90,7 @@ export const actions = {
             });
         } catch (e) {
             console.log("Error: ", e);
-            return { removeStudentError: "There was an unexpected error with the server" };
+            return { studentRemoveError: "There was an unexpected error with the server" };
         }
 
         // Show confirmation message
