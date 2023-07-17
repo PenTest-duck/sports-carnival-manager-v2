@@ -40,6 +40,10 @@
             Password
             <input type="password" id="password" name="password" placeholder="Password">
         </label>
+        <label>
+            Confirm Password
+            <input type="password" id="confirm-password" name="confirm-password" placeholder="Password">
+        </label>
         <button>Sign Up</button>
 
         <a href="/auth/login">Log in instead</a>

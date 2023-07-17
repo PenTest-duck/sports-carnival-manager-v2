@@ -20,9 +20,10 @@ export const actions = {
         const lastName = data.get("last-name");
         const email = data.get("email");
         const password = data.get("password");
+        const confirmPassword = data.get("confirm-password");
 
         // Check no fields are empty
-        if (firstName == "" || lastName == "" || email == "" || password == "") {
+        if (firstName == "" || firstName == null || lastName == "" || lastName == null || email == "" || email == null || password == "" || password == null || confirmPassword == "" || confirmPassword == null) {
             return { error: "All fields must be filled" }
         }
 
@@ -48,6 +49,11 @@ export const actions = {
         let passwordValidityMessage = validatePassword(password);
         if (passwordValidityMessage != "Valid") {
             return { error: passwordValidityMessage }
+        }
+
+        // Validate confirm password
+        if (password != confirmPassword) {
+            return { error: "Passwords do not match" }
         }
 
         try {
