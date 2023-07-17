@@ -58,7 +58,7 @@ export const actions = {
         // Validate input parameters
         const carnivalValidityMessage = validateCarnival(name, typeID, date, startTime, endTime, locationID, staffID);
         if (carnivalValidityMessage != "Valid") {
-            return { error: carnivalValidityMessage }
+            return { carnivalError: carnivalValidityMessage }
         }
 
         // Invoke MySQL stored procedure to create carnival
@@ -76,7 +76,7 @@ export const actions = {
             });
         } catch (e) {
             console.log("Error: ", e);
-            return { error: "There was an unexpected error with the server" }
+            return { carnivalError: "There was an unexpected error with the server" }
         }
 
         // Show confirmation message

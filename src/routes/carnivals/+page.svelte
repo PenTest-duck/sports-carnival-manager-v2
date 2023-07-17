@@ -34,8 +34,8 @@
         {/if}
 
         <!--Display error message from creating carnival-->
-        {#if form?.error}
-            <p id="error">Create Carnival: {form?.error}</p>
+        {#if form?.carnivalError}
+            <p id="error">Create Carnival: {form?.carnivalError}</p>
         {/if}
 
         <!--Display error message from removing carnival-->

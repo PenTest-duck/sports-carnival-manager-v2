@@ -90,9 +90,9 @@ export function validateDate(date) {
     }
 
     // Check date is not before today
-    const todayDate = new Date();
+    const todayDate = new Date().toISOString().split('T')[0];
     
-    if (new Date(date).getTime() < todayDate.getTime()) {
+    if (date < todayDate) {
         return "Date must not be before today";
     }
 
