@@ -263,6 +263,7 @@ export async function validateEvent(mode, carnivalOrEventID, typeID, ageGroupID,
 
     try {
         if (mode == "add") {
+            // Check carnival exists
             const existingCarnival = await sequelize.query("SELECT * FROM carnivals WHERE id = :carnivalID", {
                 replacements: { carnivalID: carnivalOrEventID }
             });
@@ -271,6 +272,7 @@ export async function validateEvent(mode, carnivalOrEventID, typeID, ageGroupID,
                 return "Invalid carnival ID. Please try again.";
             }
         } else {
+            // Check event exists
             const existingEvent = await sequelize.query("SELECT * FROM events WHERE id = :eventID", {
                 replacements: { eventID: carnivalOrEventID }
             });

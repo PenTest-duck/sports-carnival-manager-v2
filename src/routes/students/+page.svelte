@@ -15,6 +15,16 @@
 </script>
 
 <div id="main-container">
+    <!--Tutorial-->
+    {#if data.tutorial == "true"}
+        <p style="color: purple">
+            (2/4) This is the students page. Here, you can view and remove students, add a new student, and open each student’s page.
+            <a href="/carnivals" style="float: right; color: red">Exit</a>
+            <a href="/houses?tutorial=true" style="float: right; margin-right: 20px">Next</a>
+            <a href="/carnivals?tutorial=true" style="float: right; margin-right: 20px">Previous</a>
+        </p>
+    {/if}
+
     <h1>Students</h1>
 
     <!--Display confirmation message-->

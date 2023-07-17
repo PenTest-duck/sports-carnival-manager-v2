@@ -10,6 +10,16 @@
 </script>
     
 <div id="main-container">
+    <!--Tutorial-->
+    {#if data.tutorial == "true"}
+        <p style="color: purple">
+            (4/4) This is the records page. Here, you can view the all-time records across all three carnival types: Athletics Carnival, Swimming Carnival, and Cross Country. 
+            You can click on each event type to navigate to the event page which contains the record result, and each students’ name to navigate to their page.
+            <a href="/carnivals" style="float: right; color: red">Exit</a>
+            <a href="/houses?tutorial=true" style="float: right; margin-right: 20px">Previous</a>
+        </p>
+    {/if}
+
     <!--Heading and help reference-->
     <h1>Records <a href="https://docs.google.com/document/d/1EDETbrxlj94bFKMae59e_JWl4_bBhmmf#heading=h.d52km2unpdlz" target="_blank"><i class="fa fa-question-circle help"></i></a></h1>
 

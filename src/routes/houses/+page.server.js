@@ -5,10 +5,12 @@ import { sequelize } from "../../hooks.server";
 /** @type {import('./$types').PageServerLoad} */
 
 // Function: load()
-// Purpose: upon page load, updates house placings and fetches array of houses
-// Parameters: N/A
+// Purpose: upon page load, updates house placings and fetches array of houses + tutorial
+// Parameters: URL
 // Returns: array of house records, ordered by their placing
-export async function load() {
+export async function load({ url }) {
+    // Fetch tutorial status
+    const tutorial = url.searchParams.get("tutorial");
 
     // Fetch list of all carnivals
     const carnivals = await sequelize.query("CALL GetCarnivals");
@@ -17,10 +19,10 @@ export async function load() {
         // Fetch list of all houses, sorted by placing
         const houses = await sequelize.query("CALL GetHouses");
 
-        return { houses, carnivals };
+        return { houses, carnivals, tutorial };
     }
 
-    return { carnivals };
+    return { carnivals, tutorial };
 };
 
 /** @type {import('./$types').Actions} */

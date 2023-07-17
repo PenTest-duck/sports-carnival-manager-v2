@@ -29,6 +29,7 @@
       		<li><a href="/students">Students</a></li>
       		<li><a href="/houses">Houses</a></li>
       		<li><a href="/records">Records</a></li>
+			<li><a href="/carnivals?tutorial=true">Tutorial</a></li>
 			<li><a href="https://docs.google.com/document/d/1EDETbrxlj94bFKMae59e_JWl4_bBhmmf">User Manual</a></li>
 
 			<!--Display logged-in user's name-->

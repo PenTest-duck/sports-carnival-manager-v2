@@ -7,12 +7,15 @@ import { redirect } from "@sveltejs/kit";
 /** @type {import('./$types').PageServerLoad} */
 
 // Function: load()
-// Purpose: upon page load, fetches array of carnivals, carnival types, carnival locations, and staff + message
+// Purpose: upon page load, fetches array of carnivals, carnival types, carnival locations, and staff + message / tutorial
 // Parameters: URL path
-// Returns: array of carnivals, array of carnival types, array of carnival locations, array of staff + message
+// Returns: array of carnivals, array of carnival types, array of carnival locations, array of staff + message / tutorial
 export async function load({ url }) {
     // Fetch confirmation message from URL
     const msg = url.searchParams.get("msg");
+
+    // Fetch tutorial status from URL
+    const tutorial = url.searchParams.get("tutorial");
 
     // Fetch list of all carnivals
     const carnivals = await sequelize.query("CALL GetCarnivals");
@@ -27,7 +30,7 @@ export async function load({ url }) {
     const staffsQueryResponse = await sequelize.query("SELECT * FROM staff");
     const staffs = staffsQueryResponse[0];
 
-    return { carnivals, carnivalTypes, carnivalLocations, staffs, msg };
+    return { carnivals, carnivalTypes, carnivalLocations, staffs, msg, tutorial };
 };
 
 /** @type {import('./$types').Actions} */

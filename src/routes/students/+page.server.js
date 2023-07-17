@@ -6,12 +6,15 @@ import { redirect } from "@sveltejs/kit";
 
 /** @type {import('./$types').PageServerLoad} */
 // Function: load()
-// Purpose: upon page load, fetches array of students and houses + message
+// Purpose: upon page load, fetches array of students and houses + message / tutorial
 // Parameters: URL
 // Returns: array of students, array of houses + message
 export async function load({ url }) {
     // Fetch confirmation message from URL
     const msg = url.searchParams.get("msg");
+
+    // Fetch tutorial status from URL
+    const tutorial = url.searchParams.get("tutorial");
 
     // Fetch list of all students
     const students = await sequelize.query("CALL GetStudents");
@@ -20,7 +23,7 @@ export async function load({ url }) {
     const housesQueryResponse = await sequelize.query("SELECT * FROM house");
     const houses = housesQueryResponse[0];
 
-    return { students, houses, msg };
+    return { students, houses, msg, tutorial };
 };
 
 /** @type {import('./$types').Actions} */

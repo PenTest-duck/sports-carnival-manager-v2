@@ -15,6 +15,14 @@
 </script>
 
 <div id="main-container">
+    <!--Tutorial-->
+    {#if data.tutorial == "true"}
+        <p style="color: purple">
+            (1/4) This is the carnival page. Here, you can view all carnivals, create new carnivals, open and view the contents of existing carnivals, and remove carnivals. 
+            <a href="/carnivals" style="float: right; color: red">Exit</a>
+            <a href="/students?tutorial=true" style="float: right; margin-right: 20px">Next</a>
+        </p>
+    {/if}
 
     <div id="carnival-list">
         <!--Heading and help reference-->
