@@ -203,7 +203,7 @@ function validateID(id, maxValue, idName) {
 // Purpose: perform validation on all parameters for carnival
 // Parameters: name, type ID, date, start time, end time, location ID, staff ID
 // Returns: "Valid" OR error message
-export function validateCarnival(name, typeID, date, startTime, endTime, locationID, staffID) {
+export async function validateCarnival(name, typeID, date, startTime, endTime, locationID, staffID) {
     // Validate name
     const nameValidityMessage = validateName(name);
     if (nameValidityMessage != "Valid") {
@@ -240,6 +240,21 @@ export function validateCarnival(name, typeID, date, startTime, endTime, locatio
         return locationIDValidityMessage;
     }
 
+    // Check staff exists in database
+    try {
+        const existingStaff = await sequelize.query("SELECT * FROM staff WHERE id = :staffID", {
+            replacements: { staffID: staffID }
+        });
+
+        // Check if no staff in the database has an ID of StaffID
+        if (existingStaff[0][0] == null) {
+            return "Invalid Staff ID. Please try again.";
+        }
+    } catch (e) {
+        console.log("Error: ", e);
+        return "There was an unexpected error with the server";
+    }
+    
     // Check end time is not before start time
     // Direct string comparison possible as both are in 24-hour format
     if (endTime < startTime) {

@@ -1,4 +1,7 @@
 <script>
+// @ts-nocheck
+
+    // Imports
     import { page } from '$app/stores';
 </script>
 

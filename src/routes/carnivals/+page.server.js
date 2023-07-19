@@ -56,7 +56,7 @@ export const actions = {
         }
 
         // Validate input parameters
-        const carnivalValidityMessage = validateCarnival(name, typeID, date, startTime, endTime, locationID, staffID);
+        const carnivalValidityMessage = await validateCarnival(name, typeID, date, startTime, endTime, locationID, staffID);
         if (carnivalValidityMessage != "Valid") {
             return { carnivalError: carnivalValidityMessage }
         }
