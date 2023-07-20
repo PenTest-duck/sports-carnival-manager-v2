@@ -13,7 +13,7 @@
     <!--Tutorial-->
     {#if data.tutorial == "true"}
         <p style="color: purple">
-            (3/4) This is the houses page. Here, you can view a scoreboard of all houses for a specified carnival, ordered by rank. 
+            (3/4) This is the houses page. Here, you can view a scoreboard of all houses for a specified carnival, ordered by rank. <br>
             <a href="/carnivals" style="float: right; color: red">Exit</a>
             <a href="/records?tutorial=true" style="float: right; margin-right: 20px">Next</a>
             <a href="/students?tutorial=true" style="float: right; margin-right: 20px">Previous</a>

@@ -165,7 +165,7 @@ export const actions = {
         const maxTime = data.get("event-max-time") === "" ? null : data.get("event-max-time"); // if empty, set to null
 
         // Check no fields are empty
-        if (id == "" || id == null || typeID == "" || typeID == null || ageGroupID == "" || ageGroupID == null || divisionID == "" || divisionID == null|| startTime == null) {
+        if (id == "" || id == null || typeID == "" || typeID == null || ageGroupID == "" || ageGroupID == null || divisionID == "" || divisionID == null || startTime == null) {
             return { eventError: "All fields must be filled" }
         }
 
